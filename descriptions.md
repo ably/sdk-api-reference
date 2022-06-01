@@ -159,26 +159,26 @@
 
 ||| Spec | Description |
 |---|---|---|---|
-| name: String? ||| |
-| presence: RestPresence || RSL3 | |
-| history() => io `PaginatedResult<Message>` || RSL2a | |
-|| start: Time, | RSL2b1 | |
-|| end: Time api-default now(), | RSL2b1 | |
-|| direction: .Backwards \| .Forwards api-default .Backwards, | RSL2b2 | |
-|| limit: int api-default 100 | RSL2b3 | |
-| status() => ChannelDetails || RSL8 | |
-| publish() => io || RSL1 | |
-|| Message || |
+| name: String? ||| A unique channel name. |
+| presence: RestPresence || RSL3 | The [Presence]{@link} object associated with the channel. |
+| history() => io `PaginatedResult<Message>` || RSL2a | Retrieve a paginated list of historical messages for the channel. |
+|| start: Time, | RSL2b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
+|| end: Time api-default now(), | RSL2b1 | The time until messages are retrieved, specified as a Unix timestamp. |
+|| direction: .Backwards \| .Forwards api-default .Backwards, | RSL2b2 | The order for which messages are returned in. |
+|| limit: int api-default 100 | RSL2b3 | An upper limit on the number of messages returned. |
+| status() => ChannelDetails || RSL8 | Retrieve the [ChannelDetails]{@link} object for the channel. |
+| publish() => io || RSL1 | Send a message to the channel. |
+|| Message || A [Message]{@link} object. |
 || params?: `Dict<String, Stringifiable>` || |
-| publish() => io || RSL1 | |
-|| [Message] || |
+| publish() => io || RSL1 | Send an array of messages to the channel. |
+|| [Message] || An array of [Message]{@link} objects. |
 || params?: `Dict<String, Stringifiable>` || |
-| publish() => io || RSL1 | |
-|| name: String? || |
-|| data: Data? || |
-| setOptions() => io || RSL7 | |
-|| options: ChannelOptions || |
-| push: PushChannel || RSH4 | |
+| publish() => io || RSL1 | Send a message to the channel. |
+|| name: String? || The name of the message. |
+|| data: Data? || The payload of the message. |
+| setOptions() => io || RSL7 | Set the [ChannelOptions]{@link} for the channel. |
+|| options: ChannelOptions || The [ChannelOptions]{@link} to set for the channel. |
+| push: PushChannel || RSH4 | The [Push]{@link} object associated with the channel. |
 
 ## class RealtimeChannel
 
