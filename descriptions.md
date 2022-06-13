@@ -28,27 +28,31 @@
 
 ## class Realtime
 
+The Ably Realtime client establishes and maintains a persistent connection to Ably and provides methods to publish and subscribe to messages over a low latency realtime connection.
+
+The Realtime client extends the REST client and as such provides the functionality available in the REST client, in addition to realtime-specific features.
+
 ||| Spec | Description |
 |---|---|---|---|
-| constructor(keyStr: String) || RSC1 | |
-| constructor(tokenStr: String) || RSC1 | |
-| constructor(ClientOptions) || RSC1 | |
-| auth: Auth || RTC4 | |
-| push: Push || |
-| device() => io LocalDevice || |
-| channels: `Channels<RealtimeChannel>` || RTC3, RTS1 | |
-| clientId: String? || proxy for RSA7 | |
-| connection: Connection || RTC2 | |
-| request() => io HttpPaginatedResponse || RTC9 | |
-|| String method || |
-|| String path || |
-|| `Dict<String, String>` params? || |
-|| JsonObject \| JsonArray body? || |
-|| `Dict<String, String>` headers? || |
-| stats: || Same as Rest.stats, RTC5a || |
-| close() || proxy for RTN12 || |
-| connect() || proxy for RTN11 || |
-| time() => io Time || RTC6a || |
+| constructor(keyStr: String) || RSC1 | Constructs a realtime client object using an Ably API key string. |
+| constructor(tokenStr: String) || RSC1 | Constructs a realtime client object using an Ably token string. |
+| constructor(ClientOptions) || RSC1 | Constructs a realtime client object using an Ably [`ClientOptions`]{@link} object. |
+| auth: Auth || RTC4 | A reference to the [`Auth`]{@link} authentication object. |
+| push: Push || A reference to the [`Push`]{@link} object. |
+| device() => io LocalDevice || TBD?? |
+| channels: `Channels<RealtimeChannel>` || RTC3, RTS1 | A reference to the [`Channel`]{@link} collection instance. |
+| clientId: String? || proxy for RSA7 | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key; note that a `clientId` may also be implicit in a token used to instantiate the library; an error will be raised if a `clientId` specified here conflicts with the `clientId` implicit in the token.|
+| connection: Connection || RTC2 | A reference to the [`Connection`]{@link} object. |
+| request() => io HttpPaginatedResponse || RTC9 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
+|| String method || Request method to use such as `GET`, `POST`.|
+|| String path || Request path. |
+|| `Dict<String, String>` params? || Parameters for the REST request. |
+|| JsonObject \| JsonArray body? || JSON body for the request. |
+|| `Dict<String, String>` headers? || Headers for the request. |
+| stats: || Same as Rest.stats, RTC5a || This method queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A `PaginatedResult` is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. [See an example set of raw stats returned via the REST API](https://ably.com/docs/general/statistics).|
+| close() || proxy for RTN12 || This calls `connection.close()` and causes the connection to close, entering the closing state. Once closed, the library will not attempt to re-establish the connection without an explicit call to `connect()`. |
+| connect() || proxy for RTN11 || Explicitly calling `connect()` is unnecessary unless the `ClientOptions` `autoConnect` is disabled. This method calls `connection.connect()` and causes the connection to open, entering the connecting state. |
+| time() => io Time || RTC6a || Obtains the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably `TokenRequest`s with a more accurate timestamp should use the `queryTime` `ClientOptions` instead of this method. |
 
 ## class ClientOptions
 
