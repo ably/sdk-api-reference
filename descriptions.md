@@ -472,17 +472,17 @@ The parameters for an Ably TokenRequest. Tokens are requested using `Auth.reques
 
 ## class AuthDetails
 
-TBD
-
 ||| Spec | Description |
 |---|---|---|---|
 | accessToken: String || AD2 | TBD |
 
 ## class Connection
 
+The `Connection` object enables the management of a connection to Ably.
+
 ||| Spec | Description |
 |---|---|---|---|
-| embeds `EventEmitter<ConnectionEvent, ConnectionStateChange>` || RTN4a, RTN4e, RTN4g | |
+| embeds `EventEmitter<ConnectionEvent, ConnectionStateChange>` || RTN4a, RTN4e, RTN4g | TBD |
 | errorReason: ErrorInfo? || RTN14a | When a connection failure occurs this property contains the `ErrorInfo`. |
 | id: String? || RTN8 | A unique public identifier String for this connection, used to identify this member in presence events and messages. |
 | key: String? || RTN9 | A unique private connection key String used to recover or resume a connection, assigned by Ably. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. This private connection key can also be used by other REST clients to publish on behalf of this client. See the [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf) for more info. |
@@ -494,6 +494,8 @@ TBD
 | ping() => io || RTN13 | When connected, sends a heartbeat ping to the Ably server and executes the callback with any error and the response time in milliseconds when a heartbeat ping request is echoed from the server. This can be useful for measuring true round-trip latency to the connected Ably server. |
 
 ## enum ConnectionState
+
+`ConnectionState` is a String with a value matching any of the Realtime Connection states.
 
 ||| Spec | Description |
 |---|---|---|---|
@@ -515,13 +517,15 @@ TBD
 
 ## class ConnectionStateChange
 
+A `ConnectionStateChange` object is a type encapsulating state change information emitted by the `Connection` object.
+
 ||| Spec | Description |
 |---|---|---|---|
-| current: ConnectionState || TA2 | |
-| event: ConnectionEvent || TA5 | |
-| previous: ConnectionState || TA2 | |
-| reason: ErrorInfo? || RTN4f, TA3 | |
-| retryIn: Duration? || RTN14d, TA2 | |
+| current: ConnectionState || TA2 | The new state. |
+| event: ConnectionEvent || TA5 | The event that triggered this state change. |
+| previous: ConnectionState || TA2 | The previous state. For the `update` event, this is equal to the current state. |
+| reason: ErrorInfo? || RTN4f, TA3 | An ErrorInfo containing any information relating to the transition. |
+| retryIn: Duration? || RTN14d, TA2 | Duration in milliseconds, after which the client retries a connection where applicable. |
 
 ## class Stats
 
