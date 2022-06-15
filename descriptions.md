@@ -185,13 +185,13 @@
 ||| Spec | Description |
 |---|---|---|---|
 | embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` || RTL2a, RTL2d, RTL2e | |
-| errorReason: ErrorInfo? || RTL4e | |
-| state: ChannelState || RTL2b | |
+| errorReason: ErrorInfo? || RTL4e | When a channel failure occurs this property contains the error as an [`ErrorInfo`]{@link} type. |
+| state: ChannelState || RTL2b | The current [`ChannelState`]{@link} of this `Channel`. |
 | presence: RealtimePresence || RTL9 | Provides access to the `Presence` object for this channel which can be used to access members present on the channel, or participate in presence. |
-| properties: ChannelProperties || CP1, RTL15 | |
-| push: PushChannel || |
-| modes: readonly [ChannelMode] || RTL4m | |
-| params: readonly `Dict<String, String>` || RTL4k1 | |
+| properties: ChannelProperties || CP1, RTL15 | TBD?? |
+| push: PushChannel || Provides access to the [`PushChannel`]{@link} object for this channel. |
+| modes: readonly [ChannelMode] || RTL4m | TBD?? |
+| params: readonly `Dict<String, String>` || RTL4k1 | Optional [parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
 | attach() => io || RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using `subscribe()`. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, `attach()` is called implicitly if subscribe for the Channel is called, or `enter()` or `subscribe()` is called on the Presence for this Channel. |
 | detach() => io || RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the `on` or `once` methods. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
 | history() => io `PaginatedResult<Message>` || RSL2a | Gets a paginated set of historical messages for this channel. If the channel is configured to persist messages to disk, then message history will typically be available for 24 – 72 hours. If not, messages are only retained in memory by the Ably service for two minutes. |
