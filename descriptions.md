@@ -149,11 +149,11 @@
 
 ||| Spec | Description |
 |---|---|---|---|
-| exists(String) -> Bool || RSN2, RTS2 | |
-| get(String) -> ChannelType || RSN3a, RTS3a | |
-| get(String, ChannelOptions) -> ChannelType || RSN3c, RTS3c | |
-| iterate() -> `Iterator<ChannelType>` || RSN2, RTS2 | |
-| release(String) || RSN4, RTS4 | |
+| exists(String) -> Bool || RSN2, RTS2 | TBD |
+| get(String) -> ChannelType || RSN3a, RTS3a | Creates a new `Channel` object if none for the channel exists, or returns the existing channel object. |
+| get(String, ChannelOptions) -> ChannelType || RSN3c, RTS3c | Creates a new `Channel` object, with the specified `ClientOptions`, if none for the channel exists, or returns the existing channel object. |
+| iterate() -> `Iterator<ChannelType>` || RSN2, RTS2 | TBD |
+| release(String) || RSN4, RTS4 | Releases a `Channel` object, deleting it, and enabling it to be garbage collected. It also removes any listeners associated with the channel. To release a channel, the channel state must be `initialized`, `detached`, or `failed`. |
 
 ## class RestChannel
 
@@ -187,28 +187,32 @@
 | embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` || RTL2a, RTL2d, RTL2e | |
 | errorReason: ErrorInfo? || RTL4e | |
 | state: ChannelState || RTL2b | |
-| presence: RealtimePresence || RTL9 | |
+| presence: RealtimePresence || RTL9 | Provides access to the `Presence` object for this channel which can be used to access members present on the channel, or participate in presence. |
 | properties: ChannelProperties || CP1, RTL15 | |
 | push: PushChannel || |
 | modes: readonly [ChannelMode] || RTL4m | |
 | params: readonly `Dict<String, String>` || RTL4k1 | |
-| attach() => io || RTL4d | |
-| detach() => io || RTL5e | |
-| history() => io `PaginatedResult<Message>` || RSL2a | |
-|| start: Time, | RTL10a | |
-|| end: Time api-default now(), | RTL10a | |
-|| direction: .Backwards \| .Forwards api-default .Backwards, | RTL10a | |
-|| limit: int api-default 100, | RTL10a | |
-|| untilAttach: Bool default false | RTL10b | |
-| publish(Message) => io || RTL6i | |
-| publish([Message]) => io || RTL6i | |
-| publish(name: String?, data: Data?) => io || RTL6i | |
-| subscribe((Message) ->) => io || RTL7a | |
-| subscribe(String, (Message) ->) => io || RTL7b | |
-| unsubscribe() || RTL8a, RTE5 | |
-| unsubscribe((Message) ->) || RTL8a | |
-| unsubscribe(String, (Message) ->) || RTL8a | |
-| setOptions(options: ChannelOptions) => io || RTL16 | |
+| attach() => io || RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using `subscribe()`. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, `attach()` is called implicitly if subscribe for the Channel is called, or `enter()` or `subscribe()` is called on the Presence for this Channel. |
+| detach() => io || RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the `on` or `once` methods. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
+| history() => io `PaginatedResult<Message>` || RSL2a | Gets a paginated set of historical messages for this channel. If the channel is configured to persist messages to disk, then message history will typically be available for 24 – 72 hours. If not, messages are only retained in memory by the Ably service for two minutes. |
+|| start: Time, | RTL10a | Earliest time as a Unix timestamp for any messages retrieved. |
+|| end: Time api-default now(), | RTL10a | Latest time as a Unix timestamp for any messages retrieved. |
+|| direction: .Backwards \| .Forwards api-default .Backwards, | RTL10a | Work `backwards` or `forwards` through time. |
+|| limit: int api-default 100, | RTL10a | Maximum number of messages to retrieve up to 1,000. |
+|| untilAttach: Bool default false | RTL10b | When `true`, ensures message history is up until the point of the channel being attached. See [continuous history](https://ably.com/docs/realtime/history#continuous-history) for more info. Requires the direction to be backwards (the default). If the Channel is not attached, or if direction is set to `forwards`, this option results in an error. |
+| publish(Message) => io || RTL6i | Publish a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+| publish([Message]) => io || RTL6i | Publish several messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+| publish(name: String?, data: Data?) => io || RTL6i | Publish a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel, so long as [transient publishing](https://ably.com/docs/realtime/channels#transient-publish) is available in the library. Otherwise, the client will implicitly attach. |
+| subscribe((Message) ->) => io || RTL7a | Subscribe to messages on this channel. The caller supplies a listener function, which is called each time one or more messages arrives on the channel. |
+| subscribe(String, (Message) ->) => io || RTL7b | Subscribe to messages with a given event `name` on this channel. The caller supplies a listener function, which is called each time one or more matching messages arrives on the channel. |
+| subscribe([String], (Message) ->) => io || RTL7a | Subscribe a single listener to messages on this channel for multiple event name values. |
+| unsubscribe(String, (Message) ->) || RTL8a | Unsubscribe the given listener for the specified event name. This removes an earlier event-specific subscription. |
+| unsubscribe((Message) ->) || RTL8a | Unsubscribe the given listener (for any/all event names). This removes an earlier subscription. |
+| unsubscribe([String], (Message) ->) || RTL8a | Unsubscribe the given listener from all event names in the array. |
+| unsubscribe(String) || RTL8a | Unsubscribe all listeners for the given event name. |
+| unsubscribe([String]) || RTL8a | Unsubscribe all listeners for all event names in the array. |
+| unsubscribe() || RTL8a, RTE5 | Unsubscribes all listeners to messages on this channel. This removes all earlier subscriptions. |
+| setOptions(options: ChannelOptions) => io || RTL16 | Sets the [`ChannelOptions`]{@link} for the channel. |
 
 ## class BatchOperations
 
