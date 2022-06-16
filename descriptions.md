@@ -431,20 +431,22 @@ A `ChannelStateChange` is a type encapsulating state change information emitted 
 
 ## class Message
 
+A Message represents an individual message that is sent to or received from Ably.
+
 ||| Spec | Description |
 |---|---|---|---|
-| constructor(name: String?, data: Data?) || TM2 | |
-| constructor(name: String?, data: Data?, clientId: String?) || TM2 | |
-| +fromEncoded(JsonObject, ChannelOptions?) -> Message || TM3 | |
-| +fromEncodedArray(JsonArray, ChannelOptions?) -> [Message] || TM3 | |
-| clientId: String? || RSL1g1, TM2b | |
-| connectionId: String? || TM2c | |
-| data: Data? || TM2d | |
-| encoding: String? || TM2e | |
-| extras: JsonObject? || TM2i | |
-| id: String || TM2a | |
-| name: String? || TM2g | |
-| timestamp: Time || TM2f | |
+| constructor(name: String?, data: Data?) || TM2 | Construct a `Message` object with an event name and payload. |
+| constructor(name: String?, data: Data?, clientId: String?) || TM2 | Construct a `Message` object with an event name, payload, and a unique client ID. |
+| +fromEncoded(JsonObject, ChannelOptions?) -> Message || TM3 | A static factory method to create a `Message` object from a deserialized Message-like object encoded using Ably's wire protocol. |
+| +fromEncodedArray(JsonArray, ChannelOptions?) -> [Message] || TM3 | A static factory method to create an array of `Message` objects from an array of deserialized Message-like object encoded using Ably's wire protocol. |
+| clientId: String? || RSL1g1, TM2b | The client ID of the publisher of this message. |
+| connectionId: String? || TM2c | The connection ID of the publisher of this message. |
+| data: Data? || TM2d | The message payload, if provided. |
+| encoding: String? || TM2e | This is typically empty, as all messages received from Ably are automatically decoded client-side using this value. However, if the message encoding cannot be processed, this attribute contains the remaining transformations not applied to the `data` payload. TBD?? This needs clarification. |
+| extras: JsonObject? || TM2i | A combination of metadata or ancillary payloads. Currently the only valid payload for `extras` is the `push` object. |
+| id: String || TM2a | A Unique ID assigned by Ably to this message. |
+| name: String? || TM2g | The event name, if provided. |
+| timestamp: Time || TM2f | Timestamp of when the message was received by the Ably, as a Unix timestamp. |
 
 ## class PresenceMessage
 
