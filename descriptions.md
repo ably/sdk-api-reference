@@ -299,13 +299,15 @@
 
 ## class ChannelStateChange
 
+A `ChannelStateChange` is a type encapsulating state change information emitted by the `Channel` object.
+
 ||| Spec | Description |
 |---|---|---|---|
-| current: ChannelState || RTL2a, RTL2b | |
-| event: ChannelEvent || TH5 | |
-| previous: ChannelState || RTL2a, RTL2b | |
-| reason: ErrorInfo? || RTL2e, TH3 | |
-| resumed: Boolean || RTL2f, TH4 | |
+| current: ChannelState || RTL2a, RTL2b | The new current state. |
+| event: ChannelEvent || TH5 | The event that triggered this state change. |
+| previous: ChannelState || RTL2a, RTL2b | The previous state. For the `update` event, this is equal to the `current` state. |
+| reason: ErrorInfo? || RTL2e, TH3 | An `ErrorInfo` object containing any information relating to the transition. |
+| resumed: Boolean || RTL2f, TH4 | A boolean indicated whether message continuity on this channel is preserved, see [Nonfatal channel errors](https://ably.com/docs/realtime/channels#nonfatal-errors) for more info. |
 
 ## class ChannelOptions
 
