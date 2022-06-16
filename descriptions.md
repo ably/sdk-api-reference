@@ -313,10 +313,10 @@ A `ChannelStateChange` is a type encapsulating state change information emitted 
 
 ||| Spec | Description |
 |---|---|---|---|
-| +withCipherKey(key: Binary \| String)? -> ChannelOptions || TB3 | |
-| cipher: (CipherParams \| Params)? || RSL5a, TB2b | |
-| params?: `Dict<String, String>` || TB2c | |
-| modes?: [ChannelMode] || TB2d | |
+| +withCipherKey(key: Binary \| String)? -> ChannelOptions || TB3 | TBD?? |
+| cipher: (CipherParams \| Params)? || RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
+| params?: `Dict<String, String>` || TB2c | Optional [parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
+| modes?: [ChannelMode] || TB2d | TBD?? |
 
 ## class ChannelDetails
 
