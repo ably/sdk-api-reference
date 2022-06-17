@@ -126,10 +126,10 @@
 ||| Spec | Description |
 |---|---|---|---|
 | +fromJson(String \| JsonObject) -> TokenDetails || TD7 | |
-| capability: String || TD5 | |
+| capability: String? || TD5 | |
 | clientId: String? || TD6 | |
-| expires: Time || TD3 | |
-| issued: Time || TD4 | |
+| expires: Time? || TD3 | |
+| issued: Time? || TD4 | |
 | token: String || TD2 | |
 
 ## class TokenRequest
