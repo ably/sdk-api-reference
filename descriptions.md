@@ -538,7 +538,7 @@ Internal only.
 ||| Spec | Description |
 |---|---|---|---|
 | intervalId: String || TS12a | |
-| intervalTime: Time || TS12b (calculated clientside) | |
+| intervalTime: Time || TS12b (calculated client-side) | |
 | unit: Stats.IntervalGranularity || TS12c | |
 | intervalGranularity: Stats.IntervalGranularity? || TS12d (deprecated) | |
 | all: Stats.MessageTypes || TS12e | |
