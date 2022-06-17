@@ -6,6 +6,7 @@
 |---|---|---|---|
 | constructor(keyStr: String) || RSC1 | |
 | constructor(tokenStr: String) || RSC1 | |
+| constructor(keyOrTokenStr: String) || RSC1 | |
 | constructor(ClientOptions) || RSC1 | |
 | auth: Auth || RSC5 | |
 | push: Push || |
@@ -17,7 +18,7 @@
 || String path, || |
 || `Dict<String, String>` params?, || |
 || JsonObject \| JsonArray body?, || |
-|| `Dict<String, String>` headers || |
+|| `Dict<String, String>` headers? || |
 | stats() => io `PaginatedResult<Stats>` | RSC6a | |
 || start: Time api-default epoch(), | RSC6b1 | |
 || end: Time api-default now(), | RSC6b1 | |
@@ -32,6 +33,7 @@
 |---|---|---|---|
 | constructor(keyStr: String) || RSC1 | |
 | constructor(tokenStr: String) || RSC1 | |
+| constructor(keyOrTokenStr: String) || RSC1 | |
 | constructor(ClientOptions) || RSC1 | |
 | auth: Auth || RTC4 | |
 | push: Push || |
@@ -45,7 +47,12 @@
 || `Dict<String, String>` params? || |
 || JsonObject \| JsonArray body? || |
 || `Dict<String, String>` headers? || |
-| stats: || Same as Rest.stats, RTC5a || |
+| stats: => io `PaginatedResult<Stats>` || Same as Rest.stats, RTC5a | |
+|| start: Time api-default epoch() || |
+|| end: Time api-default now() || |
+|| direction: .Backwards | .Forwards api-default .Backwards || |
+|| limit: int api-default 100 || |
+|| unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute || |
 | close() || proxy for RTN12 || |
 | connect() || proxy for RTN11 || |
 | time() => io Time || RTC6a || |
@@ -62,12 +69,13 @@
 | environment: String? || RSC15b, TO3k1 | |
 | logHandler: || platform specific - TO3c | |
 | logLevel: || platform specific - TO3b | |
-| logExceptionReportingUrl: String default "[library specific]" || TO3c (deprecated) | |
+| logExceptionReportingUrl: String default "[library specific]" || TO3m (deprecated) | |
 | port: Int default 80 || TO3k4 | |
 | queueMessages: Bool default true || RTP16b, TO3g | |
 | restHost: String default "rest.ably.io" || RSC12, TO3k2 | |
 | realtimeHost: String default "realtime.ably.io" || RTC1d, TO3k3 | |
 | fallbackHosts: String[] default nil || RSC15b, RSC15a, TO3k6 | |
+| fallbackHostsUseDefault: Bool default false || TO3k7 (deprecated) | |
 | recover: String? || RTC1c, TO3i | |
 | tls: Bool default true || RSC18, TO3d | |
 | tlsPort: Int default 443 || TO3k5 | |
@@ -84,6 +92,7 @@
 | httpMaxRetryDuration: Duration default 15s || TO3l6 | |
 | maxMessageSize: Int default 65536 || TO3l8 | |
 | maxFrameSize: Int default 524288 || TO3l8 | |
+| fallbackRetryTimeout: Duration default 600s || TO3l10 | |
 | plugins: `Dict<PluginType, Plugin>` || TO3o | |
 | idempotentRestPublishing: bool default true || RSL1k1, RTL6a1, TO3n | |
 | agents: [String: String?]? || RSC7d6 - interface only offered by some libraries | |
@@ -121,6 +130,7 @@
 | authorize(TokenParams?, AuthOptions?) => io TokenDetails || RSA10 | |
 | createTokenRequest(TokenParams?, AuthOptions?) => io TokenRequest || RSA9 | |
 | requestToken(TokenParams?, AuthOptions?) => io TokenDetails || RSA8e | |
+| tokenDetails: TokenDetails? || RSA16 | |
 
 ## class TokenDetails
 
@@ -219,6 +229,10 @@
 | refId: string || RTL22a | |
 | refType: string || RTL22a | |
 | name: string || RTL22a | |
+
+## class ChannelProperties
+
+| attachSerial: String || CP2a | |
 
 ## class BatchOperations
 
@@ -422,6 +436,8 @@
 
 ## class ConnectionDetails
 
+Internal only.
+
 ||| Spec | Description |
 |---|---|---|---|
 | clientId: String? || RSA12a, CD2a | |
@@ -485,7 +501,7 @@
 | state: ConnectionState || RTN4d | |
 | close() || RTN12 | |
 | connect() || RTC1b, RTN3, RTN11 | |
-| ping() => io || RTN13 | |
+| ping() => io Duration || RTN13 | |
 
 ## enum ConnectionState
 
@@ -681,7 +697,7 @@
 | off() || RTE5 | |
 | off((Data...) ->) || RTE5 | |
 | off(Event, (Data...) ->) || RTE5 | |
-| emit(Event, Data...) || RTE6 | |
+| emit(Event, Data...) || internal, RTE6 | |
 
 ## class `PaginatedResult<T>`
 
