@@ -79,6 +79,7 @@
 | channelRetryTimeout: Duration default 15s || RTL13b, TO3l7 | |
 | httpOpenTimeout: Duration default 4s || TO3l3 | |
 | httpRequestTimeout: Duration default 10s || TO3l4 | |
+| realtimeRequestTimeout: Duration default 10s || TO3l11 | |
 | httpMaxRetryCount: Int default 3 || TO3l5 | |
 | httpMaxRetryDuration: Duration default 15s || TO3l6 | |
 | maxMessageSize: Int default 65536 || TO3l8 | |
