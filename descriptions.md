@@ -224,7 +224,9 @@
 | setOptions(options: ChannelOptions) => io || RTL16 | |
 
 ## class MessageFilterObject
-  
+
+||| Spec | Description |
+|---|---|---|---|
 | hasRef: bool || RTL22b | |
 | refId: string || RTL22a | |
 | refType: string || RTL22a | |
@@ -232,6 +234,8 @@
 
 ## class ChannelProperties
 
+||| Spec | Description |
+|---|---|---|---|
 | attachSerial: String || CP2a | |
 
 ## class BatchOperations
@@ -332,7 +336,7 @@
 ||| Spec | Description |
 |---|---|---|---|
 | +withCipherKey(key: Binary \| String)? -> ChannelOptions || TB3 | |
-| cipher: (CipherParams \| Params)? || RSL5a, TB2b | |
+| cipher: (CipherParams \| CipherParamOptions)? || RSL5a, TB2b | |
 | params?: `Dict<String, String>` || TB2c | |
 | modes?: [ChannelMode] || TB2d | |
 
@@ -377,11 +381,22 @@
 | keyLength: Int || TZ2b | |
 | mode: String default "CBC" || TZ2c | |
 
+## class CipherParamOptions 
+
+CO1 (may be implemented as a hashmap or a class depending on language)
+
+||| Spec | Description |
+|---|---|---|---|
+| algorithm?: String || CO2a | |
+| key: Binary \| String || CO2b | |
+| keyLength?: Int || CO2c | |
+| mode?: String || CO2d | |
+
 ## class Crypto
 
 ||| Spec | Description |
 |---|---|---|---|
-| +getDefaultParams(Params) -> CipherParams || RSE1 | |
+| +getDefaultParams(CipherParamOptions) -> CipherParams || RSE1 | |
 | +generateRandomKey(keyLength: Int?) => io Binary || RSE2 | |
 
 ## class RestPresence
