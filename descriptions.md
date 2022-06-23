@@ -64,7 +64,7 @@
 | environment: String? ||| RSC15b, TO3k1 | Allows a [custom environment](https://ably.com/docs/platform-customization), region or cluster to be used with the Ably service. Please [contact us](https://ably.com/contact) if you require a custom environment. Note that once a custom environment is specified, the [fallback host functionality](https://faqs.ably.com/routing-around-network-and-dns-issues) is disabled by default. |
 | logHandler: ||| platform specific - TO3c | Parameter to control the log output of the library. This is a function to handle each line of log output. If handler is not specified, `console.log()` is used. |
 | logLevel: ||| platform specific - TO3b | Parameter to control the log output of the library. This is a number controlling the verbosity of the output. Valid values are: 0 (no logs), 1 (errors only), 2 (errors plus connection and channel state changes), 3 (abbreviated debug output), and 4 (full debug output). |
-| logExceptionReportingUrl: String default "[library specific]" ||| TO3c (deprecated) | TBD |
+| logExceptionReportingUrl: String default "[library specific]" ||| TO3c (deprecated) | Defaults to a string value for an Ably error reporting DSN (Data Source Name), which is typically a URL in the format `https://[KEY]:[SECRET]@errors.ably.io/[ID]`. When set to `null`, `false` or an empty string (depending on what is idiomatic for the platform), exception reporting is disabled. |
 | port: Int default 80 ||| TO3k4 | For development environments only; allows a non-default Ably port to be specified. |
 | queueMessages: Bool default true ||| RTP16b, TO3g | If `false`, this disables the default behavior whereby the library queues messages on a connection in the disconnected or connecting states. The default behavior allows applications to submit messages immediately upon instancing the library without having to wait for the connection to be established. Applications may use this option to disable queueing if they wish to have application-level control over the queueing under those conditions. |
 | restHost: String default "rest.ably.io" ||| RSC12, TO3k2 | For development environments only; allows a non-default Ably host to be specified. |
@@ -426,16 +426,16 @@ The parameters for an Ably TokenRequest. Tokens are requested using `Auth.reques
 
 ## class ConnectionDetails
 
-||| Spec | Description |
-|---|---|---|---|
-| clientId: String? || RSA12a, CD2a | |
-| connectionKey: String || RTN15e, CD2b | |
-| connectionStateTtl: Duration || CD2f, RTN14e, DF1a | |
-| maxFrameSize: Int || CD2d | |
-| maxInboundRate: Int || CD2e | |
-| maxMessageSize: Int || CD2c | |
-| serverId: String || CD2g | |
-| maxIdleInterval: Duration || CD2h | |
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| clientId: String? ||| RSA12a, CD2a |  `clientId` contains the client ID assigned to the token. If `clientId` is `null` or omitted, then the client is prohibited from assuming a `clientId` in any operations, however if `clientId` is a wildcard string `*`, then the client is permitted to assume any `clientId`. Any other string value for `clientId` implies that the `clientId` is both enforced and assumed for all operations from this client. |
+| connectionKey: String ||| RTN15e, CD2b | The connection secret key string that is used to resume a connection and its state. |
+| connectionStateTtl: Duration ||| CD2f, RTN14e, DF1a | The duration that Ably will persist the connection state when a Realtime client is abruptly disconnected. |
+| maxFrameSize: Int ||| CD2d | Overrides the default `maxFrameSize`. |
+| maxInboundRate: Int ||| CD2e | The maximum allowable number of requests per second from a client or Ably. In the case of a realtime connection, this restriction applies to the number of `ProtocolMessage` objects sent, whereas in the case of REST, it is the total number of REST requests per second. |
+| maxMessageSize: Int ||| CD2c | Overrides the default `maxMessageSize`.|
+| serverId: String ||| CD2g | A unique identifier for the front-end server that the client has connected to. This server ID is only used for the purposes of debugging. |
+| maxIdleInterval: Duration ||| CD2h | The maximum length of time in milliseconds that the server will allow no activity to occur in the server to client direction. After such a period of inactivity, the server will send a `HEARTBEAT` or transport-level ping to the client. If the value is 0, the server will allow arbitrarily-long levels of inactivity. |
 
 ## class Message
 
@@ -472,9 +472,9 @@ The parameters for an Ably TokenRequest. Tokens are requested using `Auth.reques
 
 ## class AuthDetails
 
-||| Spec | Description |
-|---|---|---|---|
-| accessToken: String || AD2 | TBD |
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| accessToken: String ||| AD2 | Contains the authentication token string. |
 
 ## class Connection
 
@@ -482,7 +482,7 @@ The `Connection` object enables the management of a connection to Ably.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| embeds `EventEmitter<ConnectionEvent, ConnectionStateChange>` ||| RTN4a, RTN4e, RTN4g | TBD |
+| embeds `EventEmitter<ConnectionEvent, ConnectionStateChange>` ||| RTN4a, RTN4e, RTN4g | An [`EventEmitter`]{@link} object. |
 | errorReason: ErrorInfo? ||| RTN14a | When a connection failure occurs this property contains the `ErrorInfo`. |
 | id: String? ||| RTN8 | A unique public identifier String for this connection, used to identify this member in presence events and messages. |
 | key: String? ||| RTN9 | A unique private connection key String used to recover or resume a connection, assigned by Ably. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. This private connection key can also be used by other REST clients to publish on behalf of this client. See the [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf) for more info. |
