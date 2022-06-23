@@ -13,8 +13,8 @@ The REST library is typically used server-side to issue tokens, publish messages
 | constructor(ClientOptions) ||| RSC1 | Construct a REST client object using an Ably [`ClientOptions`]{@link} object. |
 | auth: Auth ||| RSC5 | A reference to the [`Auth`]{@link} authentication object. |
 | push: Push |||| A reference to the [`Push`]{@link} object. |
-| batch: BatchOperations ||| BO1 | TBD?? |
-| device() => io LocalDevice |||| TBD?? |
+| batch: BatchOperations ||| BO1 | A [`BatchOperations`]{@link} object. |
+| device() => LocalDevice |||| The local device instance represents the current state of the device in respect of it being a target for push notifications. |
 | channels: `Channels<RestChannel>` ||| RSN1 | A reference to the [`Channel`]{@link} collection instance. |
 | request() => io HttpPaginatedResponse ||| RSC19 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || String method, ||| Request method to use such as `GET`, `POST`. |
@@ -43,7 +43,7 @@ The Realtime client extends the REST client and as such provides the functionali
 | constructor(ClientOptions) ||| RSC1 | Constructs a realtime client object using an Ably [`ClientOptions`]{@link} object. |
 | auth: Auth ||| RTC4 | A reference to the [`Auth`]{@link} authentication object. |
 | push: Push ||| | A reference to the [`Push`]{@link} object. |
-| device() => io LocalDevice |||| TBD?? |
+| device() => LocalDevice |||| The local device instance represents the current state of the device in respect of it being a target for push notifications. |
 | channels: `Channels<RealtimeChannel>` ||| RTC3, RTS1 | A reference to the [`Channel`]{@link} collection instance. |
 | clientId: String? ||| proxy for RSA7 | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key; note that a `clientId` may also be implicit in a token used to instantiate the library; an error will be raised if a `clientId` specified here conflicts with the `clientId` implicit in the token.|
 | connection: Connection ||| RTC2 | A reference to the [`Connection`]{@link} object. |
