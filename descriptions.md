@@ -299,7 +299,7 @@
 
 ## class ChannelStateChange
 
-A `ChannelStateChange` is a type encapsulating state change information emitted by the `Channel` object.
+`ChannelStateChange` is an object encapsulating state change information emitted by the `Channel` object.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -311,6 +311,8 @@ A `ChannelStateChange` is a type encapsulating state change information emitted 
 
 ## class ChannelOptions
 
+Options provided when creating a channel object.
+
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|----|
 | +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Optional constructor `withCipherKey`, that takes a key only. |
@@ -320,35 +322,42 @@ A `ChannelStateChange` is a type encapsulating state change information emitted 
 
 ## class ChannelDetails
 
-||| Spec | Description |
-|---|---|---|---|
-| channelId: String || CHD2a | |
-| name: String || CHD2b | |
-| status: ChannelStatus || CHD2c | |
+`ChannelDetails` is an object that represents information for a channel including `channelId`, `status` and occupancy.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channelId: String ||| CHD2a | The identifier of the channel. |
+| status: ChannelStatus ||| CHD2b | A [`ChannelStatus`]{@link} object. |
 
 ## class ChannelStatus
 
-||| Spec | Description |
-|---|---|---|---|
-| isActive: Boolean || CHS2a | |
-| occupancy: ChannelOccupancy || CHS2b | |
+`ChannelStatus` is an object that contains the status and occupancy of a channel.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| isActive: Boolean ||| CHS2a | Represents if the channel is active. |
+| occupancy: ChannelOccupancy ||| CHS2b | A [`ChannelOccupancy`{@link} object. |
 
 ## class ChannelOccupancy
 
-||| Spec | Description |
-|---|---|---|---|
-| metrics: ChannelMetrics || CHO2a | |
+`ChannelOccupancy` is an object that contain channel metrics.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| metrics: ChannelMetrics ||| CHO2a | A [`ChannelMetrics`]{@link} object. |
 
 ## class ChannelMetrics
 
-||| Spec | Description |
-|---|---|---|---|
-| connections: Int || CHM2a | |
-| presenceConnections: Int || CHM2b | |
-| presenceMembers: Int || CHM2c | |
-| presenceSubscribers: Int || CHM2d | |
-| publishers: Int || CHM2e | |
-| subscribers: Int || CHM2f | |
+`ChannelMetrics` is an object that contains the count of `publishers` and `subscribers`, `connections` and `presenceConnections`, `presenceMembers` and `presenceSubscribers`.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| connections: Int ||| CHM2a | The total number of connections to the channel. |
+| presenceConnections: Int ||| CHM2b | The total number of presence connections to the channel. |
+| presenceMembers: Int ||| CHM2c | The total number of presence members for the channel. |
+| presenceSubscribers: Int ||| CHM2d | The total number of presence subscribers for the channel. |
+| publishers: Int ||| CHM2e | The total number of publishers to the channel. |
+| subscribers: Int ||| CHM2f | The total number of subscribers to the channel. |
 
 ## class CipherParams
 
@@ -431,7 +440,7 @@ A `ChannelStateChange` is a type encapsulating state change information emitted 
 
 ## class Message
 
-A Message represents an individual message that is sent to or received from Ably.
+A `Message` object represents an individual message that is sent to or received from Ably.
 
 | Method / Property | Parameter| Returns | Spec | Description |
 |---|---|---|---|---|
