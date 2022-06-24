@@ -149,10 +149,10 @@
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| exists(String) -> Bool ||| RSN2, RTS2 | Method to check if a certain channel exists. |
-| get(String) -> ChannelType ||| RSN3a, RTS3a | Creates a new `Channel` object if none for the channel exists, or returns the existing channel object. |
-| get(String, ChannelOptions) -> ChannelType ||| RSN3c, RTS3c | Creates a new `Channel` object, with the specified `ClientOptions`, if none for the channel exists, or returns the existing channel object. |
-| iterate() -> `Iterator<ChannelType>` ||| RSN2, RTS2 | Method to iterate through the existing channels. |
+| exists(String) -> Bool || `true` if the channel exists, otherwise `false`. | RSN2, RTS2 | Method to check if a certain channel exists. |
+| get(String) -> ChannelType || A `ChannelType` object. | RSN3a, RTS3a | Creates a new `Channel` object if none for the channel exists, or returns the existing channel object. |
+| get(String, ChannelOptions) -> ChannelType || A `ChannelType` object. | RSN3c, RTS3c | Creates a new `Channel` object, with the specified `ClientOptions`, if none for the channel exists, or returns the existing channel object. |
+| iterate() -> `Iterator<ChannelType>` || Each iteration returns a `ChannelType` object. | RSN2, RTS2 | Method to iterate through the existing channels. |
 | release(String) ||| RSN4, RTS4 | Releases a `Channel` object, deleting it, and enabling it to be garbage collected. It also removes any listeners associated with the channel. To release a channel, the channel state must be `initialized`, `detached`, or `failed`. |
 
 ## class RestChannel
@@ -315,7 +315,7 @@ Options provided when creating a channel object.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|----|
-| +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Optional constructor `withCipherKey`, that takes a key only. |
+| +withCipherKey(key: Binary \| String)? -> ChannelOptions || A `ChannelOptions` object. | TB3 | Optional constructor `withCipherKey`, that takes a key only. |
 | cipher: (CipherParams \| Params)? ||| RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
 | params?: `Dict<String, String>` ||| TB2c | Optional [parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
 | modes?: [ChannelMode] ||| TB2d | For realtime client libraries only. An array of [`ChannelMode`]{@link} objects. |
@@ -446,8 +446,8 @@ A `Message` object represents an individual message that is sent to or received 
 |---|---|---|---|---|
 | constructor(name: String?, data: Data?) ||| TM2 | Construct a `Message` object with an event name and payload. |
 | constructor(name: String?, data: Data?, clientId: String?) ||| TM2 | Construct a `Message` object with an event name, payload, and a unique client ID. |
-| +fromEncoded(JsonObject, ChannelOptions?) -> Message ||| TM3 | A static factory method to create a `Message` object from a deserialized Message-like object encoded using Ably's wire protocol. |
-| +fromEncodedArray(JsonArray, ChannelOptions?) -> [Message] ||| TM3 | A static factory method to create an array of `Message` objects from an array of deserialized Message-like object encoded using Ably's wire protocol. |
+| +fromEncoded(JsonObject, ChannelOptions?) -> Message || A `Message` object. | TM3 | A static factory method to create a `Message` object from a deserialized Message-like object encoded using Ably's wire protocol. |
+| +fromEncodedArray(JsonArray, ChannelOptions?) -> [Message] || An array of A `Message` objects. | TM3 | A static factory method to create an array of `Message` objects from an array of deserialized Message-like object encoded using Ably's wire protocol. |
 | clientId: String? ||| RSL1g1, TM2b | The client ID of the publisher of this message. |
 | connectionId: String? ||| TM2c | The connection ID of the publisher of this message. |
 | data: Data? ||| TM2d | The message payload, if provided. |
