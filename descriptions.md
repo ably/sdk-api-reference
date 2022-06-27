@@ -621,17 +621,6 @@ The interval unit over which statistics are gathered.
 | remove(PushChannelSubscription) => io || RSH1c4 | |
 | removeWhere(params: `Dict<String, String>`) => io || RSH1c5 | |
 
-## enum DevicePushTransportType
-
-The transport used to carry push notifications. 
-
-| Enum || Spec | Description |
-|---|---|---|---|
-| "fcm" || PTTT1 | Firebase Cloud Messaging. |
-| "gcm" || PTT1 | Google Cloud Messaging. |
-| "apns" || PTT1 | Apple Push Notification service. |
-| "web" || PTT1 | Web Push Notifications. |
-
 ## enum DevicePlatform
 
 The device receiving push notifications.
