@@ -346,19 +346,21 @@
 
 ## class CipherParams
 
-||| Spec | Description |
+Parameters to configure encryption for a channel.
+
+| Method / Property | Parameter | Spec | Description |
 |---|---|---|---|
-| algorithm: String default "AES" || TZ2a | |
-| key: Binary || TZ2d | |
-| keyLength: Int || TZ2b | |
-| mode: String default "CBC" || TZ2c | |
+| algorithm: String default "AES" || TZ2a | Optionally specify the algorithm to use for encryption, currently only AES is supported. |
+| key: Binary || TZ2d | Private key used to encrypt and decrypt payloads. |
+| keyLength: Int || TZ2b | The length in bits of the key; for example 128 or 256. |
+| mode: String default "CBC" || TZ2c | Optionally specify cipher mode, currently only CBC is supported. |
 
 ## class Crypto
 
-||| Spec | Description |
-|---|---|---|---|
-| +getDefaultParams(Params) -> CipherParams || RSE1 | |
-| +generateRandomKey(keyLength: Int?) => io Binary || RSE2 | |
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| +getDefaultParams(Params) -> CipherParams || Returns a complete `CipherParams` instance, using the default values for any field not supplied. | RSE1 | Gets the default cipher parameters. |
+| +generateRandomKey(keyLength: Int?) => io Binary || Returns the key as a binary, for example, a byte array, depending on the language. If the language cryptographic randomness primitives are blocking or async, a callback is used. The callback returns the generated binary key. | RSE2 | Generates a random key. Takes an optional `keyLength` parameter, which is the length in bits of the key to be generated. If unspecified, this is equal to the default `keyLength` of the default algorithm: for AES this is 256 bits. |
 
 ## class RestPresence
 
