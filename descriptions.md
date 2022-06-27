@@ -290,12 +290,14 @@ The state of the channel.
 
 ## enum ChannelMode
 
+`ChannelMode` is set by the client to configure client capabilities. The mode flags can be combined to reflect the capabilities required.
+
 | Enum || Spec | Description |
 |---|---|---|---|
-| PRESENCE || |
-| PUBLISH || |
-| SUBSCRIBE || |
-| PRESENCE_SUBSCRIBE || |
+| PRESENCE || The client can enter presence. |
+| PUBLISH || The client can publish messages. |
+| SUBSCRIBE || The client can subscribe to messages. |
+| PRESENCE_SUBSCRIBE || The client can receive presence messages. |
 
 ## class ChannelStateChange
 
