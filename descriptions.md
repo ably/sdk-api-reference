@@ -627,7 +627,7 @@ The transport used to carry push notifications.
 
 | Enum || Spec | Description |
 |---|---|---|---|
-| "fcm" || PTT1 | Firebase Cloud Messaging. |
+| "fcm" || PTTT1 | Firebase Cloud Messaging. |
 | "gcm" || PTT1 | Google Cloud Messaging. |
 | "apns" || PTT1 | Apple Push Notification service. |
 | "web" || PTT1 | Web Push Notifications. |
@@ -638,9 +638,9 @@ The device receiving push notifications.
 
 | Enum || Spec | Description |
 |---|---|---|---|
-| "android" || PPT1 | Android. |
-| "ios" || PPT1 | iOS. |
-| "browser" || PPT1 | Web browser. |
+| "android" || PCD6 | Device platform is Android. |
+| "ios" || PCD6 | Device platform is iOS. |
+| "browser" || PCD6 | Device platform is web browser. |
 
 ## enum DeviceFormFactor
 
@@ -648,14 +648,14 @@ Form factor of device receiving the push notification.
 
 | Enum || Spec | Description |
 |---|---|---|---|
-| "phone" || PDT1 | |
-| "tablet" || PDT1 | |
-| "desktop" || PDT1 | |
-| "tv" || PDT1 | |
-| "watch" || PDT1 | |
-| "car" || PDT1 | |
-| "embedded" || PDT1 | |
-| "other" || PDT1 | |
+| "phone" || PCD4 | Device form factor. |
+| "tablet" || PCD4 | Device form factor. |
+| "desktop" || PCD4 | Device form factor. |
+| "tv" || PCD4 | Device form factor. |
+| "watch" || PCD4 | Device form factor. |
+| "car" || PCD4 | Device form factor. |
+| "embedded" || PCD4 | Device form factor. |
+| "other" || PCD4 | Device form factor. |
 
 ## class PushChannelSubscription
 
