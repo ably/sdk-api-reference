@@ -267,26 +267,30 @@
 
 ## enum ChannelState
 
-||| Spec | Description |
+The state of the channel.
+
+| Enum || Spec | Description |
 |---|---|---|---|
-| INITIALIZED || |
-| ATTACHING || |
-| ATTACHED || |
-| DETACHING || |
-| DETACHED || |
-| SUSPENDED || |
-| FAILED || |
+| INITIALIZED || A `Channel` object having this state has been initialized but no attach has yet been attempted. |
+| ATTACHING || An attach has been initiated by sending a request to Ably. This is a transient state; it will be followed either by a transition to attached, suspended, or failed. |
+| ATTACHED || Attach has succeeded. In the attached state a client may publish and subscribe to messages, or be present. |
+| DETACHING || A detach has been initiated on the attached `Channel` by sending a request to Ably. This is a transient state; it will be followed either by a transition to detached or failed. |
+| DETACHED || The `Channel`, having previously been attached, has been detached by the user. |
+| SUSPENDED || The `Channel`, having previously been attached, has lost continuity, usually due to the client being disconnected from Ably for more than two minutes. It will automatically attempt to reattach as soon as connectivity is restored. |
+| FAILED || An indefinite failure condition. This state is entered if a `Channel` error has been received from the Ably service (such as an attempt to attach without the necessary access rights). |
 
 ## enum ChannelEvent
 
-||| Spec | Description |
+`ChannelEvent` is a string that can be emitted as an event on the `Channel` object; either a `ChannelState` or an `update` event.
+
+| Enum || Spec | Description |
 |---|---|---|---|
-| embeds ChannelState || |
-| UPDATE || RTL2g | |
+| embeds ChannelState || The event contains a `[ChannelState]{@link}`|
+| UPDATE || RTL2g | An event for changes to channel conditions that do not result in a change in `ChannelState`. |
 
 ## enum ChannelMode
 
-||| Spec | Description |
+| Enum || Spec | Description |
 |---|---|---|---|
 | PRESENCE || |
 | PUBLISH || |
@@ -402,13 +406,15 @@
 
 ## enum PresenceAction
 
-||| Spec | Description |
+`PresenceAction` is a string with a value matching any of the Realtime Presence states and events.
+
+| Enum || Spec | Description |
 |---|---|---|---|
-| ABSENT || TP2 | |
-| PRESENT || TP2 | |
-| ENTER || TP2 | |
-| LEAVE || TP2 | |
-| UPDATE || TP2 | |
+| ABSENT || TP2 | A member is not present in the channel. |
+| PRESENT || TP2 | When subscribing to presence events on a channel that already has members present, this event is emitted for every member already present on the channel before the subscribe listener was registered. |
+| ENTER || TP2 | A new member has entered the channel. |
+| LEAVE || TP2 | A member who was present has now left the channel. This may be a result of an explicit request to leave or implicitly when detaching from the channel. Alternatively, if a member's connection is abruptly disconnected and they do not resume their connection within a minute, Ably treats this as a leave event as the client is no longer present. |
+| UPDATE || TP2 | An already present member has updated their member data. Being notified of member data updates can be very useful, for example, it can be used to update the status of a user when they are typing a message. |
 
 ## class ConnectionDetails
 
@@ -479,7 +485,7 @@
 
 ## enum ConnectionState
 
-||| Spec | Description |
+| Enum || Spec | Description |
 |---|---|---|---|
 | INITIALIZED || |
 | CONNECTING || |
@@ -492,10 +498,12 @@
 
 ## enum ConnectionEvent
 
-||| Spec | Description |
+`ConnectionEvent` is a string that can be emitted as an event on the `Connection` object; either a Realtime `ConnectionState` or an `update` event.
+
+| Enum || Spec | Description |
 |---|---|---|---|
-| embeds ConnectionState || |
-| UPDATE || RTN4h | |
+| embeds ConnectionState || See [`ConnectionState`]{@link}. |
+| UPDATE || RTN4h | An event for changes to connection conditions for which the `ConnectionState` (such as `CONNECTED`) does not change. |
 
 ## class ConnectionStateChange
 
@@ -529,12 +537,14 @@
 
 ## enum StatsIntervalGranularity
 
-||| Spec | Description |
+The interval unit over which statistics are gathered.
+
+| Enum || Spec | Description |
 |---|---|---|---|
-| MINUTE || |
-| HOUR || |
-| DAY || |
-| MONTH || |
+| MINUTE || Interval unit over which statistics are gathered is a minute. |
+| HOUR || Interval unit over which statistics are gathered is an hour. |
+| DAY || Interval unit over which statistics are gathered is a day. |
+| MONTH || Interval unit over which statistics are gathered is a month. |
 
 ## class DeviceDetails
 
@@ -611,24 +621,30 @@
 
 ## enum DevicePushTransportType
 
-||| Spec | Description |
+The transport used to carry push notifications. 
+
+| Enum || Spec | Description |
 |---|---|---|---|
-| "fcm" || PTT1 | |
-| "gcm" || PTT1 | |
-| "apns" || PTT1 | |
-| "web" || PTT1 | |
+| "fcm" || PTT1 | Firebase Cloud Messaging. |
+| "gcm" || PTT1 | Google Cloud Messaging. |
+| "apns" || PTT1 | Apple Push Notification service. |
+| "web" || PTT1 | Web Push Notifications. |
 
 ## enum DevicePlatform
 
-||| Spec | Description |
+The device receiving push notifications.
+
+| Enum || Spec | Description |
 |---|---|---|---|
-| "android" || PPT1 | |
-| "ios" || PPT1 | |
-| "browser" || PPT1 | |
+| "android" || PPT1 | Android. |
+| "ios" || PPT1 | iOS. |
+| "browser" || PPT1 | Web browser. |
 
 ## enum DeviceFormFactor
 
-||| Spec | Description |
+Form factor of device receiving the push notification.
+
+| Enum || Spec | Description |
 |---|---|---|---|
 | "phone" || PDT1 | |
 | "tablet" || PDT1 | |
@@ -697,15 +713,15 @@
 
 ## enum PluginType
 
-||| Spec | Description |
+| Enum || Spec | Description |
 |---|---|---|---|
-| "vcdiff" || |
+| "vcdiff" || A plugin capable of decoding vcdiff-encoded messages. It must implement the [`VCDiffDecoder`]{@link} interface. |
 
 ## class VCDiffDecoder
 
 ||| Spec | Description |
 |---|---|---|---|
-| decode([byte] delta, [byte] base) -> [byte]  || |
+| decode([byte] delta, [byte] base) -> [byte]  || The `VCDiffDecoder.decode` method receives the stored base payload of the last message on a channel. If the base payload is a string, it should be encoded to binary using UTF-8, before being passed as the `base` argument to the `VCDiffDecoder.decode` method. |
 
 ## class DeltaExtras
 
