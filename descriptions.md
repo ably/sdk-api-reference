@@ -583,6 +583,8 @@
 
 ## class JsonObject
 
+`JsonObject` denotes any type or interface in the target language that represents an RFC4627 object or array value respectively. Such types serialize to, and may be deserialized from, the corresponding JSON text. This object is platform-dependent, typically a Dict-like object.
+
 ||| Spec | Description |
 |---|---|---|---|
 |||| |
@@ -651,27 +653,31 @@
 
 ## class ErrorInfo
 
+A generic Ably error object that contains an Ably-specific status code, and a generic status code. Errors returned from the Ably server are compatible with the `ErrorInfo` structure and should result in errors that inherit from `ErrorInfo`.
+
 ||| Spec | Description |
 |---|---|---|---|
-| code: Int || TI1 | |
-| href: String? || TI4 | |
-| message: String || TI1 | |
-| cause: ErrorInfo? || TI1 | |
-| statusCode: Int || TI1 | |
-| requestId: String? || RSC7c | |
+| code: Int || TI1 | Ably [error code](https://github.com/ably/ably-common/blob/main/protocol/errors.json). |
+| href: String? || TI4 | This is included for REST responses to provide a URL for customers to find more help on the error code. |
+| message: String || TI1 | 	Additional message information, where available. |
+| cause: ErrorInfo? || TI1 | Information pertaining to what caused the error where available. |
+| statusCode: Int || TI1 | HTTP Status Code corresponding to this error, where applicable. |
+| requestId: String? || RSC7c | If a request fails, the request ID must be included in the `ErrorInfo` returned to the user. |
 
 ## class `EventEmitter<Event, Data>`
 
-||| Spec | Description |
-|---|---|---|---|
-| on((Data...) ->) || RTE4 | |
-| on(Event, (Data...) ->) || RTE4 | |
-| once((Data...) ->) || RTE4 | |
-| once(Event, (Data...) ->) || RTE4 | |
-| off() || RTE5 | |
-| off((Data...) ->) || RTE5 | |
-| off(Event, (Data...) ->) || RTE5 | |
-| emit(Event, Data...) || RTE6 | |
+EventEmitter is a generic interface for event registration and delivery used in a number of the types in the Realtime client library. For example, the Connection object emits events for connection state using the EventEmitter pattern
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| on((Data...) ->) ||| RTE4 | Registers the provided listener all events. If `on` is called more than once with the same listener and event, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `on`, and an event is emitted once, the listener would be invoked twice. |
+| on(Event, (Data...) ->) ||| RTE4 | Registers the provided listener for the specified event. If `on` is called more than once with the same listener and event, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `on`, and an event is emitted once, the listener would be invoked twice. |
+| once((Data...) ->) ||| RTE4 | Registers the provided listener for the first event that is emitted. If `once` is called more than once with the same listener, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `once`, and an event is emitted once, the listener would be invoked twice. However, all subsequent events emitted would not invoke the listener as `once` ensures that each registration is only invoked once. |
+| once(Event, (Data...) ->) ||| RTE4 | Registers the provided listener for the first occurrence of a single named event specified as the `Event` argument. If `once` is called more than once with the same listener, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `once`, and an event is emitted once, the listener would be invoked twice. However, all subsequent events emitted would not invoke the listener as `once` ensures that each registration is only invoked once. |
+| off() ||| RTE5 | Deregisters all registrations, for all events and listeners. |
+| off((Data...) ->) ||| RTE5 | Deregisters the specified listener. Removes all registrations matching the given listener, regardless of whether they are associated with an event or not. |
+| off(Event, (Data...) ->) ||| RTE5 | Removes all registrations that match both the specified listener and the specified event. |
+| emit(Event, Data...) ||| RTE6 | Emits an event, calling registered listeners with the given event name and any other given arguments. If an exception is raised in any of the listeners, the exception is caught by the `EventEmitter` and the exception is logged to the Ably logger. |
 
 ## class `PaginatedResult<T>`
 
