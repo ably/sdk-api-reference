@@ -353,7 +353,7 @@ Parameters to configure encryption for a channel.
 | algorithm: String default "AES" || TZ2a | Optionally specify the algorithm to use for encryption. Only `AES` is supported. |
 | key: Binary || TZ2d | Private key used to encrypt and decrypt payloads. |
 | keyLength: Int || TZ2b | The length in bits of the key; for example 128 or 256. |
-| mode: String default "CBC" || TZ2c | Optionally specify cipher mode, currently only CBC is supported. |
+| mode: String default "CBC" || TZ2c | Optionally specify cipher mode. Only `CBC` is supported. |
 
 ## class Crypto
 
