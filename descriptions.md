@@ -357,10 +357,16 @@ Parameters to configure encryption for a channel.
 
 ## class Crypto
 
+Ably client libraries support built-in symmetric encryption of message content, making it easier to build apps that encrypt content fully end-to-end. While TLS is enabled by default and ensures that data is securely sent to and received from Ably, messages are not encrypted within the Ably system. Using the `Crypto` object ensures that message payloads are opaque, can never be decrypted by Ably, and can only be decrypted by other clients that share your secret key.
+
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| +getDefaultParams(Params) -> CipherParams || Returns a complete `CipherParams` instance, using the default values for any field not supplied. | RSE1 | Gets the default cipher parameters. |
-| +generateRandomKey(keyLength: Int?) => io Binary || Returns the key as a binary, for example, a byte array, depending on the language. If the language cryptographic randomness primitives are blocking or async, a callback is used. The callback returns the generated binary key. | RSE2 | Generates a random key. Takes an optional `keyLength` parameter, which is the length in bits of the key to be generated. If unspecified, this is equal to the default `keyLength` of the default algorithm: for AES this is 256 bits. |
+| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Retrieves the default cipher parameters. |
+|| `Params` overrides the default parameters. ||||
+||| Completed `CipherParams` instance, using the default values for any field not supplied. |||
+| +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key. |
+|| `keyLength` is the length in bits of the key to be generated. If unspecified, this is equal to the default `keyLength` of the default algorithm: for AES this is 256 bits. ||||
+||| The key as a binary, for example, a byte array. If the language cryptographic randomness primitives are blocking or async, a callback is used. The callback returns the generated binary key. |||
 
 ## class RestPresence
 
