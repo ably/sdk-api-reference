@@ -346,27 +346,27 @@
 
 ## class CipherParams
 
-Parameters to configure encryption for a channel.
+The `CipherParams` object contains parameters to configure encryption for a channel.
 
 | Method / Property | Parameter | Spec | Description |
 |---|---|---|---|
-| algorithm: String default "AES" || TZ2a | Optionally specify the algorithm to use for encryption. Only `AES` is supported. |
-| key: Binary || TZ2d | Private key used to encrypt and decrypt payloads. |
-| keyLength: Int || TZ2b | The length in bits of the key; for example 128 or 256. |
-| mode: String default "CBC" || TZ2c | Optionally specify cipher mode. Only `CBC` is supported. |
+| algorithm: String default "AES" || TZ2a | The algorithm to use for encryption. Only `AES` is supported. |
+| key: Binary || TZ2d | The private key used to encrypt and decrypt payloads. |
+| keyLength: Int || TZ2b | The length of the key in bits; for example 128 or 256. |
+| mode: String default "CBC" || TZ2c | The cipher mode. Only `CBC` is supported. |
 
 ## class Crypto
 
-Ably client libraries support built-in symmetric encryption of message content, making it easier to build apps that encrypt content fully end-to-end. While TLS is enabled by default and ensures that data is securely sent to and received from Ably, messages are not encrypted within the Ably system. Using the `Crypto` object ensures that message payloads are opaque, can never be decrypted by Ably, and can only be decrypted by other clients that share your secret key.
+The `Crypto` object ensures that message payloads are encrypted, can never be decrypted by Ably, and can only be decrypted by other clients that share the same secret symmetric key.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Retrieves the default cipher parameters. |
-|| `Params` overrides the default parameters. ||||
-||| Completed `CipherParams` instance, using the default values for any field not supplied. |||
-| +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key. |
-|| `keyLength` is the length in bits of the key to be generated. If unspecified, this is equal to the default `keyLength` of the default algorithm: for AES this is 256 bits. ||||
-||| The key as a binary, for example, a byte array. If the language cryptographic randomness primitives are blocking or async, a callback is used. The callback returns the generated binary key. |||
+| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Retrieves, or optionally sets, the [`CipherParams`]{@link} for the channel to be encrypted. |
+|| `Params` ||| Overrides the default parameters. A suitable `key` must be provided as a minimum. |
+||| `CipherParams` || A [`CipherParams`]{@link} object, using the default values for any field not supplied. |
+| +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key to be used in the encryption of the channel. |
+|| `keyLength` ||| The length of the key, in bits, to be generated. If not specified, this is equal to the default `keyLength` of the default algorithm: for AES this is 256 bits. |
+||| `Binary` || The key as a binary, for example, a byte array. If the language cryptographic randomness primitives are blocking or async, a callback is used. The callback returns the generated binary key. |
 
 ## class RestPresence
 
