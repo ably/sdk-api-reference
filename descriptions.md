@@ -346,7 +346,7 @@
 
 ## class CipherParams
 
-The `CipherParams` object contains parameters to configure encryption for a channel.
+The `CipherParams` object contains properties to configure encryption for a channel.
 
 | Method / Property | Parameter | Spec | Description |
 |---|---|---|---|
