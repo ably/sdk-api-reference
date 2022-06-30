@@ -230,7 +230,7 @@ The `BatchResult<T>` object contains the results of a batch operation.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| error: ErrorInfo? ||| BPA2b | Describes the reason for which a batch operation failed, or states that the batch operation was only partially successful as an [`ErrorInfo`]{@link} object. Will be null if the operation was successful. |
+| error: ErrorInfo? ||| BPA2b | Describes the reason for which a batch operation failed, or states that the batch operation was only partially successful as an [`ErrorInfo`]{@link} object. Will be `null` if the operation was successful. |
 | responses: []T? ||| BPA2a | An array of [`BatchPublishResponse`]{@link} or [`BatchPresenceResponse`]{@link} objects that contain details of successful and partially successful batch operations. |
 
 ## class BatchPublishResponse
