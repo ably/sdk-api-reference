@@ -367,15 +367,15 @@ The `RestPresence` object associated with a channel, enabling the retrieval of t
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | get(limit: int api-default 100, clientId: String?, connectionId: String?) => io `PaginatedResult<PresenceMessage>` ||| RSPa | Retrieves the current members present on the channel and the metadata for each member, such as their [`PresenceAction`]{@link} and ID. Returns a paginated list of [`PresenceMessage`]{@link} objects. |
-|| `limit`: int api-default 100, || RSP3a | An upper limit on the number of messages returned. |
-|| `clientId`: String?, || RSP3a2 || Filters the list of returned presence members by a specific client using its ID. |
-|| `connectionId`: String?, || RSP3a3 | Filters the list of returned presence members by a specific connection using its ID. |
+|| `limit` || RSP3a | An upper limit on the number of messages returned. |
+|| `clientId` || RSP3a2 | Filters the list of returned presence members by a specific client using its ID. |
+|| `connectionId` || RSP3a3 | Filters the list of returned presence members by a specific connection using its ID. |
 ||| `PaginatedResult<PresenceMessage>` || A paginated list of [`PresenceMessage`]{@link} objects. |
 | history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<PresenceMessage>` ||| RSP4a | Retrieves a list of historic presence messages that occurred on the channel. Returns a paginated list of [`PresenceMessage`]{@link} objects. |
-|| `start`: Time, || RSP4b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
-|| `end`: Time api-default now(), || RSP4b1 | The time until messages are retrieved, specified as a Unix timestamp. |
-|| `direction`: .Backwards \| .Forwards api-default .Backwards, || RSP4b2 | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
-|| `limit`: int api-default 100, || RSP4b3 | An upper limit on the number of messages returned. |
+|| `start` || RSP4b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
+|| `end` || RSP4b1 | The time until messages are retrieved, specified as a Unix timestamp. |
+|| `direction` || RSP4b2 | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
+|| `limit` || RSP4b3 | An upper limit on the number of messages returned. |
 ||| `PaginatedResult<PresenceMessage>` || A paginated list of [`PresenceMessage`]{@link} objects. |
 
 ## class RealtimePresence
@@ -386,15 +386,15 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 |---|---|---|---|---|
 | syncComplete: Bool ||| RTP13 | Shows whether the presence set sync between Ably and the clients on the channel has been completed. Set to `true` when the sync is complete. |
 | get(waitForSync: Bool default true, clientId: String?, connectionId: String?) => io [`PresenceMessage`] ||| RTP11 | Retrieves the current members present on the channel and the metadata for each member, such as their [`PresenceAction`]{@link} and ID. Returns an array of [`PresenceMessage`]{@link} objects. |
-|| `waitForSync`: Bool default true, || RTP11c1 | Sets whether to wait for a full presence set synchronization between Ably and the clients on the channel to complete before returning the results. Synchronization begins as soon as the channel is [`attached`]{@link}. When set to `true` the results will be returned as soon as the sync is complete. When set to `false` the current list of members will be returned without the sync completing. |
-|| `clientId`: String?, || RTP11c2 | Filters the array of returned presence members by a specific client using its ID. |
-|| `connectionId`: String?, || RTP11c3 | Filters the array of returned presence members by a specific connection using its ID. |
+|| `waitForSync` || RTP11c1 | Sets whether to wait for a full presence set synchronization between Ably and the clients on the channel to complete before returning the results. Synchronization begins as soon as the channel is [`attached`]{@link}. When set to `true` the results will be returned as soon as the sync is complete. When set to `false` the current list of members will be returned without the sync completing. |
+|| `clientId` || RTP11c2 | Filters the array of returned presence members by a specific client using its ID. |
+|| `connectionId` || RTP11c3 | Filters the array of returned presence members by a specific connection using its ID. |
 ||| [`PresenceMessage`] || An array of [`PresenceMessage`]{@link} objects. |
 | history(start: Time, end: Time, direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<PresenceMessage>` ||| RTP12c | Retrieves a list of historic presence messages that occurred on the channel. Returns a paginated list of [`PresenceMessage`]{@link} objects. |
-|| `start`: Time, || RTP12a | The time from which messages are retrieved, specified as a Unix timestamp. |
-|| `end`: Time, || RTP12a | The time until messages are retrieved, specified as a Unix timestamp. |
-|| `direction`: .Backwards \| .Forwards api-default .Backwards, || RTP12a | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
-|| `limit`: int api-default 100, || RTP12a | An upper limit on the number of messages returned. |
+|| `start` || RTP12a | The time from which messages are retrieved, specified as a Unix timestamp. |
+|| `end` || RTP12a | The time until messages are retrieved, specified as a Unix timestamp. |
+|| `direction` || RTP12a | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
+|| `limit` || RTP12a | An upper limit on the number of messages returned. |
 ||| `PaginatedResult<PresenceMessage>` || A paginated list of [`PresenceMessage`]{@link} objects. |
 | subscribe((PresenceMessage) ->) => io ||| RTP6a | Registers a listener that is called each time a [`PresenceMessage`]{@link} is received on the channel, such as a new member entering the presence set. |
 | subscribe(PresenceAction, (PresenceMessage) ->) => io ||| RTP6b | Registers a listener that is called each time a [`PresenceMessage`]{@link} matching a given [`PresenceAction`]{@link} is received on the channel, such as a new member entering the presence set. |
@@ -404,26 +404,26 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 | unsubscribe(PresenceAction, (PresenceMessage) ->) ||| RTP7b | Unregisters a specific listener that is registered to receive [`PresenceMessage`]{@link} on the channel for a given [`PresenceAction`]{@link}. |
 || `PresenceAction` || | A specific [`PresenceAction`]{@link} to unregister the listener for. |
 | enter(Data?, extras?: JsonObject) => io ||| RTP8 | Enters the presence set for the channel, optionally passing a `data` payload. A [clientID]{@link} is required to be present on a channel. An optional callback may be provided to notify of the success or failure of the operation. |
-|| `Data`? || | The payload associated with the presence member. |
-|| `extras`?: JsonObject || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `Data` || | The payload associated with the presence member. |
+|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
 | update(Data?, extras?: JsonObject) => io ||| RTP9 | Updates the `data` payload for a presence member. If called before entering the presence set, this is treated as an `enter` event. An optional callback may be provided to notify of the success or failure of the operation. |
-|| `Data`? || | The payload to update for the presence member. |
-|| `extras`?: JsonObject || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `Data` || | The payload to update for the presence member. |
+|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
 | leave(Data?, extras?: JsonObject) => io ||| RTP10 | Leaves the presence set for the channel. A client must have previously entered the presence set before they can leave it. An optional callback may be provided to notify of the success or failure of the operation. |
-|| `Data`? || | The payload associated with the presence member. |
-|| `extras`?: JsonObject || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `Data` || | The payload associated with the presence member. |
+|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
 | enterClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP4, RTP14, RTP15 | Enters the presence set of the channel for a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
-|| `clientId`: String || | The ID of the client to enter into the presence set. |
-|| `Data`? || | The payload associated with the presence member. |
-|| `extras`?: JsonObject || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `clientId` || | The ID of the client to enter into the presence set. |
+|| `Data` || | The payload associated with the presence member. |
+|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
 | updateClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP15 | Updates the `data` payload for a presence member using a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
-|| `clientId`: String || | The ID of the client to update in the presence set. |
-|| `Data`? || | The payload to update for the presence member. |
-|| `extras`?: JsonObject || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `clientId` || | The ID of the client to update in the presence set. |
+|| `Data` || | The payload to update for the presence member. |
+|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
 | leaveClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP15 | Leaves the presence set of the channel for a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
-|| `clientId`: String || | The ID of the client to leave the presence set for. |
-|| `Data`? || | The payload associated with the presence member. |
-|| `extras`?: JsonObject || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `clientId` || | The ID of the client to leave the presence set for. |
+|| `Data` || | The payload associated with the presence member. |
+|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
 
 ## enum PresenceAction
 
@@ -473,10 +473,10 @@ A `PresenceMessage` object represents an individual presence update sent to, or 
 |---|---|---|---|---|
 | +fromEncoded(JsonObject, ChannelOptions?) -> PresenceMessage ||| TP4 | Decodes and decrypts a deserialized `PresenceMessage`-like object using the cipher in [`ChannelOption`]{@link}. Any residual transforms that cannot be decoded or decrypted will be in the `encoding` property. Intended for users receiving messages from a source other than a REST or Realtime channel (for example a queue) to avoid having to parse the encoding string. |
 || `JsonObject` ||| The deserialized `PresenceMessage`-like object to decode and decrypt. |
-|| `ChannelOptions`? ||| A [`ChannelOptions`]{@link} object containing the cipher. |
+|| `ChannelOptions` ||| A [`ChannelOptions`]{@link} object containing the cipher. |
 | +fromEncodedArray(JsonArray, ChannelOptions?) -> [PresenceMessage] ||| TP4 | Decodes and decrypts an array of deserialized `PresenceMessage`-like object using the cipher in [`ChannelOption`]{@link}. Any residual transforms that cannot be decoded or decrypted will be in the `encoding` property. Intended for users receiving messages from a source other than a REST or Realtime channel (for example a queue) to avoid having to parse the encoding string. |
 || `JsonArray` ||| An array of deserialized `PresenceMessage`-like objects to decode and decrypt.|
-|| `ChannelOptions`? ||| A [`ChannelOptions`]{@link} object containing the cipher. |
+|| `ChannelOptions` ||| A [`ChannelOptions`]{@link} object containing the cipher. |
 | action: PresenceAction ||| TP3b | The type of [`PresenceAction`]{@link} the `PresenceMessage` is for. |
 | clientId: String ||| TP3c | The ID of the client that published the `PresenceMessage`. |
 | connectionId: String ||| TP3d | The ID of the connection associated with the client that published the `PresenceMessage`. |
@@ -485,7 +485,8 @@ A `PresenceMessage` object represents an individual presence update sent to, or 
 | extras: JsonObject? ||| TP3i | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
 | id: String ||| TP3a | A unique ID assigned to each `PresenceMessage` by Ably. |
 | timestamp: Time ||| TP3g | The time the `PresenceMessage` was received by Ably, as a Unix timestamp. |
-| memberKey() -> String ||| TP3h | A combination of `clientId` and `connectionId` to ensure that multiple connected clients with an identical `clientId` are uniquely identifiable. |
+| memberKey() -> String ||| TP3h | Combines `clientId` and `connectionId` to ensure that multiple connected clients with an identical `clientId` are uniquely identifiable. A string function that returns the combined `clientId` and `connectionId`. |
+||| `String` || A combination of `clientId` and `connectionId`. |
 
 ## class AuthDetails
 
