@@ -212,41 +212,55 @@
 
 ## class BatchOperations
 
-||| Spec | Description |
-|---|---|---|---|
-| publish([BatchSpec]) => `BatchResult<BatchPublishResponse>` || BO2a | |
-| publish(BatchSpec) => `BatchResult<BatchPublishResponse>` || BO2a | |
-| getPresence([String]) => `BatchResult<BatchPresenceResponse>` || BO2b | |
+The `BatchOperations` object is used to publish messages to multiple channels, or retrieve the presence state from multiple channels, as batch operations. 
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| publish([BatchSpec]) => `BatchResult<BatchPublishResponse>` ||| BO2a | Sends an array of [`BatchSpec`]{@link} objects to one or more channels, up to a maximum of 100 channels. Each `BatchSpec` object can contain a single message or an array of messages. Returns a [`BatchResult<BatchPublishResponse>`]{@link} object. |
+|| [`BatchSpec`] ||| An array of [`BatchSpec`]{@link} objects. |
+||| `BatchResult<BatchPublishResponse>` || A [`BatchResult<BatchPublishResponse>`]{@link} object. |
+| publish(BatchSpec) => `BatchResult<BatchPublishResponse>` ||| BO2a | Sends a [`BatchSpec`]{@link} object to one or more channels, up to a maximum of 100 channels. A `BatchSpec` object can contain a single message or an array of messages. Returns a [`BatchResult<BatchPublishResponse>`]{@link} object. |
+|| `BatchSpec` ||| A [`BatchSpec`]{@link} object. |
+| getPresence([String]) => `BatchResult<BatchPresenceResponse>` ||| BO2b | Retrieves the presence state for one or more channels, up to a maximum of 100 channels. Presence state includes the `clientId` of members and their current [`PresenceAction`]{@link}. Returns a [`BatchResult<BatchPresenceResponse>`]{@link} object. |
+|| [`String`] ||| An array of one or more channel names, up to a maximum of 100. |
 
 ## class `BatchResult<T>`
 
-||| Spec | Description |
-|---|---|---|---|
-| error: ErrorInfo? || BPA2b | |
-| responses: []T? || BPA2a | |
+The `BatchResult<T>` object contains the results of a batch operation.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| error: ErrorInfo? ||| BPA2b | Describes the reason for which a batch operation failed, or states that the batch operation was only partially successful as an [`ErrorInfo`]{@link} object. Will be `null` if the operation was successful. |
+| responses: []T? ||| BPA2a | An array of [`BatchPublishResponse`]{@link} or [`BatchPresenceResponse`]{@link} objects that contain details of successful and partially successful batch operations. |
 
 ## class BatchPublishResponse
 
-||| Spec | Description |
-|---|---|---|---|
-| channel: String || BPB2a | |
-| messageId: String? || BPB2b | |
-| error: ErrorInfo? || BPB2c | |
+The `BatchPublishResponse` object contains the response information for each batch publish operation.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BPB2a | The channel name a message was successfully published to, or the channel name for which an `error` was returned. |
+| messageId: String? ||| BPB2b | The unique ID for a successfully published message. |
+| error: ErrorInfo? ||| BPB2c | Describes the reason for which a message, or messages failed to publish to a channel as an [`ErrorInfo`]{@link} object. |
 
 ## class BatchPresenceResponse
 
-||| Spec | Description |
-|---|---|---|---|
-| channel: String || BPD2a | |
-| presence: []BatchPresence || PBD2b | |
+The `BatchPresenceResponse` contains the response information for each batch presence operation.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BPD2a | The channel name the presence state was retrieved for. |
+| presence: []BatchPresence ||| PBD2b | An array of [`BatchPresence`]{@link} objects that contains details of the presence state for a channel, such as the `clientId` of members and their current [`PresenceAction`]{@link}. |
 
 ## class BatchPresence
 
-||| Spec | Description |
-|---|---|---|---|
-| clientId: string || |
-| action: string? || |
-| error: ErrorInfo? || |
+The `BatchPresence` object contains the presence state of each batch presence request.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| clientId: string |||| The ID of each client entered into the presence set for the channel. |
+| action: string? |||| The [`PresenceAction`]{@link} associated with each client. |
+| error: ErrorInfo? |||| Describes the reason for which the presence details could not be retrieved for a channel as an [`ErrorInfo`]{@link} object. |
 
 ## class PushChannel
 
