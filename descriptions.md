@@ -346,19 +346,27 @@
 
 ## class CipherParams
 
-||| Spec | Description |
+The `CipherParams` object contains properties to configure encryption for a channel.
+
+| Method / Property | Parameter | Spec | Description |
 |---|---|---|---|
-| algorithm: String default "AES" || TZ2a | |
-| key: Binary || TZ2d | |
-| keyLength: Int || TZ2b | |
-| mode: String default "CBC" || TZ2c | |
+| algorithm: String default "AES" || TZ2a | The algorithm to use for encryption. Only `AES` is supported. |
+| key: Binary || TZ2d | The private key used to encrypt and decrypt payloads. |
+| keyLength: Int || TZ2b | The length of the key in bits; for example 128 or 256. |
+| mode: String default "CBC" || TZ2c | The cipher mode. Only `CBC` is supported. |
 
 ## class Crypto
 
-||| Spec | Description |
-|---|---|---|---|
-| +getDefaultParams(Params) -> CipherParams || RSE1 | |
-| +generateRandomKey(keyLength: Int?) => io Binary || RSE2 | |
+The `Crypto` object ensures that message payloads are encrypted, can never be decrypted by Ably, and can only be decrypted by other clients that share the same secret symmetric key.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Retrieves, or optionally sets, the [`CipherParams`]{@link} for the channel. |
+|| `Params` ||| Overrides the default parameters. A suitable `key` must be provided as a minimum. |
+||| `CipherParams` || A [`CipherParams`]{@link} object, using the default values for any field not supplied. |
+| +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key to be used in the encryption of the channel. |
+|| `keyLength` ||| The length of the key, in bits, to be generated. If not specified, this is equal to the default `keyLength` of the default algorithm: for AES this is 256 bits. |
+||| `Binary` || The key as a binary, for example, a byte array. If the language cryptographic randomness primitives are blocking or async, a callback is used. The callback returns the generated binary key. |
 
 ## class RestPresence
 
