@@ -361,7 +361,7 @@ The `Crypto` object ensures that message payloads are encrypted, can never be de
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Retrieves, or optionally sets, the [`CipherParams`]{@link} for the channel to be encrypted. |
+| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Retrieves, or optionally sets, the [`CipherParams`]{@link} for the channel. |
 || `Params` ||| Overrides the default parameters. A suitable `key` must be provided as a minimum. |
 ||| `CipherParams` || A [`CipherParams`]{@link} object, using the default values for any field not supplied. |
 | +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key to be used in the encryption of the channel. |
