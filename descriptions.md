@@ -274,10 +274,12 @@ The `BatchPresence` object contains the presence state of each batch presence re
 
 ## class BatchSpec
 
-||| Spec | Description |
-|---|---|---|---|
-| channels: [String] || |
-| messages: [Message] || |
+The `BatchSpec` object contains the channel names and messages to batch publish to. 
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channels: [String] || An array of channel names to publish messages to. |
+| messages: [Message] || An array of [`Message`]{@link} objects to publish. |
 
 ## enum ChannelState
 
