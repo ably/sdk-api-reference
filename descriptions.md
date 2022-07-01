@@ -10,7 +10,7 @@ The `Rest` object offers a simple stateless API to interact directly with Ably's
 || `keyStr` ||| The Ably API key string used to validate the client. |
 | constructor(tokenStr: String) ||| RSC1 | Constructs a REST client object using an Ably token string. |
 || `tokenStr` ||| The Ably API token string used to validate the client. |
-| constructor(ClientOptions) ||| RSC1 | Construct a REST client object using an Ably [`ClientOptions`]{@link} object. |
+| constructor(ClientOptions) ||| RSC1 | Constructs a REST client object using an Ably [`ClientOptions`]{@link} object. |
 || `clientOptions` ||| Options to configure the client connection to Ably. |
 | auth: Auth ||| RSC5 | An [`Auth`]{@link} authentication object. |
 | push: Push ||| RSH7 | A [`Push`]{@link} object. |
