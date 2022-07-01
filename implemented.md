@@ -26,8 +26,8 @@
 | class ChannelStatus |||
 | class ChannelOccupancy |||
 | class ChannelMetrics |||
-| class CipherParams |||
-| class Crypto |||
+| class CipherParams |[PR 1439](https://github.com/ably/ably-cocoa/pull/1439)||
+| class Crypto |[PR 1439](https://github.com/ably/ably-cocoa/pull/1439)||
 | class RestPresence |||
 | class RealtimePresence |||
 | class ConnectionDetails |||
