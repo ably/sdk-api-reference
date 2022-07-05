@@ -28,7 +28,7 @@ The `Rest` object offers a simple stateless API to interact directly with Ably's
 | stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
 || `start` | | RSC6b1 | The time from which stats are retrieved, specified as a Unix timestamp. |
 || `end` | | RSC6b1 | The time until stats are retrieved, specified as a Unix timestamp. |
-|| `direction` | | RSC6b2 | The order for which stats are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
+|| `direction` | | RSC6b2 | The order for which stats are returned in. The default is `Backwards` which orders stats from most recent to oldest. |
 || `limit` | | RSC6b3 | An upper limit on the number of stats returned, up to 1000. |
 || `unit` | | RSC6b4 | `minute`, `hour`, `day` or `month`. Based on the unit selected, the given `start` or `end` times are rounded down to the start of the relevant interval depending on the unit granularity of the query. |
 ||| `PaginatedResult` | | A [`PaginatedResult`]{@link} object containing an array of stats for the first page of results. |
@@ -62,8 +62,8 @@ The `Realtime` object extends the REST client and provides the functionality ava
 || `headers` ||| Headers for the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
 | stats: ||| Same as Rest.stats, RTC5a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
-| close() ||| proxy for RTN12 | This calls `connection.close()` and causes the connection to close, entering the closing state. Once closed, the library will not attempt to re-establish the connection without an explicit call to `connect()`. |
-| connect() ||| proxy for RTN11 | This calls `connection.connect()` and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is unnecessary unless the `autoConnect` property of the [`ClientOptions`]{@link} object is disabled. |
+| close() ||| proxy for RTN12 | Calls `connection.close()` and causes the connection to close, entering the closing state. Once closed, the library will not attempt to re-establish the connection without an explicit call to `connect()`. |
+| connect() ||| proxy for RTN11 | Calls `connection.connect()` and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is unnecessary unless the `autoConnect` property of the [`ClientOptions`]{@link} object is disabled. |
 | time() => io Time ||| RTC6a | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably `TokenRequest`s with a more accurate timestamp should use the [`queryTime`]{@link} property of the [`ClientOption`]{@link} object instead of this method. |
 ||| `Time` || The time as a Unix timestamp. |
 
