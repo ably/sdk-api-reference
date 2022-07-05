@@ -384,7 +384,7 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| syncComplete: Bool ||| RTP13 | Shows whether the presence set sync between Ably and the clients on the channel has been completed. Set to `true` when the sync is complete. |
+| syncComplete: Bool ||| RTP13 | Shows whether the presence set synchronization between Ably and the clients on the channel has been completed. Set to `true` when the sync is complete. |
 | get(waitForSync: Bool default true, clientId: String?, connectionId: String?) => io [`PresenceMessage`] ||| RTP11 | Retrieves the current members present on the channel and the metadata for each member, such as their [`PresenceAction`]{@link} and ID. Returns an array of [`PresenceMessage`]{@link} objects. |
 || `waitForSync` || RTP11c1 | Sets whether to wait for a full presence set synchronization between Ably and the clients on the channel to complete before returning the results. Synchronization begins as soon as the channel is [`attached`]{@link}. When set to `true` the results will be returned as soon as the sync is complete. When set to `false` the current list of members will be returned without the sync completing. |
 || `clientId` || RTP11c2 | Filters the array of returned presence members by a specific client using its ID. |
