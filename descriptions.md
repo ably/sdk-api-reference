@@ -52,50 +52,50 @@
 
 ## class ClientOptions
 
-`ClientOptions` is a plain JavaScript object and is used in the `Ably.Realtime` constructor’s options argument. `ClientOptions` extends `AuthOptions`.
+The `ClientOptions` object is a plain JavaScript object and is used in the `Ably.Realtime` constructor’s options argument. `ClientOptions` extends `AuthOptions`.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| embeds AuthOptions ||| TO3j | The embedded [`AuthOptions`]{@link} object. |
+| embeds AuthOptions ||| TO3j | An [`AuthOptions`]{@link} object. |
 | autoConnect: Bool default true ||| RTC1b, TO3e | When `true`, the client connects to Ably as soon as it is instantiated. You can optionally set this to `false` and explicitly connect to Ably when required using the `connect` method. |
 | clientId: String? ||| RSC17, RSA4, RSA15, TO3a | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key; note that a `clientId` may also be implicit in a token used to instantiate the library; an error will be raised if a `clientId` specified here conflicts with the `clientId` implicit in the token. |
-| defaultTokenParams: TokenParams? ||| TO3j11 | When a `TokenParams` object is provided, it overrides the client library defaults when issuing new Ably Tokens or Ably `TokenRequest`s. |
+| defaultTokenParams: TokenParams? ||| TO3j11 | When a [`TokenParams`]{@link} object is provided, it overrides the client library defaults when issuing new Ably Tokens or Ably `TokenRequest`s. |
 | echoMessages: Bool default true ||| RTC1a, TO3h | If `false`, prevents messages originating from this connection being echoed back on the same connection. |
 | environment: String? ||| RSC15b, TO3k1 | Allows a [custom environment](https://ably.com/docs/platform-customization), region or cluster to be used with the Ably service. Please [contact us](https://ably.com/contact) if you require a custom environment. Note that once a custom environment is specified, the [fallback host functionality](https://faqs.ably.com/routing-around-network-and-dns-issues) is disabled by default. |
-| logHandler: ||| platform specific - TO3c | Parameter to control the log output of the library. This is a function to handle each line of log output. If handler is not specified, `console.log()` is used. |
-| logLevel: ||| platform specific - TO3b | Parameter to control the log output of the library. This is a number controlling the verbosity of the output. Valid values are: 0 (no logs), 1 (errors only), 2 (errors plus connection and channel state changes), 3 (abbreviated debug output), and 4 (full debug output). |
+| logHandler: ||| platform specific - TO3c | Controls the log output of the library. This is a function to handle each line of log output. If handler is not specified, `console.log()` is used. |
+| logLevel: ||| platform specific - TO3b | Controls the log output of the library. This is a number controlling the verbosity of the output. Valid values are: 0 (no logs), 1 (errors only), 2 (errors plus connection and channel state changes), 3 (abbreviated debug output), and 4 (full debug output). |
 | logExceptionReportingUrl: String default "[library specific]" ||| TO3c (deprecated) | Defaults to a string value for an Ably error reporting DSN (Data Source Name), which is typically a URL in the format `https://[KEY]:[SECRET]@errors.ably.io/[ID]`. When set to `null`, `false` or an empty string (depending on what is idiomatic for the platform), exception reporting is disabled. |
 | port: Int default 80 ||| TO3k4 | For development environments only; allows a non-default Ably port to be specified. |
 | queueMessages: Bool default true ||| RTP16b, TO3g | If `false`, this disables the default behavior whereby the library queues messages on a connection in the disconnected or connecting states. The default behavior allows applications to submit messages immediately upon instancing the library without having to wait for the connection to be established. Applications may use this option to disable queueing if they wish to have application-level control over the queueing under those conditions. |
 | restHost: String default "rest.ably.io" ||| RSC12, TO3k2 | For development environments only; allows a non-default Ably host to be specified. |
 | realtimeHost: String default "realtime.ably.io" ||| RTC1d, TO3k3 | For development environments only; allows a non-default Ably host to be specified for realtime connections. |
 | fallbackHosts: String[] default nil ||| RSC15b, RSC15a, TO3k6 | An array of fallback hosts to be used in the case of an error necessitating the use of an alternative host. When a custom environment is specified, the [fallback host functionality](https://faqs.ably.com/routing-around-network-and-dns-issues) is disabled. If your customer success manager has provided you with a set of custom fallback hosts, please specify them here.|
-| recover: String? ||| RTC1c, TO3i | This option allows a connection to inherit the state of a previous connection that may have existed under a different instance of the Realtime library. This might typically be used by clients of the browser library to ensure connection state can be preserved when the user refreshes the page. A recovery key string can be explicitly provided, or alternatively if a callback function is provided, the client library will automatically persist the recovery key between page reloads and call the callback when the connection is recoverable. The callback is then responsible for confirming whether the connection should be recovered or not. See [connection state recovery](https://ably.com/docs/realtime/connection/#connection-state-recovery) for further information. |
+| recover: String? ||| RTC1c, TO3i | Allows a connection to inherit the state of a previous connection that may have existed under a different instance of the Realtime library. This might typically be used by clients of the browser library to ensure connection state can be preserved when the user refreshes the page. A recovery key string can be explicitly provided, or alternatively if a callback function is provided, the client library will automatically persist the recovery key between page reloads and call the callback when the connection is recoverable. The callback is then responsible for confirming whether the connection should be recovered or not. See [connection state recovery](https://ably.com/docs/realtime/connection/#connection-state-recovery) for further information. |
 | tls: Bool default true ||| RSC18, TO3d | Use a non-secure connection connection. By default, a TLS connection is used to connect to Ably. |
 | tlsPort: Int default 443 ||| TO3k5 | For development environments only; allows a non-default Ably TLS port to be specified. |
 | useBinaryProtocol: Bool default true ||| TO3f | When `true`, the more efficient `MsgPack` binary encoding is used. When `false`, JSON text encoding is used. |
 | transportParams: [String: Stringifiable]? ||| RTC1f | Can be used to pass in arbitrary connection parameters. |
-| addRequestIds: Bool default false ||| TO3p | |
+| addRequestIds: Bool default false ||| TO3p | If enabled, every REST request to Ably should include a random string in a `request_id` query string parameter. The random string is a url-safe base64-encoding sequence of at least 9 bytes, obtained from a source of randomness. This request ID must remain the same if a request is retried to a fallback host. Any log messages associated with the request should include the request ID. If the request fails, the request ID must be included in the [`ErrorInfo`]{@link} returned to the user. |
 | disconnectedRetryTimeout: Duration default 15s ||| TO3l1 | When the connection enters the `DISCONNECTED` state, after this delay in milliseconds, if the state is still `DISCONNECTED`, the client library attempts to reconnect automatically. Defaults to 15,000ms. |
 | suspendedRetryTimeout: Duration default 30s ||| RTN14d, TO3l2 | When the connection enters the `SUSPENDED` state, after this delay in milliseconds, if the state is still `SUSPENDED`, the client library attempts to reconnect automatically. |
-| channelRetryTimeout: Duration default 15s ||| RTL13b, TO3l7 | Integer – default 15,000 (15s). When a channel becomes `SUSPENDED` following a server initiated `DETACHED`, after this delay in milliseconds, if the channel is still `SUSPENDED` and the connection is `CONNECTED`, the client library will attempt to re-attach the channel automatically |
+| channelRetryTimeout: Duration default 15s ||| RTL13b, TO3l7 | When a channel becomes `SUSPENDED` following a server initiated `DETACHED`, after this delay in milliseconds, if the channel is still `SUSPENDED` and the connection is `CONNECTED`, the client library will attempt to re-attach the channel automatically |
 | httpOpenTimeout: Duration default 4s ||| TO3l3 | Timeout for opening the connection, available in the client library if supported by the transport. |
 | httpRequestTimeout: Duration default 10s ||| TO3l4 | Timeout for any single HTTP request and response. |
-| httpMaxRetryCount: Int default 3 ||| TO3l5 | Maximum number of fallback hosts to use as a fallback when an HTTP request to the primary host is unreachable or indicates that it is unserviceable. |
-| httpMaxRetryDuration: Duration default 15s ||| TO3l6 | Maximum elapsed time in which fallback host retries for HTTP requests will be attempted. |
-| maxMessageSize: Int default 65536 ||| TO3l8 | integer – default 65536 (64KiB). The maximum size of messages that can be published in one go. That is, the size of the `ProtocolMessage.messages` or `ProtocolMessage.presence` array for a realtime publish or presence action, or the message or array of messages being published for a REST publish. For realtime publishes, the default will be overridden by the `maxMessageSize` in the [`connectionDetails`]{@link}. |
-| maxFrameSize: Int default 524288 ||| TO3l8 | integer – default 524288 (512KiB). The maximum size of a single POST body or WebSocket frame. This is mostly only relevant for `RestClient#request` (for batch publishes), since publishes will hit the `maxMessageSize` limit before this. |
+| httpMaxRetryCount: Int default 3 ||| TO3l5 | The maximum number of fallback hosts to use as a fallback when an HTTP request to the primary host is unreachable or indicates that it is unserviceable. |
+| httpMaxRetryDuration: Duration default 15s ||| TO3l6 | The maximum elapsed time in which fallback host retries for HTTP requests will be attempted. |
+| maxMessageSize: Int default 65536 ||| TO3l8 | The maximum size of messages that can be published in one go. That is, the size of the `ProtocolMessage.messages` or `ProtocolMessage.presence` array for a realtime publish or presence action, or the message or array of messages being published for a REST publish. For realtime publishes, the default will be overridden by the `maxMessageSize` in the [`connectionDetails`]{@link}. |
+| maxFrameSize: Int default 524288 ||| TO3l8 | The maximum size of a single POST body or WebSocket frame. This is mostly only relevant for `RestClient#request` (for batch publishes), since publishes will hit the `maxMessageSize` limit before this. |
 | plugins: `Dict<PluginType, Plugin>` ||| TO3o | A map between a `PluginType` and a `Plugin` object. The client library might downcast a `Plugin` to particular plugin type. |
 | idempotentRestPublishing: bool default true ||| RSL1k1, RTL6a1, TO3n | When `true`, enables idempotent publishing by assigning a unique message ID client-side, allowing the Ably servers to discard automatic publish retries following a failure such as a network fault. |
-| agents: [String: String?]? ||| RSC7d6 - interface only offered by some libraries | Libraries may offer a `ClientOptions#agents` property, for use only by other Ably-authored SDKs, on a need-to-have basis. |
+| agents: [String: String?]? ||| RSC7d6 - interface only offered by some libraries | For use only by other Ably-authored SDKs, on a need-to-have basis. |
 
 ## class AuthOptions
 
-`AuthOptions` is a plain JavaScript object and is used when making authentication requests. If passed in, an `AuthOptions` object will be used instead of the default values given when the library was instantiated.
+The `AuthOptions` object is a plain JavaScript object and is used when making authentication requests. If passed in, an `AuthOptions` object will be used instead of the default values given when the library was instantiated.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| authCallback: ((TokenParams) -> io (String \| TokenDetails \| TokenRequest \| JsonObject))? ||| RSA4a, RSA4, TO3j5, AO2b | A function which is called when a new token is required. The role of the callback is to obtain a fresh token, one of: an Ably Token string (in plain text format); a signed `TokenRequest`; a `TokenDetails` (in JSON format); an [Ably JWT](https://ably.com/docs/core-features/authentication#ably-jwt). See [the authentication documentation](https://ably.com/docs/realtime/authentication) for details of the Ably TokenRequest format and associated API calls. |
+| authCallback: ((TokenParams) -> io (String \| TokenDetails \| TokenRequest \| JsonObject))? ||| RSA4a, RSA4, TO3j5, AO2b | Called when a new token is required. The role of the callback is to obtain a fresh token, one of: an Ably Token string (in plain text format); a signed `TokenRequest`; a `TokenDetails` (in JSON format); an [Ably JWT](https://ably.com/docs/core-features/authentication#ably-jwt). See [the authentication documentation](https://ably.com/docs/realtime/authentication) for details of the Ably [`TokenRequest`]{@link} format and associated API calls. |
 | authHeaders: [String: Stringifiable]? ||| RSA8c3, TO3j8, AO2e | A set of key-value pair headers to be added to any request made to the `authUrl`. Useful when an application requires these to be added to validate the request or implement the response. If the `authHeaders` object contains an `authorization` key, then `withCredentials` is set on the XHR request. |
 | authMethod: .GET \| .POST default .GET ||| RSA8c, TO3j7, AO2d | The HTTP verb to use for the request, either `GET` or `POST`. Defaults to `GET`. |
 | authParams: [String: Stringifiable]? ||| RSA8c3, RSA8c1, TO3j9, AO2f | A set of key-value pair params to be added to any request made to the `authUrl`. When the `authMethod` is `GET`, query params are added to the URL, whereas when `authMethod` is `POST`, the params are sent as URL encoded form data. Useful when an application require these to be added to validate the request or implement the response. |
@@ -108,36 +108,39 @@
 
 ## class TokenParams
 
-`TokenParams` is a plain JavaScript object and is used in the parameters of token authentication requests, corresponding to the desired attributes of the Ably Token.
+The `TokenParams` object is a plain JavaScript object and is used in the parameters of token authentication requests, corresponding to the desired attributes of the Ably Token.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | capability: String api-default `'{"*":["*"]}'` ||| RSA9f, TK2b | Capability requirements JSON stringified for the token. When omitted, Ably defaults to the capabilities of the underlying key. See the [capabilities docs](https://ably.com/docs/core-features/authentication#capabilities-explained) for more information. |
 | clientId: String? ||| TK2c | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key; note that a `clientId` may also be implicit in a token used to instantiate the library; an error is raised if a `clientId` specified here conflicts with the `clientId` implicit in the token. Find out more about [identified clients](https://ably.com/docs/core-features/authentication#identified-clients). |
-| nonce: String? ||| RSA9c, Tk2d | An unquoted, un-escaped random string of at least 16 characters, used to ensure the `TokenRequest` cannot be reused. |
+| nonce: String? ||| RSA9c, Tk2d | An unquoted, un-escaped random string of at least 16 characters, used to ensure the [`TokenRequest`]{@link} cannot be reused. |
 | timestamp: Time? ||| RSA9d, Tk2d | The Unix timestamp of this request. Timestamps, in conjunction with the `nonce`, are used to prevent requests from being replayed. `timestamp` is a "one-time" value, and is valid in a request, but is not validly a member of any default token params such as `ClientOptions.defaultTokenParams`. |
 | ttl: Duration api-default 60min ||| RSA9e, TK2a | Requested time to live for the token in milliseconds. When omitted, Ably will default to a TTL of 60 minutes. |
 
 ## class Auth
 
-The principal use-case for the `Auth` object is to create Ably `TokenRequest` objects with `createTokenRequest` or obtain Ably Tokens from Ably with `requestToken`, and then issue them to other "less trusted" clients.
-
-The Auth object is available as the auth property of an Ably Realtime or REST client instance.
+The `Auth` object creates Ably `TokenRequest` objects with `createTokenRequest` or obtain Ably Tokens from Ably with `requestToken`, and then issue them to less trusted clients.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | clientId: String? ||| RSA7, RSC17, RSA12 | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key; note that a `clientId` may also be implicit in a token used to instantiate the library; an error is raised if a `clientId` specified here conflicts with the `clientId` implicit in the token. Find out more about [identified clients](https://ably.com/docs/core-features/authentication#identified-clients). |
-| authorize(TokenParams?, AuthOptions?) => io TokenDetails || An ably authentication token. | RSA10 | Instructs the library to get a new token immediately. When using the realtime client, it upgrades the current realtime connection to use the new token, or if not connected, initiates a connection to Ably, once the new token has been obtained. Also stores any `tokenParams` and `authOptions` passed in as the new defaults, to be used for all subsequent implicit or explicit token requests. Any `tokenParams` and `authOptions` objects passed in entirely replace (as opposed to being merged with) the currently client library saved `tokenParams` and `authOptions`. |
-| createTokenRequest(TokenParams?, AuthOptions?) => io TokenRequest || An Ably token request. | RSA9 | Creates and signs an Ably `TokenRequest` based on the specified (or if none specified, the client library stored) `tokenParams` and `authOptions`. Note this can only be used when the API `key` value is available locally. Otherwise, the Ably `TokenRequest` must be obtained from the key owner. Use this to generate an Ably `TokenRequest` in order to implement an Ably Token request callback for use by other clients. Both `authOptions` and `tokenParams` are optional. When omitted or `null`, the default token parameters and authentication options for the client library are used, as specified in the `ClientOptions` when the client library was instantiated, or later updated with an explicit `authorize` request. Values passed in are used instead of (rather than being merged with) the default values. To understand why an Ably `TokenRequest` may be issued to clients in favor of a token, see [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication). |
-| requestToken(TokenParams?, AuthOptions?) => io TokenDetails || An Ably authentication token. | RSA8e | Calls the [requestToken REST API endpoint](https://ably.com/docs/rest-api#request-token) to obtain an Ably Token according to the specified tokenParams and authOptions. Both `authOptions` and `tokenParams` are optional. When omitted or `null`, the default token parameters and authentication options for the client library are used, as specified in the `ClientOptions` when the client library was instantiated, or later updated with an explicit `authorize` request. Values passed in are used instead of (rather than being merged with) the default values. To understand why an Ably `TokenRequest` may be issued to clients in favor of a token, see [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication). |
+| authorize(TokenParams?, AuthOptions?) => io TokenDetails ||| RSA10 | Instructs the library to get a new token immediately. When using the realtime client, it upgrades the current realtime connection to use the new token, or if not connected, initiates a connection to Ably, once the new token has been obtained. Also stores any `tokenParams` and `authOptions` passed in as the new defaults, to be used for all subsequent implicit or explicit token requests. Any `tokenParams` and `authOptions` objects passed in entirely replace (as opposed to being merged with) the currently client library saved `tokenParams` and `authOptions`. |
+||| `TokenDetails` ||  An ably authentication token. |
+| createTokenRequest(TokenParams?, AuthOptions?) => io TokenRequest ||| RSA9 | Creates and signs an Ably `TokenRequest` based on the specified (or if none specified, the client library stored) `tokenParams` and `authOptions`. Note this can only be used when the API `key` value is available locally. Otherwise, the Ably `TokenRequest` must be obtained from the key owner. Use this to generate an Ably `TokenRequest` in order to implement an Ably Token request callback for use by other clients. Both `authOptions` and `tokenParams` are optional. When omitted or `null`, the default token parameters and authentication options for the client library are used, as specified in the `ClientOptions` when the client library was instantiated, or later updated with an explicit `authorize` request. Values passed in are used instead of (rather than being merged with) the default values. To understand why an Ably `TokenRequest` may be issued to clients in favor of a token, see [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication). |
+||| `TokenRequest` || An Ably token request object. |
+| requestToken(TokenParams?, AuthOptions?) => io TokenDetails ||| RSA8e | Calls the [requestToken REST API endpoint](https://ably.com/docs/rest-api#request-token) to obtain an Ably Token according to the specified tokenParams and authOptions. Both `authOptions` and `tokenParams` are optional. When omitted or `null`, the default token parameters and authentication options for the client library are used, as specified in the `ClientOptions` when the client library was instantiated, or later updated with an explicit `authorize` request. Values passed in are used instead of (rather than being merged with) the default values. To understand why an Ably `TokenRequest` may be issued to clients in favor of a token, see [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication). |
+||| `TokenDetails` || An Ably authentication token. |
+
 
 ## class TokenDetails
 
-`TokenDetails` is a type providing details of Ably Token string and its associated metadata.
+The `TokenDetails` object represents an Ably token string and its associated metadata.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| +fromJson(String \| JsonObject) -> TokenDetails || A `TokenDetails` object. | TD7 | A static factory method to create a `TokenDetails` object from a deserialized TokenDetails-like object or a JSON stringified `TokenDetails` object. This method is provided to minimize bugs as a result of differing types by platform for fields such as `timestamp` or `ttl`. For example, in Ruby `ttl` in the `TokenDetails` object is exposed in seconds as that is idiomatic for the language, yet when serialized to JSON using `to_json` it is automatically converted to the Ably standard which is milliseconds. By using the `fromJson` method when constructing a `TokenDetails` object, Ably ensures that all fields are consistently serialized and deserialized across platforms. |
+| +fromJson(String \| JsonObject) -> TokenDetails ||| TD7 | A static factory method to create a `TokenDetails` object from a deserialized TokenDetails-like object or a JSON stringified `TokenDetails` object. This method is provided to minimize bugs as a result of differing types by platform for fields such as `timestamp` or `ttl`. For example, in Ruby `ttl` in the `TokenDetails` object is exposed in seconds as that is idiomatic for the language, yet when serialized to JSON using `to_json` it is automatically converted to the Ably standard which is milliseconds. By using the `fromJson` method when constructing a `TokenDetails` object, Ably ensures that all fields are consistently serialized and deserialized across platforms. |
+||| `TokenDetails` || An Ably authentication token. |
 | capability: String ||| TD5 | The capability associated with this Ably Token. The capability is a a JSON stringified canonicalized representation of the resource paths and associated operations. Read more about capbilities in the [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained). |
 | clientId: String? ||| TD6 | The client ID, if any, bound to this Ably Token. If a client ID is included, then the Ably Token authenticates its bearer as that client ID, and the Ably Token may only be used to perform operations on behalf of that client ID. The client is then considered to be an [identified client](https://ably.com/docs/core-features/authentication#identified-clients). |
 | expires: Time ||| TD3 | The Unix timestamp at which this token expires. |
@@ -146,11 +149,12 @@ The Auth object is available as the auth property of an Ably Realtime or REST cl
 
 ## class TokenRequest
 
-The parameters for an Ably TokenRequest. Tokens are requested using `Auth.requestToken`.
+The `TokenRequest` object represents properties used to generate an Ably TokenRequest. Tokens are generated using `Auth.requestToken`.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| +fromJson(String \| JsonObject) -> TokenRequest || A `TokenRequest` object. | TE6 | A static factory method to create a `TokenRequest` object from a deserialized TokenRequest-like object or a JSON stringified `TokenRequest` object. This method is provided to minimize bugs as a result of differing types by platform for fields such as `timestamp` or `ttl`. For example, in Ruby `ttl` in the `TokenRequest` object is exposed in seconds as that is idiomatic for the language, yet when serialized to JSON using `to_json` it is automatically converted to the Ably standard which is milliseconds. By using the `fromJson` method when constructing a `TokenRequest` object, Ably ensures that all fields are consistently serialized and deserialized across platforms. |
+| +fromJson(String \| JsonObject) -> TokenRequest ||| TE6 | A static factory method to create a `TokenRequest` object from a deserialized TokenRequest-like object or a JSON stringified `TokenRequest` object. This method is provided to minimize bugs as a result of differing types by platform for fields such as `timestamp` or `ttl`. For example, in Ruby `ttl` in the `TokenRequest` object is exposed in seconds as that is idiomatic for the language, yet when serialized to JSON using `to_json` it is automatically converted to the Ably standard which is milliseconds. By using the `fromJson` method when constructing a `TokenRequest` object, Ably ensures that all fields are consistently serialized and deserialized across platforms. |
+||| `TokenRequest` || An Ably token request object. |
 | capability: String ||| TE3 | Capability of the requested Ably Token. If the Ably TokenRequest is successful, the capability of the returned Ably Token will be the intersection of this capability with the capability of the issuing key. The capability is a JSON stringified canonicalized representation of the resource paths and associated operations. Read more about capabilities in the [capabilities docs](https://ably.com/docs/realtime/authentication). |
 | clientId: String? ||| TE2 | The client ID to associate with the requested Ably Token. When provided, the Ably Token may only be used to perform operations on behalf of that client ID. |
 | keyName: String ||| TE2 | The key name of the key against which this request is made. The key name is public, whereas the key secret is private. |
@@ -426,13 +430,15 @@ The parameters for an Ably TokenRequest. Tokens are requested using `Auth.reques
 
 ## class ConnectionDetails
 
+The `ConnectionDetails` object is optionally passed to the client library in the `CONNECTED` of `ProtocolMessage#connectionDetails`. It informs the client about any constraints it should adhere to, and provides additional metadata about the connection. For example, if a request is made to publish a message that exceeds the `maxMessageSize`, the client library can reject the message immediately, without communicating with the Ably service.
+
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | clientId: String? ||| RSA12a, CD2a |  `clientId` contains the client ID assigned to the token. If `clientId` is `null` or omitted, then the client is prohibited from assuming a `clientId` in any operations, however if `clientId` is a wildcard string `*`, then the client is permitted to assume any `clientId`. Any other string value for `clientId` implies that the `clientId` is both enforced and assumed for all operations from this client. |
 | connectionKey: String ||| RTN15e, CD2b | The connection secret key string that is used to resume a connection and its state. |
 | connectionStateTtl: Duration ||| CD2f, RTN14e, DF1a | The duration that Ably will persist the connection state when a Realtime client is abruptly disconnected. |
 | maxFrameSize: Int ||| CD2d | Overrides the default `maxFrameSize`. |
-| maxInboundRate: Int ||| CD2e | The maximum allowable number of requests per second from a client or Ably. In the case of a realtime connection, this restriction applies to the number of `ProtocolMessage` objects sent, whereas in the case of REST, it is the total number of REST requests per second. |
+| maxInboundRate: Int ||| CD2e | The maximum allowable number of requests per second from a client or Ably. In the case of a realtime connection, this restriction applies to the number of [`ProtocolMessage`]{@link} objects sent, whereas in the case of REST, it is the total number of REST requests per second. |
 | maxMessageSize: Int ||| CD2c | Overrides the default `maxMessageSize`.|
 | serverId: String ||| CD2g | A unique identifier for the front-end server that the client has connected to. This server ID is only used for the purposes of debugging. |
 | maxIdleInterval: Duration ||| CD2h | The maximum length of time in milliseconds that the server will allow no activity to occur in the server to client direction. After such a period of inactivity, the server will send a `HEARTBEAT` or transport-level ping to the client. If the value is 0, the server will allow arbitrarily-long levels of inactivity. |
@@ -472,41 +478,43 @@ The parameters for an Ably TokenRequest. Tokens are requested using `Auth.reques
 
 ## class AuthDetails
 
+The `AuthDetails` object contains the token string used to authenticate a client with Ably.
+
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| accessToken: String ||| AD2 | Contains the authentication token string. |
+| accessToken: String ||| AD2 | The authentication token string. |
 
 ## class Connection
 
-The `Connection` object enables the management of a connection to Ably.
+The `Connection` object enables the management of a connection with Ably.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | embeds `EventEmitter<ConnectionEvent, ConnectionStateChange>` ||| RTN4a, RTN4e, RTN4g | An [`EventEmitter`]{@link} object. |
-| errorReason: ErrorInfo? ||| RTN14a | When a connection failure occurs this property contains the `ErrorInfo`. |
+| errorReason: ErrorInfo? ||| RTN14a | When a connection failure occurs this property contains the [`ErrorInfo`]{@link}. |
 | id: String? ||| RTN8 | A unique public identifier String for this connection, used to identify this member in presence events and messages. |
 | key: String? ||| RTN9 | A unique private connection key String used to recover or resume a connection, assigned by Ably. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. This private connection key can also be used by other REST clients to publish on behalf of this client. See the [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf) for more info. |
-| recoveryKey: String? ||| RTN16b, RTN16c | The recovery key String can be used by another client to recover this connection's state in the recover client options property. See [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options) for more information. |
-| serial: Int? ||| RTN10 | The serial number Integer of the last message to be received on this connection, used automatically by the library when recovering or resuming a connection. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. |
+| recoveryKey: String? ||| RTN16b, RTN16c | The recovery key string can be used by another client to recover this connection's state in the recover client options property. See [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options) for more information. |
+| serial: Int? ||| RTN10 | The serial number of the last message to be received on this connection, used automatically by the library when recovering or resuming a connection. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. |
 | state: ConnectionState ||| RTN4d | The current state of this Connection. See [Connection states](https://ably.com/docs/realtime/connection#connection-states) for more information. |
 | close() ||| RTN12 | Causes the connection to close, entering the closing state. Once closed, the library does not attempt to re-establish the connection without an explicit call to `connect`. |
-| connect() ||| RTC1b, RTN3, RTN11 | Explicitly calling connect is unnecessary unless the `ClientOptions` attribute `autoConnect` is false. Unless already connected or connecting, this method causes the connection to open, entering the connecting state. |
+| connect() ||| RTC1b, RTN3, RTN11 | Explicitly calling `connect()` is unnecessary unless the `autoConnect` attribute of the [`ClientOptions`]{@link} object is false. Unless already connected or connecting, this method causes the connection to open, entering the connecting state. |
 | ping() => io ||| RTN13 | When connected, sends a heartbeat ping to the Ably server and executes the callback with any error and the response time in milliseconds when a heartbeat ping request is echoed from the server. This can be useful for measuring true round-trip latency to the connected Ably server. |
 
 ## enum ConnectionState
 
-`ConnectionState` is a String with a value matching any of the Realtime Connection states.
+The `ConnectionState` enum is a string with a value matching any of the realtime connection states.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| INITIALIZED ||| A `Connection` object having this state has been initialized but no connection has yet been attempted. |
+| INITIALIZED ||| A [`Connection`]{@link} object having this state has been initialized but no connection has yet been attempted. |
 | CONNECTING ||| A connection attempt has been initiated. The connecting state is entered as soon as the library has completed initialization, and is reentered each time connection is re-attempted following disconnection. |
 | CONNECTED ||| A connection exists and is active. |
 | DISCONNECTED ||| A temporary failure condition. No current connection exists because there is no network connectivity or no host is available. The disconnected state is entered if an established connection is dropped, or if a connection attempt was unsuccessful. In the disconnected state the library will periodically attempt to open a new connection (approximately every 15 seconds), anticipating that the connection will be re-established soon and thus connection and channel continuity will be possible. In this state, developers can continue to publish messages as they are automatically placed in a local queue, to be sent as soon as a connection is reestablished. Messages published by other clients while this client is disconnected will be delivered to it upon reconnection, so long as the connection was resumed within 2 minutes. After 2 minutes have elapsed, recovery is no longer possible and the connection will move to the `suspended` state. |
 | SUSPENDED ||| A long term failure condition. No current connection exists because there is no network connectivity or no host is available. The suspended state is entered after a failed connection attempt if there has then been no connection for a period of two minutes. In the suspended state, the library will periodically attempt to open a new connection every 30 seconds. Developers are unable to publish messages in this state. A new connection attempt can also be triggered by an explicit call to `connect()` on the `Connection` object. Once the connection has been re-established, channels will be automatically re-attached. The client has been disconnected for too long for them to resume from where they left off, so if it wants to catch up on messages published by other clients while it was disconnected, it needs to use the [History API](https://ably.com/docs/realtime/history). |
 | CLOSING ||| An explicit request by the developer to close the connection has been sent to the Ably service. If a reply is not received from Ably within a short period of time, the connection is forcibly terminated and the connection state becomes `closed`. |
-| CLOSED ||| The connection has been explicitly closed by the client. In the closed state, no reconnection attempts are made automatically by the library, and clients may not publish messages. No connection state is preserved by the service or by the library. A new connection attempt can be triggered by an explicit call to `connect()` on the `Connection` object, which results in a new connection. |
-| FAILED ||| This state is entered if the client library encounters a failure condition that it cannot recover from. This may be a fatal connection error received from the Ably service, for example an attempt to connect with an incorrect API key, or a local terminal error, for example the token in use has expired and the library does not have any way to renew it. In the failed state, no reconnection attempts are made automatically by the library, and clients may not publish messages. A new connection attempt can be triggered by an explicit call to `connect()` on the `Connection` object. |
+| CLOSED ||| The connection has been explicitly closed by the client. In the closed state, no reconnection attempts are made automatically by the library, and clients may not publish messages. No connection state is preserved by the service or by the library. A new connection attempt can be triggered by an explicit call to `connect()` on the [`Connection`]{@link} object, which results in a new connection. |
+| FAILED ||| This state is entered if the client library encounters a failure condition that it cannot recover from. This may be a fatal connection error received from the Ably service, for example an attempt to connect with an incorrect API key, or a local terminal error, for example the token in use has expired and the library does not have any way to renew it. In the failed state, no reconnection attempts are made automatically by the library, and clients may not publish messages. A new connection attempt can be triggered by an explicit call to `connect()` on the [`Connection`]{@link} object. |
 
 ## enum ConnectionEvent
 
@@ -517,14 +525,14 @@ The `Connection` object enables the management of a connection to Ably.
 
 ## class ConnectionStateChange
 
-A `ConnectionStateChange` object is a type encapsulating state change information emitted by the `Connection` object.
+A `ConnectionStateChange` object encapsulates state change information emitted by the [`Connection`]{@link} object.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | current: ConnectionState ||| TA2 | The new state. |
 | event: ConnectionEvent ||| TA5 | The event that triggered this state change. |
 | previous: ConnectionState ||| TA2 | The previous state. For the `update` event, this is equal to the current state. |
-| reason: ErrorInfo? ||| RTN4f, TA3 | An ErrorInfo containing any information relating to the transition. |
+| reason: ErrorInfo? ||| RTN4f, TA3 | An [`ErrorInfo`]{@link} object containing any information relating to the transition. |
 | retryIn: Duration? ||| RTN14d, TA2 | Duration in milliseconds, after which the client retries a connection where applicable. |
 
 ## class Stats
