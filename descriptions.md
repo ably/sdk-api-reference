@@ -11,28 +11,28 @@ The `Rest` object offers a simple stateless API to interact directly with Ably's
 | constructor(tokenStr: String) ||| RSC1 | Constructs a REST client object using an Ably token string. |
 || `tokenStr` ||| The Ably API token string used to validate the client. |
 | constructor(ClientOptions) ||| RSC1 | Construct a REST client object using an Ably [`ClientOptions`]{@link} object. |
-|| `clientOptions` ||| Options to configure the client connection to Ably. |
-| auth: Auth ||| RSC5 | An [`Auth`]{@link} authentication object. |
+|| `ClientOptions` ||| A [`ClientOptions`]{@link} object to configure the client connection to Ably. |
+| auth: Auth ||| RSC5 | An [`Auth`]{@link} object. |
 | push: Push ||| RSH7 | A [`Push`]{@link} object. |
 | batch: BatchOperations ||| BO1 | A [`BatchOperations`]{@link} object. |
 | device() => LocalDevice ||  | RSH8 | Retrieves a local device object. |
 ||| `LocalDevice` || A [`LocalDevice`]{@link} object that represents the current state of the device as a target for push notifications. |
 | channels: `Channels<RestChannel>` ||| RSN1 | A [`Channel`]{@link} collection object. |
-| request() => io HttpPaginatedResponse ||  | RSC19 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
+| request(String method, String path, Dict<String, String> params?, JsonObject \| JsonArray body?, Dict<String, String> headers?) => io HttpPaginatedResponse ||  | RSC19 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || `method` ||| Request method to use such as `GET`, `POST`. |
 || `path` ||| Request path. |
 || `params` ||| Parameters for the REST request. |
 || `body` ||| JSON body for the request. |
 || `headers` ||| Headers for the request. |
-||| `HttpPaginatedResponse` || Response from an HTTP request containing an empty or JSON-encodable object response. |
-| stats() => io `PaginatedResult<Stats>` ||| RSC6a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
-|| `start` | | RSC6b1 | Earliest time as a Unix timestamp for any stats retrieved. |
-|| `end` | | RSC6b1 | Latest time as a Unix timestamp for any stats retrieved. |
-|| `direction` | | RSC6b2 | Work `backwards` or `forwards` through time. |
-|| `limit` | | RSC6b3 | Maximum number of messages to retrieve up to 1,000. |
+||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
+| stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
+|| `start` | | RSC6b1 | The time from which stats are retrieved, specified as a Unix timestamp. |
+|| `end` | | RSC6b1 | The time until stats are retrieved, specified as a Unix timestamp. |
+|| `direction` | | RSC6b2 | The order for which stats are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
+|| `limit` | | RSC6b3 | An upper limit on the number of stats returned, up to 1000. |
 || `unit` | | RSC6b4 | `minute`, `hour`, `day` or `month`. Based on the unit selected, the given `start` or `end` times are rounded down to the start of the relevant interval depending on the unit granularity of the query. |
-||| `PaginatedResult` | | A [`PaginatedResult`]{@link} containing an array of stats for the first page of results. |
-| time() => io Time ||| RSC16 | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably `TokenRequest`s with a more accurate timestamp should use the `queryTime` `ClientOptions` instead of this method. |
+||| `PaginatedResult` | | A [`PaginatedResult`]{@link} object containing an array of stats for the first page of results. |
+| time() => io Time ||| RSC16 | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably `TokenRequest`s with a more accurate timestamp should use the `queryTime` property of the [`ClientOptions`]{@link} object instead of this method. |
 ||| `Time` || The time as a Unix timestamp. |
 
 ## class Realtime
@@ -46,25 +46,25 @@ The `Realtime` object extends the REST client and provides the functionality ava
 | constructor(tokenStr: String) ||| RSC1 | Constructs a realtime client object using an Ably token string. |
 || `tokenStr` ||| The Ably API token string used to validate the client. |
 | constructor(ClientOptions) ||| RSC1 | Constructs a realtime client object using an Ably [`ClientOptions`]{@link} object. |
-|| `clientOptions` ||| Options to configure the client connection to Ably. |
-| auth: Auth ||| RTC4 | An [`Auth`]{@link} authentication object. |
+|| `ClientOptions` ||| A [`ClientOptions`]{@link} object to configure the client connection to Ably. |
+| auth: Auth ||| RTC4 | An [`Auth`]{@link} object. |
 | push: Push ||| | A [`Push`]{@link} object. |
 | device() => LocalDevice ||  | RSH8 | Retrieves a local device object. |
 ||| `LocalDevice` || A [`LocalDevice`]{@link} object that represents the current state of the device as a target for push notifications. |
 | channels: `Channels<RealtimeChannel>` ||| RTC3, RTS1 | A [`Channel`]{@link} collection object. |
 | clientId: String? ||| proxy for RSA7 | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key. A `clientId` may also be implicit in a token used to instantiate the library; an error will be raised if a `clientId` specified here conflicts with the `clientId` implicit in the token.|
 | connection: Connection ||| RTC2 | A reference to the [`Connection`]{@link} object. |
-| request() => io HttpPaginatedResponse ||| RTC9 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
+| request(String method, String path, Dict<String, String> params?, JsonObject \| JsonArray body?, Dict<String, String> headers?) => io HttpPaginatedResponse ||| RTC9 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || `method` ||| Request method to use such as `GET`, `POST`.|
 || `path` ||| Request path. |
 || `params` ||| Parameters for the REST request. |
 || `body` ||| JSON body for the request. |
 || `headers` ||| Headers for the request. |
-||| `HttpPaginatedResponse` || The response from an HTTP request containing an empty or JSON-encodable object response. |
-| stats: ||| Same as Rest.stats, RTC5a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
+||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
+| stats: ||| Same as Rest.stats, RTC5a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
 | close() ||| proxy for RTN12 | This calls `connection.close()` and causes the connection to close, entering the closing state. Once closed, the library will not attempt to re-establish the connection without an explicit call to `connect()`. |
-| connect() ||| proxy for RTN11 | This method calls `connection.connect()` and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is unnecessary unless the `ClientOptions` `autoConnect` is disabled. |
-| time() => io Time ||| RTC6a | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably `TokenRequest`s with a more accurate timestamp should use the [`queryTime`]{@link} client option instead of this method. |
+| connect() ||| proxy for RTN11 | This calls `connection.connect()` and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is unnecessary unless the `autoConnect` property of the [`ClientOptions`]{@link} object is disabled. |
+| time() => io Time ||| RTC6a | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably `TokenRequest`s with a more accurate timestamp should use the [`queryTime`]{@link} property of the [`ClientOption`]{@link} object instead of this method. |
 ||| `Time` || The time as a Unix timestamp. |
 
 ## class ClientOptions
