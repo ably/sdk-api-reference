@@ -585,10 +585,6 @@
 
 The `JsonObject` object denotes any type or interface in the target language that represents an RFC4627 object or array value respectively. Such types serialize to, and may be deserialized from, the corresponding JSON text. This object is platform-dependent, typically a Dict-like object.
 
-||| Spec | Description |
-|---|---|---|---|
-|||| |
-
 ## class PushDeviceRegistrations
 
 ||| Spec | Description |
@@ -694,7 +690,6 @@ The `PaginatedResult<T>` object represents a page of results for all message and
 ||| `Bool` || Whether or not this is the last page of results. |
 | next() => io `PaginatedResult<T>`? ||| TG4 | Returns a new `PaginatedResult` loaded with the next page of results. If there are no further pages, then `null` is returned. |
 ||| `PaginatedResult<T>` || A page of results for message and presence history, stats, and REST presence requests. |
-
 
 ## class HttpPaginatedResponse
 
