@@ -658,8 +658,8 @@ The `ErrorInfo` object is a generic Ably error object that contains an Ably-spec
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | code: Int ||| TI1 | Ably [error code](https://github.com/ably/ably-common/blob/main/protocol/errors.json). |
-| href: String? ||| TI4 | This is included for REST responses to provide a URL for customers to find more help on the error code. |
-| message: String ||| TI1 | 	Additional message information, where available. |
+| href: String? ||| TI4 | This is included for REST responses to provide a URL for additional help on the error code. |
+| message: String ||| TI1 | Additional message information, where available. |
 | cause: ErrorInfo? ||| TI1 | Information pertaining to what caused the error where available. |
 | statusCode: Int ||| TI1 | HTTP Status Code corresponding to this error, where applicable. |
 | requestId: String? ||| RSC7c | If a request fails, the request ID must be included in the `ErrorInfo` returned to the user. |
@@ -681,7 +681,7 @@ The `EventEmitter` object is a generic interface for event registration and deli
 
 ## class `PaginatedResult<T>`
 
-The `PaginatedResult<T>` object represents a page of results for all message and presence history, stats, and REST presence requests. The response from a [Ably REST API paginated query](https://ably.com/docs/rest-api/#pagination) is accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
+The `PaginatedResult<T>` object represents a page of results for all message and presence history, stats, and REST presence requests. The response from an [Ably REST API paginated query](https://ably.com/docs/rest-api/#pagination) is accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
