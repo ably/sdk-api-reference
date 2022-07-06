@@ -583,7 +583,7 @@
 
 ## class JsonObject
 
-`JsonObject` denotes any type or interface in the target language that represents an RFC4627 object or array value respectively. Such types serialize to, and may be deserialized from, the corresponding JSON text. This object is platform-dependent, typically a Dict-like object.
+The `JsonObject` object denotes any type or interface in the target language that represents an RFC4627 object or array value respectively. Such types serialize to, and may be deserialized from, the corresponding JSON text. This object is platform-dependent, typically a Dict-like object.
 
 ||| Spec | Description |
 |---|---|---|---|
@@ -653,7 +653,7 @@
 
 ## class ErrorInfo
 
-A generic Ably error object that contains an Ably-specific status code, and a generic status code. Errors returned from the Ably server are compatible with the `ErrorInfo` structure and should result in errors that inherit from `ErrorInfo`.
+The `ErrorInfo` object is a generic Ably error object that contains an Ably-specific status code, and a generic status code. Errors returned from the Ably server are compatible with the `ErrorInfo` structure and should result in errors that inherit from `ErrorInfo`.
 
 ||| Spec | Description |
 |---|---|---|---|
@@ -666,7 +666,7 @@ A generic Ably error object that contains an Ably-specific status code, and a ge
 
 ## class `EventEmitter<Event, Data>`
 
-EventEmitter is a generic interface for event registration and delivery used in a number of the types in the Realtime client library. For example, the Connection object emits events for connection state using the EventEmitter pattern
+The `EventEmitter` object is a generic interface for event registration and delivery used in a number of the types in the Realtime client library. For example, the [`Connection`]{@link} object emits events for connection state using the EventEmitter pattern.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -681,25 +681,34 @@ EventEmitter is a generic interface for event registration and delivery used in 
 
 ## class `PaginatedResult<T>`
 
-||| Spec | Description |
-|---|---|---|---|
-| items: [T] || TG3 | |
-| first() => io `PaginatedResult<T>` || TG5 | |
-| hasNext() -> Bool || TG6 | |
-| isLast() -> Bool || TG7 | |
-| next() => io `PaginatedResult<T>`? || TG4 | |
+The `PaginatedResult<T>` object represents a page of results for all message and presence history, stats, and REST presence requests. The response from a [Ably REST API paginated query](https://ably.com/docs/rest-api/#pagination) is accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| items: [T] ||| TG3 | Contains the current page of results; for example, an array of `Message` or `PresenceMessage` objects for a channel history request. |
+| first() => io `PaginatedResult<T>` ||| TG5 | Returns a new `PaginatedResult` for the first page of results. |
+||| `PaginatedResult<T>` || A page of results for message and presence history, stats, and REST presence requests. |
+| hasNext() -> Bool ||| TG6 | Returns `true` if there are more pages available by calling next and returns `false` if this page is the last page available. |
+||| `Bool` || Whether or not there are more pages of results. |
+| isLast() -> Bool ||| TG7 | Returns `true` if this page is the last page and returns `false` if there are more pages available by calling next available. |
+||| `Bool` || Whether or not this is the last page of results. |
+| next() => io `PaginatedResult<T>`? ||| TG4 | Returns a new `PaginatedResult` loaded with the next page of results. If there are no further pages, then `null` is returned. |
+||| `PaginatedResult<T>` || A page of results for message and presence history, stats, and REST presence requests. |
+
 
 ## class HttpPaginatedResponse
 
+The `HttpPaginatedResponse` object is a superset of `PaginatedResult`, which represents a page of results plus metadata indicating the relative queries available to it. `HttpPaginatedResponse` additionally carries information about the response to an HTTP request. It is used when making [custom HTTP requests](https://ably.com/docs/api/rest-sdk#request).
+
 ||| Spec | Description |
 |---|---|---|---|
-| embeds `PaginatedResult<JsonObject>` || |
-| items: [JsonObject] || HP3 | |
-| statusCode: Int || HP4 | |
-| success: Bool || HP5 | |
-| errorCode: Int || HP6 | |
-| errorMessage: String || HP7 | |
-| headers: `Dict<String, String>` || HP8 | |
+| embeds `PaginatedResult<JsonObject>` || `HttpPaginatedResponse` is a subclass of `PaginatedResult`. |
+| items: [JsonObject] || HP3 | Contains a page of results; for example, an array of `Message` or `PresenceMessage` objects for a channel history request. |
+| statusCode: Int || HP4 | The HTTP status code of the response. |
+| success: Bool || HP5 | Whether `statusCode` indicates success. This is equivalent to `200 <= statusCode < 300`. |
+| errorCode: Int || HP6 | The error code if the `X-Ably-Errorcode` HTTP header is sent in the response. |
+| errorMessage: String || HP7 | The error message if the `X-Ably-Errormessage` HTTP header is sent in the response. |
+| headers: `Dict<String, String>` || HP8 | The headers of the response. |
 
 ## enum PluginType
 
@@ -709,13 +718,20 @@ EventEmitter is a generic interface for event registration and delivery used in 
 
 ## class VCDiffDecoder
 
-||| Spec | Description |
-|---|---|---|---|
-| decode([byte] delta, [byte] base) -> [byte]  || |
+The `VCDiffDecode` object is capable of decoding `vcdiff` encoded messages. See [delta compression](https://ably.com/docs/realtime/channels/channel-parameters/deltas) for more information.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| decode([byte] delta, [byte] base) -> [byte]  ||| PC3 | Decodes `vcdiff` encoded messages. |
+|| `delta` || PC3a | The delta encoded data. |
+|| `base` || PC3a | The stored base payload of the last message on a channel. |
+||| `[byte]` | PC3a | The decoded data. |
 
 ## class DeltaExtras
 
+The `DeltaExtras` object is JSON-encodable and used to contain any arbitrary key-value pairs, which may also contain other primitive JSON types, JSON-encodable objects, or JSON-encodable arrays. 
+
 ||| Spec | Description |
 |---|---|---|---|
-| from: String ||| |
-| format: String ||| |
+| from: String ||| The ID of the message the delta was generated from. |
+| format: String ||| The delta compression format. Only `vcdiff` is supported for Ably protocol version 1.2. |
