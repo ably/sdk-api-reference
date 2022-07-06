@@ -659,7 +659,7 @@ The `ErrorInfo` object is a generic Ably error object that contains an Ably-spec
 |---|---|---|---|
 | code: Int || TI1 | Ably [error code](https://github.com/ably/ably-common/blob/main/protocol/errors.json). |
 | href: String? || TI4 | This is included for REST responses to provide a URL for additional help on the error code. |
-| message: String || TI1 | 	Additional message information, where available. |
+| message: String || TI1 |  Additional message information, where available. |
 | cause: ErrorInfo? || TI1 | Information pertaining to what caused the error where available. |
 | statusCode: Int || TI1 | HTTP Status Code corresponding to this error, where applicable. |
 | requestId: String? || RSC7c | If a request fails, the request ID must be included in the `ErrorInfo` returned to the user. |
