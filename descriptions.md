@@ -267,34 +267,34 @@
 
 ## enum ChannelState
 
-The state of the channel.
+`ChannelState` describes the possible states of a `Channel`.
 
-| Enum || Spec | Description |
-|---|---|---|---|
+| Enum | Spec | Description |
+|---|---|---|
 | INITIALIZED || A `Channel` object having this state has been initialized but no attach has yet been attempted. |
-| ATTACHING || An attach has been initiated by sending a request to Ably. This is a transient state; it will be followed either by a transition to attached, suspended, or failed. |
-| ATTACHED || Attach has succeeded. In the attached state a client may publish and subscribe to messages, or be present. |
-| DETACHING || A detach has been initiated on the attached `Channel` by sending a request to Ably. This is a transient state; it will be followed either by a transition to detached or failed. |
-| DETACHED || The `Channel`, having previously been attached, has been detached by the user. |
-| SUSPENDED || The `Channel`, having previously been attached, has lost continuity, usually due to the client being disconnected from Ably for more than two minutes. It will automatically attempt to reattach as soon as connectivity is restored. |
+| ATTACHING || An attach has been initiated by sending a request to Ably. This is a transient state, followed either by a transition to `ATTACHED`, `SUSPENDED`, or `FAILED`. |
+| ATTACHED || The attach has succeeded. In the `ATTACHED` state a client may publish and subscribe to messages, or be present on the channel. |
+| DETACHING || A detach has been initiated on an `ATTACHED` `Channel` by sending a request to Ably. This is a transient state, followed either by a transition to `DETACHED` or `FAILED`. |
+| DETACHED || The `Channel`, having previously been `ATTACHED`, has been detached by the user. |
+| SUSPENDED || The `Channel`, having previously been `ATTACHED`, has lost continuity, usually due to the client being disconnected from Ably for longer than two minutes. It will automatically attempt to reattach as soon as connectivity is restored. |
 | FAILED || An indefinite failure condition. This state is entered if a `Channel` error has been received from the Ably service (such as an attempt to attach without the necessary access rights). |
 
 ## enum ChannelEvent
 
-`ChannelEvent` is a string that can be emitted as an event on the `Channel` object; either a `ChannelState` or an `update` event.
+`ChannelEvent` describes the events emitted by a `Channel`. An event is either an `UPDATE` or a `ChannelState`.
 
-| Enum || Spec | Description |
-|---|---|---|---|
-| embeds ChannelState || The event contains a `[ChannelState]{@link}`|
-| UPDATE || RTL2g | An event for changes to channel conditions that do not result in a change in `ChannelState`. |
+| Enum | Spec | Description |
+|---|---|---|
+| embeds ChannelState || The event contains a [`ChannelState`]{@link}. |
+| UPDATE | RTL2g | An event for changes to channel conditions that do not result in a change in [`ChannelState`]{@link}. |
 
 ## enum ChannelMode
 
-`ChannelMode` is set by the client to configure client capabilities. The mode flags can be combined to reflect the capabilities required.
+`ChannelMode` describes the possible flags used to configure client capabilities.
 
-| Enum || Spec | Description |
-|---|---|---|---|
-| PRESENCE || The client can enter presence. |
+| Enum | Spec | Description |
+|---|---|---|
+| PRESENCE || The client can enter the presence set. |
 | PUBLISH || The client can publish messages. |
 | SUBSCRIBE || The client can subscribe to messages. |
 | PRESENCE_SUBSCRIBE || The client can receive presence messages. |
@@ -408,15 +408,15 @@ The state of the channel.
 
 ## enum PresenceAction
 
-`PresenceAction` is a string with a value matching any of the Realtime Presence states and events.
+`PresenceAction` describes the possible actions presence members can emit.
 
-| Enum || Spec | Description |
-|---|---|---|---|
-| ABSENT || TP2 | A member is not present in the channel. |
-| PRESENT || TP2 | When subscribing to presence events on a channel that already has members present, this event is emitted for every member already present on the channel before the subscribe listener was registered. |
-| ENTER || TP2 | A new member has entered the channel. |
-| LEAVE || TP2 | A member who was present has now left the channel. This may be a result of an explicit request to leave or implicitly when detaching from the channel. Alternatively, if a member's connection is abruptly disconnected and they do not resume their connection within a minute, Ably treats this as a leave event as the client is no longer present. |
-| UPDATE || TP2 | An already present member has updated their member data. Being notified of member data updates can be very useful, for example, it can be used to update the status of a user when they are typing a message. |
+| Enum | Spec | Description |
+|---|---|---|
+| ABSENT | TP2 | A member is not present in the channel. |
+| PRESENT | TP2 | When subscribing to presence events on a channel that already has members present, this event is emitted for every member already present on the channel before the subscribe listener was registered. |
+| ENTER | TP2 | A new member has entered the channel. |
+| LEAVE | TP2 | A member who was present has now left the channel. This may be a result of an explicit request to leave or implicitly when detaching from the channel. Alternatively, if a member's connection is abruptly disconnected and they do not resume their connection within a minute, Ably treats this as a leave event as the client is no longer present. |
+| UPDATE | TP2 | An already present member has updated their member data. Being notified of member data updates can be very useful, for example, it can be used to update the status of a user when they are typing a message. |
 
 ## class ConnectionDetails
 
@@ -500,12 +500,12 @@ The state of the channel.
 
 ## enum ConnectionEvent
 
-`ConnectionEvent` is a string that can be emitted as an event on the `Connection` object; either a Realtime `ConnectionState` or an `update` event.
+`ConnectionEvent` describes the events emitted by a [`Connection`]{@link} object. An event is either an `UPDATE` or a `ConnectionState`.
 
-| Enum || Spec | Description |
-|---|---|---|---|
-| embeds ConnectionState || See [`ConnectionState`]{@link}. |
-| UPDATE || RTN4h | An event for changes to connection conditions for which the `ConnectionState` (such as `CONNECTED`) does not change. |
+| Enum | Spec | Description |
+|---|---|---|
+| embeds ConnectionState || The event contains a [`ConnectionState`]{@link}. |
+| UPDATE | RTN4h | An event for changes to connection conditions for which the [`ConnectionState`]{@link} does not change. |
 
 ## class ConnectionStateChange
 
@@ -539,14 +539,14 @@ The state of the channel.
 
 ## enum StatsIntervalGranularity
 
-The interval unit over which statistics are gathered.
+`StatsIntervalGranularity` describes the interval unit over which statistics are gathered.
 
-| Enum || Spec | Description |
-|---|---|---|---|
-| MINUTE || Interval unit over which statistics are gathered is a minute. |
-| HOUR || Interval unit over which statistics are gathered is an hour. |
-| DAY || Interval unit over which statistics are gathered is a day. |
-| MONTH || Interval unit over which statistics are gathered is a month. |
+| Enum | Spec | Description |
+|---|---|---|
+| MINUTE || Interval unit over which statistics are gathered as minutes. |
+| HOUR || Interval unit over which statistics are gathered as hours. |
+| DAY || Interval unit over which statistics are gathered as days. |
+| MONTH || Interval unit over which statistics are gathered as months. |
 
 ## class DeviceDetails
 
@@ -623,28 +623,28 @@ The interval unit over which statistics are gathered.
 
 ## enum DevicePlatform
 
-The device receiving push notifications.
+`DevicePlatform` describes the device receiving push notifications.
 
-| Enum || Spec | Description |
-|---|---|---|---|
-| "android" || PCD6 | Device platform is Android. |
-| "ios" || PCD6 | Device platform is iOS. |
-| "browser" || PCD6 | Device platform is web browser. |
+| Enum | Spec | Description |
+|---|---|---|
+| "android" | PCD6 | The device platform is Android. |
+| "ios" | PCD6 | The device platform is iOS. |
+| "browser" | PCD6 | The device platform is a web browser. |
 
 ## enum DeviceFormFactor
 
-Form factor of device receiving the push notification.
+`DeviceFormFactor` is the type of device receiving a push notification.
 
-| Enum || Spec | Description |
-|---|---|---|---|
-| "phone" || PCD4 | Device form factor. |
-| "tablet" || PCD4 | Device form factor. |
-| "desktop" || PCD4 | Device form factor. |
-| "tv" || PCD4 | Device form factor. |
-| "watch" || PCD4 | Device form factor. |
-| "car" || PCD4 | Device form factor. |
-| "embedded" || PCD4 | Device form factor. |
-| "other" || PCD4 | Device form factor. |
+| Enum | Spec | Description |
+|---|---|---|
+| "phone" | PCD4 | The device is a phone. |
+| "tablet" | PCD4 | The device is tablet. |
+| "desktop" | PCD4 | The device is a desktop. |
+| "tv" | PCD4 | The device is a TV. |
+| "watch" | PCD4 | The device is a watch. |
+| "car" | PCD4 | The device is a car. |
+| "embedded" | PCD4 | The device is embedded. |
+| "other" | PCD4 | The device is other. |
 
 ## class PushChannelSubscription
 
@@ -704,9 +704,11 @@ Form factor of device receiving the push notification.
 
 ## enum PluginType
 
-| Enum || Spec | Description |
-|---|---|---|---|
-| "vcdiff" || A plugin capable of decoding vcdiff-encoded messages. It must implement the [`VCDiffDecoder`]{@link} interface. |
+`PluginType` describes the type of plugin used.
+
+| Enum | Spec | Description |
+|---|---|---|
+| "vcdiff" || A plugin capable of decoding `vcdiff`-encoded messages. It must implement the [`VCDiffDecoder`]{@link} interface. |
 
 ## class VCDiffDecoder
 
