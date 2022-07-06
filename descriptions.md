@@ -681,7 +681,7 @@ The `EventEmitter` object is a generic interface for event registration and deli
 
 ## class `PaginatedResult<T>`
 
-The `PaginatedResult<T>` object represents a page of results for all message and presence history, stats, and REST presence requests. The response from a [Ably REST API paginated query](https://ably.com/docs/rest-api/#pagination) is accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
+The `PaginatedResult<T>` object represents a page of results for all message and presence history, stats, and REST presence requests. The response from an [Ably REST API paginated query](https://ably.com/docs/rest-api/#pagination) is accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
