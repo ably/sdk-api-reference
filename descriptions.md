@@ -655,14 +655,14 @@ The `JsonObject` object denotes any type or interface in the target language tha
 
 The `ErrorInfo` object is a generic Ably error object that contains an Ably-specific status code, and a generic status code. Errors returned from the Ably server are compatible with the `ErrorInfo` structure and should result in errors that inherit from `ErrorInfo`.
 
-||| Spec | Description |
-|---|---|---|---|
-| code: Int || TI1 | Ably [error code](https://github.com/ably/ably-common/blob/main/protocol/errors.json). |
-| href: String? || TI4 | This is included for REST responses to provide a URL for customers to find more help on the error code. |
-| message: String || TI1 | 	Additional message information, where available. |
-| cause: ErrorInfo? || TI1 | Information pertaining to what caused the error where available. |
-| statusCode: Int || TI1 | HTTP Status Code corresponding to this error, where applicable. |
-| requestId: String? || RSC7c | If a request fails, the request ID must be included in the `ErrorInfo` returned to the user. |
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| code: Int ||| TI1 | Ably [error code](https://github.com/ably/ably-common/blob/main/protocol/errors.json). |
+| href: String? ||| TI4 | This is included for REST responses to provide a URL for customers to find more help on the error code. |
+| message: String ||| TI1 | 	Additional message information, where available. |
+| cause: ErrorInfo? ||| TI1 | Information pertaining to what caused the error where available. |
+| statusCode: Int ||| TI1 | HTTP Status Code corresponding to this error, where applicable. |
+| requestId: String? ||| RSC7c | If a request fails, the request ID must be included in the `ErrorInfo` returned to the user. |
 
 ## class `EventEmitter<Event, Data>`
 
@@ -700,15 +700,15 @@ The `PaginatedResult<T>` object represents a page of results for all message and
 
 The `HttpPaginatedResponse` object is a superset of `PaginatedResult`, which represents a page of results plus metadata indicating the relative queries available to it. `HttpPaginatedResponse` additionally carries information about the response to an HTTP request. It is used when making [custom HTTP requests](https://ably.com/docs/api/rest-sdk#request).
 
-||| Spec | Description |
-|---|---|---|---|
-| embeds `PaginatedResult<JsonObject>` || `HttpPaginatedResponse` is a subclass of `PaginatedResult`. |
-| items: [JsonObject] || HP3 | Contains a page of results; for example, an array of `Message` or `PresenceMessage` objects for a channel history request. |
-| statusCode: Int || HP4 | The HTTP status code of the response. |
-| success: Bool || HP5 | Whether `statusCode` indicates success. This is equivalent to `200 <= statusCode < 300`. |
-| errorCode: Int || HP6 | The error code if the `X-Ably-Errorcode` HTTP header is sent in the response. |
-| errorMessage: String || HP7 | The error message if the `X-Ably-Errormessage` HTTP header is sent in the response. |
-| headers: `Dict<String, String>` || HP8 | The headers of the response. |
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| embeds `PaginatedResult<JsonObject>` |||| `HttpPaginatedResponse` embeds `PaginatedResult`.|
+| items: [JsonObject] ||| HP3 | Contains a page of results; for example, an array of `Message` or `PresenceMessage` objects for a channel history request. |
+| statusCode: Int ||| HP4 | The HTTP status code of the response. |
+| success: Bool ||| HP5 | Whether `statusCode` indicates success. This is equivalent to `200 <= statusCode < 300`. |
+| errorCode: Int ||| HP6 | The error code if the `X-Ably-Errorcode` HTTP header is sent in the response. |
+| errorMessage: String ||| HP7 | The error message if the `X-Ably-Errormessage` HTTP header is sent in the response. |
+| headers: `Dict<String, String>` ||| HP8 | The headers of the response. |
 
 ## enum PluginType
 
@@ -731,7 +731,7 @@ The `VCDiffDecode` object is capable of decoding `vcdiff` encoded messages. See 
 
 The `DeltaExtras` object is JSON-encodable and used to contain any arbitrary key-value pairs, which may also contain other primitive JSON types, JSON-encodable objects, or JSON-encodable arrays. 
 
-||| Spec | Description |
-|---|---|---|---|
-| from: String ||| The ID of the message the delta was generated from. |
-| format: String ||| The delta compression format. Only `vcdiff` is supported for Ably protocol version 1.2. |
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| from: String |||| The ID of the message the delta was generated from. |
+| format: String |||| The delta compression format. Only `vcdiff` is supported for Ably protocol version 1.2. |
