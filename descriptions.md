@@ -667,13 +667,24 @@ The `EventEmitter` object is a generic interface for event registration and deli
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | on((Data...) ->) ||| RTE4 | Registers the provided listener all events. If `on` is called more than once with the same listener and event, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `on`, and an event is emitted once, the listener would be invoked twice. |
+|| `Data` ||| The event listener. |
 | on(Event, (Data...) ->) ||| RTE4 | Registers the provided listener for the specified event. If `on` is called more than once with the same listener and event, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `on`, and an event is emitted once, the listener would be invoked twice. |
+|| `Event` ||| The named event to listen for. |
+|| `Data` ||| The event listener. |
 | once((Data...) ->) ||| RTE4 | Registers the provided listener for the first event that is emitted. If `once` is called more than once with the same listener, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `once`, and an event is emitted once, the listener would be invoked twice. However, all subsequent events emitted would not invoke the listener as `once` ensures that each registration is only invoked once. |
+|| `Data` ||| The event listener. |
 | once(Event, (Data...) ->) ||| RTE4 | Registers the provided listener for the first occurrence of a single named event specified as the `Event` argument. If `once` is called more than once with the same listener, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `once`, and an event is emitted once, the listener would be invoked twice. However, all subsequent events emitted would not invoke the listener as `once` ensures that each registration is only invoked once. |
+|| `Event` ||| The named event to listen for. |
+|| `Data` ||| The event listener. |
 | off() ||| RTE5 | Deregisters all registrations, for all events and listeners. |
 | off((Data...) ->) ||| RTE5 | Deregisters the specified listener. Removes all registrations matching the given listener, regardless of whether they are associated with an event or not. |
+|| `Data` ||| The event listener. |
 | off(Event, (Data...) ->) ||| RTE5 | Removes all registrations that match both the specified listener and the specified event. |
+|| `Event` ||| The named event. |
+|| `Data` ||| The event listener. |
 | emit(Event, Data...) ||| RTE6 | Emits an event, calling registered listeners with the given event name and any other given arguments. If an exception is raised in any of the listeners, the exception is caught by the `EventEmitter` and the exception is logged to the Ably logger. |
+|| `Event` ||| The named event. |
+|| `Data` ||| The event listener. |
 
 ## class `PaginatedResult<T>`
 
