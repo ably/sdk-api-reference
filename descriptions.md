@@ -740,4 +740,4 @@ The `DeltaExtras` object is JSON-encodable and used to contain any arbitrary key
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | from: String |||| The ID of the message the delta was generated from. |
-| format: String |||| The delta compression format. Only `vcdiff` is supported for Ably protocol version 1.2. |
+| format: String |||| The delta compression format. Only `vcdiff` is supported. |
