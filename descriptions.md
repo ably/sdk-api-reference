@@ -277,7 +277,7 @@
 | DETACHING || A detach has been initiated on an `ATTACHED` `Channel` by sending a request to Ably. This is a transient state, followed either by a transition to `DETACHED` or `FAILED`. |
 | DETACHED || The `Channel`, having previously been `ATTACHED`, has been detached by the user. |
 | SUSPENDED || The `Channel`, having previously been `ATTACHED`, has lost continuity, usually due to the client being disconnected from Ably for longer than two minutes. It will automatically attempt to reattach as soon as connectivity is restored. |
-| FAILED || An indefinite failure condition. This state is entered if a `Channel` error has been received from the Ably service (such as an attempt to attach without the necessary access rights). |
+| FAILED || An indefinite failure condition. This state is entered if a `Channel` error has been received from the Ably service, such as an attempt to attach without the necessary access rights. |
 
 ## enum ChannelEvent
 
@@ -487,7 +487,7 @@
 
 ## enum ConnectionState
 
-| Enum || Spec | Description |
+||| Spec | Description |
 |---|---|---|---|
 | INITIALIZED || |
 | CONNECTING || |
