@@ -666,9 +666,7 @@ A `PresenceMessage` object represents an individual presence update sent to, or 
 
 ## class JsonObject
 
-||| Spec | Description |
-|---|---|---|---|
-|||| |
+The `JsonObject` object denotes any type or interface in the target language that represents an RFC4627 object or array value respectively. Such types serialize to, and may be deserialized from, the corresponding JSON text. This object is platform-dependent, typically a Dict-like object.
 
 ## class PushDeviceRegistrations
 
@@ -729,49 +727,72 @@ A `PresenceMessage` object represents an individual presence update sent to, or 
 
 ## class ErrorInfo
 
-||| Spec | Description |
-|---|---|---|---|
-| code: Int || TI1 | |
-| href: String? || TI4 | |
-| message: String || TI1 | |
-| cause: ErrorInfo? || TI1 | |
-| statusCode: Int || TI1 | |
-| requestId: String? || RSC7c | |
+The `ErrorInfo` object is a generic Ably error object that contains an Ably-specific status code, and a generic status code. Errors returned from the Ably server are compatible with the `ErrorInfo` structure and should result in errors that inherit from `ErrorInfo`.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| code: Int ||| TI1 | Ably [error code](https://github.com/ably/ably-common/blob/main/protocol/errors.json). |
+| href: String? ||| TI4 | This is included for REST responses to provide a URL for additional help on the error code. |
+| message: String ||| TI1 | Additional message information, where available. |
+| cause: ErrorInfo? ||| TI1 | Information pertaining to what caused the error where available. |
+| statusCode: Int ||| TI1 | HTTP Status Code corresponding to this error, where applicable. |
+| requestId: String? ||| RSC7c | If a request fails, the request ID must be included in the `ErrorInfo` returned to the user. |
 
 ## class `EventEmitter<Event, Data>`
 
-||| Spec | Description |
-|---|---|---|---|
-| on((Data...) ->) || RTE4 | |
-| on(Event, (Data...) ->) || RTE4 | |
-| once((Data...) ->) || RTE4 | |
-| once(Event, (Data...) ->) || RTE4 | |
-| off() || RTE5 | |
-| off((Data...) ->) || RTE5 | |
-| off(Event, (Data...) ->) || RTE5 | |
-| emit(Event, Data...) || RTE6 | |
+The `EventEmitter` object is a generic interface for event registration and delivery used in a number of the types in the Realtime client library. For example, the [`Connection`]{@link} object emits events for connection state using the EventEmitter pattern.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| on((Data...) ->) ||| RTE4 | Registers the provided listener all events. If `on` is called more than once with the same listener and event, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `on`, and an event is emitted once, the listener would be invoked twice. |
+|| `Data` ||| The event listener. |
+| on(Event, (Data...) ->) ||| RTE4 | Registers the provided listener for the specified event. If `on` is called more than once with the same listener and event, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `on`, and an event is emitted once, the listener would be invoked twice. |
+|| `Event` ||| The named event to listen for. |
+|| `Data` ||| The event listener. |
+| once((Data...) ->) ||| RTE4 | Registers the provided listener for the first event that is emitted. If `once` is called more than once with the same listener, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `once`, and an event is emitted once, the listener would be invoked twice. However, all subsequent events emitted would not invoke the listener as `once` ensures that each registration is only invoked once. |
+|| `Data` ||| The event listener. |
+| once(Event, (Data...) ->) ||| RTE4 | Registers the provided listener for the first occurrence of a single named event specified as the `Event` argument. If `once` is called more than once with the same listener, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `once`, and an event is emitted once, the listener would be invoked twice. However, all subsequent events emitted would not invoke the listener as `once` ensures that each registration is only invoked once. |
+|| `Event` ||| The named event to listen for. |
+|| `Data` ||| The event listener. |
+| off() ||| RTE5 | Deregisters all registrations, for all events and listeners. |
+| off((Data...) ->) ||| RTE5 | Deregisters the specified listener. Removes all registrations matching the given listener, regardless of whether they are associated with an event or not. |
+|| `Data` ||| The event listener. |
+| off(Event, (Data...) ->) ||| RTE5 | Removes all registrations that match both the specified listener and the specified event. |
+|| `Event` ||| The named event. |
+|| `Data` ||| The event listener. |
+| emit(Event, Data...) ||| RTE6 | Emits an event, calling registered listeners with the given event name and any other given arguments. If an exception is raised in any of the listeners, the exception is caught by the `EventEmitter` and the exception is logged to the Ably logger. |
+|| `Event` ||| The named event. |
+|| `Data` ||| The event listener. |
 
 ## class `PaginatedResult<T>`
 
-||| Spec | Description |
-|---|---|---|---|
-| items: [T] || TG3 | |
-| first() => io `PaginatedResult<T>` || TG5 | |
-| hasNext() -> Bool || TG6 | |
-| isLast() -> Bool || TG7 | |
-| next() => io `PaginatedResult<T>`? || TG4 | |
+The `PaginatedResult<T>` object represents a page of results for all message and presence history, stats, and REST presence requests. The response from an [Ably REST API paginated query](https://ably.com/docs/rest-api/#pagination) is accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| items: [T] ||| TG3 | Contains the current page of results; for example, an array of `Message` or `PresenceMessage` objects for a channel history request. |
+| first() => io `PaginatedResult<T>` ||| TG5 | Returns a new `PaginatedResult` for the first page of results. |
+||| `PaginatedResult<T>` || A page of results for message and presence history, stats, and REST presence requests. |
+| hasNext() -> Bool ||| TG6 | Returns `true` if there are more pages available by calling next and returns `false` if this page is the last page available. |
+||| `Bool` || Whether or not there are more pages of results. |
+| isLast() -> Bool ||| TG7 | Returns `true` if this page is the last page and returns `false` if there are more pages available by calling next available. |
+||| `Bool` || Whether or not this is the last page of results. |
+| next() => io `PaginatedResult<T>`? ||| TG4 | Returns a new `PaginatedResult` loaded with the next page of results. If there are no further pages, then `null` is returned. |
+||| `PaginatedResult<T>` || A page of results for message and presence history, stats, and REST presence requests. |
 
 ## class HttpPaginatedResponse
 
-||| Spec | Description |
-|---|---|---|---|
-| embeds `PaginatedResult<JsonObject>` || |
-| items: [JsonObject] || HP3 | |
-| statusCode: Int || HP4 | |
-| success: Bool || HP5 | |
-| errorCode: Int || HP6 | |
-| errorMessage: String || HP7 | |
-| headers: `Dict<String, String>` || HP8 | |
+The `HttpPaginatedResponse` object is a superset of `PaginatedResult`, which represents a page of results plus metadata indicating the relative queries available to it. `HttpPaginatedResponse` additionally carries information about the response to an HTTP request. It is used when making [custom HTTP requests](https://ably.com/docs/api/rest-sdk#request).
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| embeds `PaginatedResult<JsonObject>` |||| `HttpPaginatedResponse` embeds [`PaginatedResult`]{@link}. |
+| items: [JsonObject] ||| HP3 | Contains a page of results; for example, an array of `Message` or `PresenceMessage` objects for a channel history request. |
+| statusCode: Int ||| HP4 | The HTTP status code of the response. |
+| success: Bool ||| HP5 | Whether `statusCode` indicates success. This is equivalent to `200 <= statusCode < 300`. |
+| errorCode: Int ||| HP6 | The error code if the `X-Ably-Errorcode` HTTP header is sent in the response. |
+| errorMessage: String ||| HP7 | The error message if the `X-Ably-Errormessage` HTTP header is sent in the response. |
+| headers: `Dict<String, String>` ||| HP8 | The headers of the response. |
 
 ## enum PluginType
 
@@ -783,13 +804,20 @@ A `PresenceMessage` object represents an individual presence update sent to, or 
 
 ## class VCDiffDecoder
 
-||| Spec | Description |
-|---|---|---|---|
-| decode([byte] delta, [byte] base) -> [byte]  || |
+The `VCDiffDecode` object is capable of decoding `vcdiff` encoded messages. See [delta compression](https://ably.com/docs/realtime/channels/channel-parameters/deltas) for more information.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| decode([byte] delta, [byte] base) -> [byte]  ||| PC3 | Decodes `vcdiff` encoded messages. |
+|| `delta` || PC3a | The delta encoded data. |
+|| `base` || PC3a | The stored base payload of the last message on a channel. |
+||| `[byte]` | PC3a | The decoded data. |
 
 ## class DeltaExtras
 
-||| Spec | Description |
-|---|---|---|---|
-| from: String ||| |
-| format: String ||| |
+The `DeltaExtras` object is JSON-encodable and used to contain any arbitrary key-value pairs, which may also contain other primitive JSON types, JSON-encodable objects, or JSON-encodable arrays. 
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| from: String |||| The ID of the message the delta was generated from. |
+| format: String |||| The delta compression format. Only `vcdiff` is supported. |
