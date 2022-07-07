@@ -476,7 +476,7 @@ The `Message` object represents an individual message that is sent to, or receiv
 | connectionId: String? ||| TM2c | The connection ID of the publisher of this message. |
 | data: Data? ||| TM2d | The message payload, if provided. |
 | encoding: String? ||| TM2e | This is typically empty, as all messages received from Ably are automatically decoded client-side using this value. However, if the message encoding cannot be processed, this attribute contains the remaining transformations not applied to the `data` payload. |
-| extras: JsonObject? ||| TM2i | A combination of metadata or ancillary payloads. Currently the only valid payload for `extras` is the `push` object. |
+| extras: JsonObject? ||| TM2i | A combination of metadata or ancillary payloads. The only valid payload for `extras` is the `push` object. |
 | id: String ||| TM2a | A Unique ID assigned by Ably to this message. |
 | name: String? ||| TM2g | The event name. |
 | timestamp: Time ||| TM2f | Timestamp of when the message was received by the Ably, as a Unix timestamp. |
