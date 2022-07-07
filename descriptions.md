@@ -161,7 +161,7 @@ The `Channels` object is used to create and destroy [`Channel`]{@link} objects.
 || `String` ||| The channel name. |
 || `ChannelOptions` ||| [`ChannelOptions`]{@link} used to configure the channel. |
 ||| `ChannelType` || A `ChannelType` object. |
-| iterate() -> `Iterator<ChannelType>` ||| RSN2, RTS2 | Method to iterate through the existing channels. |
+| iterate() -> `Iterator<ChannelType>` ||| RSN2, RTS2 | Iterates through the existing channels. |
 ||| `ChannelType` || Each iteration returns a `ChannelType` object. |
 | release(String) ||| RSN4, RTS4 | Releases a [`Channel`]{@link} object, deleting it, and enabling it to be garbage collected. It also removes any listeners associated with the channel. To release a channel, the channel state must be `initialized`, `detached`, or `failed`. |
 || `String` ||| The channel name. |
