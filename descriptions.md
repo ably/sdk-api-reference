@@ -708,7 +708,7 @@ The `HttpPaginatedResponse` object is a superset of `PaginatedResult`, which rep
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| embeds `PaginatedResult<JsonObject>` |||| `HttpPaginatedResponse` embeds `PaginatedResult`.|
+| embeds `PaginatedResult<JsonObject>` |||| `HttpPaginatedResponse` embeds [`PaginatedResult`]{@link}. |
 | items: [JsonObject] ||| HP3 | Contains a page of results; for example, an array of `Message` or `PresenceMessage` objects for a channel history request. |
 | statusCode: Int ||| HP4 | The HTTP status code of the response. |
 | success: Bool ||| HP5 | Whether `statusCode` indicates success. This is equivalent to `200 <= statusCode < 300`. |
