@@ -479,7 +479,7 @@ The `Message` object represents an individual message that is sent to, or receiv
 | extras: JsonObject? ||| TM2i | A combination of metadata or ancillary payloads. The only valid payload for `extras` is the `push` object. |
 | id: String ||| TM2a | A Unique ID assigned by Ably to this message. |
 | name: String? ||| TM2g | The event name. |
-| timestamp: Time ||| TM2f | Timestamp of when the message was received by the Ably, as a Unix timestamp. |
+| timestamp: Time ||| TM2f | Timestamp of when the message was received by Ably, as a Unix timestamp. |
 
 ## class PresenceMessage
 
