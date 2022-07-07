@@ -470,7 +470,7 @@ The `Message` object represents an individual message that is sent to, or receiv
 ||| `Message` || A `Message` object. |
 | +fromEncodedArray(JsonArray, ChannelOptions?) -> [Message] ||| TM3 | A static factory method to create an array of `Message` objects from an array of deserialized Message-like object encoded using Ably's wire protocol. |
 || `JsonArray` ||| An array of `Message`-like deserialized objects. |
-|| `ChannelOptions` ||| A [`ChannelOptions`]{@link} object. If you have an encrypted channel, use this to allow the library can decrypt the data. |
+|| `ChannelOptions` ||| A [`ChannelOptions`]{@link} object. If you have an encrypted channel, use this to allow the library to decrypt the data. |
 ||| [`Message`] || An array of Message-like deserialized objects. |
 | clientId: String? ||| RSL1g1, TM2b | The client ID of the publisher of this message. |
 | connectionId: String? ||| TM2c | The connection ID of the publisher of this message. |
