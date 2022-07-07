@@ -154,16 +154,16 @@ The `Channels` object is used to create and destroy [`Channel`]{@link} objects.
 | exists(String) -> Bool || | RSN2, RTS2 | Checks if a certain channel exists. |
 || `String` ||| The channel name. |
 ||| `Bool` || `true` if the channel exists, otherwise `false`. |
-| get(String) -> ChannelType ||| RSN3a, RTS3a | Creates a new `ChannelType` if none for the channel exists, or returns the existing channel object. |
+| get(String) -> ChannelType ||| RSN3a, RTS3a | Creates a new `ChannelType`, or returns the existing channel object. |
 || `String` ||| The channel name. |
 ||| `ChannelType` || A `ChannelType` object. |
-| get(String, ChannelOptions) -> ChannelType || A `ChannelType` object. | RSN3c, RTS3c | Creates a new `ChannelType` object, with the specified [`ClientOptions`]{@link}, if none for the channel exists, or returns the existing channel object. |
+| get(String, ChannelOptions) -> ChannelType ||| RSN3c, RTS3c | Creates a new `ChannelType` object, with the specified [`ClientOptions`]{@link}, or returns the existing channel object. |
 || `String` ||| The channel name. |
 || `ChannelOptions` ||| [`ChannelOptions`]{@link} used to configure the channel. |
 ||| `ChannelType` || A `ChannelType` object. |
 | iterate() -> `Iterator<ChannelType>` ||| RSN2, RTS2 | Iterates through the existing channels. |
 ||| `ChannelType` || Each iteration returns a `ChannelType` object. |
-| release(String) ||| RSN4, RTS4 | Releases a [`Channel`]{@link} object, deleting it, and enabling it to be garbage collected. It also removes any listeners associated with the channel. To release a channel, the channel state must be `initialized`, `detached`, or `failed`. |
+| release(String) ||| RSN4, RTS4 | Releases a [`Channel`]{@link} object, deleting it, and enabling it to be garbage collected. It also removes any listeners associated with the channel. To release a channel, the [`ChannelState`]{@link} must be `initialized`, `detached`, or `failed`. |
 || `String` ||| The channel name. |
 
 ## class RestChannel
@@ -193,11 +193,11 @@ The `Channels` object is used to create and destroy [`Channel`]{@link} objects.
 
 ## class RealtimeChannel
 
-The `RealtimeChannel` object is one where when it becomes attached, all incoming messages and presence messages are processed and emitted where applicable. Incoming is defined as "received from Ably over the realtime transport".
+The `RealtimeChannel` object handles all incoming messages and presence messages when it is attached. Incoming is defined as "received from Ably over the realtime transport".
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` ||| RTL2a, RTL2d, RTL2e | The `RealtimeChannel` implements [`EventEmitter`]{@link} and emits [`ChannelEvent`]{@link} events, where a `ChannelEvent` is either a [`ChannelState`]{@link} or `UPDATE`, and a `ChannelState` is either `INITIALIZED`, `ATTACHING`, `ATTACHED`, `DETACHING`, `DETACHED`, `SUSPENDED` and `FAILED`. |
+| embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` ||| RTL2a, RTL2d, RTL2e | The `RealtimeChannel` implements [`EventEmitter`]{@link} and emits [`ChannelEvent`]{@link} events, where a `ChannelEvent` is either a [`ChannelState`]{@link} or `UPDATE`. |
 | errorReason: ErrorInfo? ||| RTL4e | An error as an [`ErrorInfo`]{@link} object when a channel failure occurs. |
 | state: ChannelState ||| RTL2b | The current [`ChannelState`]{@link} of this [`Channel`]{@link}. |
 | presence: RealtimePresence ||| RTL9 | Provides access to the [`Presence`]{@link} object for this channel which can be used to access members present on the channel, or participate in presence. |
@@ -205,27 +205,45 @@ The `RealtimeChannel` object is one where when it becomes attached, all incoming
 | push: PushChannel ||| Provides access to the [`PushChannel`]{@link} object for this channel. |
 | modes: readonly [ChannelMode] ||| RTL4m | An array of [`ChannelMode`]{@link} objects. |
 | params: readonly `Dict<String, String>` ||| RTL4k1 | Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
-| attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using `subscribe()`. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, `attach()` is called implicitly if subscribe for the Channel is called, or `enter()` or `subscribe()` is called on the Presence for this Channel. |
-| detach() => io ||| RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the `on` or `once` methods. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
+| attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link}. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, [`attach()`]{@link} is called implicitly if [`subscribe()`]{@link} for the channel is called, or [`enter()`]{@link} or [`subscribe()`]{@link} is called on the [`Presence`]{@link} object for this channel. |
+| detach() => io ||| RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the [`on`]{@link} or [`once`]{@link} methods of the [`EventEmitter`]{@link} object. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
 | history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100, untilAttach: Bool default false) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a paginated set of historical messages for this channel. If the channel is configured to persist messages to disk, then message history will typically be available for 24 – 72 hours. If not, messages are only retained in memory by the Ably service for two minutes. |
 || `start` || RTL10a | The time from which messages are retrieved, specified as a Unix timestamp. |
 || `end` || RTL10a | The time until messages are retrieved, specified as a Unix timestamp. |
 || `direction` || RTL10a | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
 || `limit` || RTL10a | An upper limit on the number of messages returned, up to 1000. |
 || `untilAttach` || RTL10b | When `true`, ensures message history is up until the point of the channel being attached. See [continuous history](https://ably.com/docs/realtime/history#continuous-history) for more info. Requires the direction to be backwards (the default). If the channel is not attached, or if direction is set to `forwards`, this option results in an error. |
-| publish(Message) => io ||| RTL6i | Publishes a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
-| publish([Message]) => io ||| RTL6i | Publishes several messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
-| publish(name: String?, data: Data?) => io ||| RTL6i | Publishes a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel, so long as [transient publishing](https://ably.com/docs/realtime/channels#transient-publish) is available in the library. Otherwise, the client will implicitly attach. |
-| subscribe((Message) ->) => io ||| RTL7a | Subscribes to messages on this channel. The caller supplies a listener function, which is called each time one or more messages arrives on the channel. |
-| subscribe(String, (Message) ->) => io ||| RTL7b | Subscribes to messages with a given event `name` on this channel. The caller supplies a listener function, which is called each time one or more matching messages arrives on the channel. |
-| subscribe([String], (Message) ->) => io ||| RTL7a | Subscribes a single listener to messages on this channel for multiple event name values. |
-| unsubscribe(String, (Message) ->) ||| RTL8a | Unsubscribes the given listener for the specified event name. This removes an earlier event-specific subscription. |
-| unsubscribe((Message) ->) ||| RTL8a | Unsubscribes the given listener (for any/all event names). This removes an earlier subscription. |
-| unsubscribe([String], (Message) ->) ||| RTL8a | Unsubscribes the given listener from all event names in the array. |
-| unsubscribe(String) ||| RTL8a | Unsubscribes all listeners for the given event name. |
-| unsubscribe([String]) ||| RTL8a | Unsubscribes all listeners for all event names in the array. |
-| unsubscribe() ||| RTL8a, RTE5 | Unsubscribes all listeners to messages on this channel. This removes all earlier subscriptions. |
+||| `PaginatedResult<Message>` || A paginated set of historical messages. |
+| publish(Message) => io ||| RTL6i | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+|| `Message` ||| A [`Message`]{@link} object. |
+| publish([Message]) => io ||| RTL6i | Sends several messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+|| [`Message`] ||| An array of [`Message`]{@link} objects. |
+| publish(name: String?, data: Data?) => io ||| RTL6i | Sends a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel, so long as [transient publishing](https://ably.com/docs/realtime/channels#transient-publish) is available in the library. Otherwise, the client will implicitly attach. |
+|| `name` ||| Event name. |
+|| `data` ||| Message payload. |
+| subscribe((Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel. The caller supplies a listener function, which is called each time one or more messages arrives on the channel. |
+|| `(Message)` ||| Event listener function. |
+| subscribe(String, (Message) ->) => io ||| RTL7b | Registers a listener for messages with a given event `name` on this channel. The caller supplies a listener function, which is called each time one or more matching messages arrives on the channel. |
+|| `String` ||| Event name. |
+|| `(Message)` ||| Event listener function. |
+| subscribe([String], (Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel for multiple event name values. |
+|| [`String`] ||| An array of event names. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe(String, (Message) ->) ||| RTL8a | Deregisters the given listener for the specified event name. This removes an earlier event-specific subscription. |
+|| `String` ||| Event name. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe((Message) ->) ||| RTL8a | Deregisters the given listener (for any/all event names). This removes an earlier subscription. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe([String], (Message) ->) ||| RTL8a | Deregisters the given listener from all event names in the array. |
+|| [`String`] ||| An array of event names. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe(String) ||| RTL8a | Deregisters all listeners for the given event name. |
+|| `String` ||| Event name. |
+| unsubscribe([String]) ||| RTL8a | Deregisters all listeners for all event names in the array. |
+|| [`String`] ||| An array of event names. |
+| unsubscribe() ||| RTL8a, RTE5 | Deregisters all listeners to messages on this channel. This removes all earlier subscriptions. |
 | setOptions(options: ChannelOptions) => io ||| RTL16 | Sets the [`ChannelOptions`]{@link} for the channel. |
+|| `options` ||| A [`ChannelOptions`]{@link} object. |
 
 ## class BatchOperations
 
@@ -316,11 +334,11 @@ The `ChannelStateChange`  object encapsulates state change information emitted b
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| current: ChannelState ||| RTL2a, RTL2b | The new current state. |
-| event: ChannelEvent ||| TH5 | The event that triggered this state change. |
-| previous: ChannelState ||| RTL2a, RTL2b | The previous state. For the `update` event, this is equal to the `current` state. |
+| current: ChannelState ||| RTL2a, RTL2b | The new current [`ChannelState`]{@link}. |
+| event: ChannelEvent ||| TH5 | The event that triggered this [`ChannelState`]{@link} change. |
+| previous: ChannelState ||| RTL2a, RTL2b | The previous state. For the `update` event, this is equal to the `current` [`ChannelState`]{@link}. |
 | reason: ErrorInfo? ||| RTL2e, TH3 | An [`ErrorInfo`]{@link} object containing any information relating to the transition. |
-| resumed: Boolean ||| RTL2f, TH4 | A boolean indicated whether message continuity on this channel is preserved, see [Nonfatal channel errors](https://ably.com/docs/realtime/channels#nonfatal-errors) for more info. |
+| resumed: Boolean ||| RTL2f, TH4 | Indicates whether message continuity on this channel is preserved, see [Nonfatal channel errors](https://ably.com/docs/realtime/channels#nonfatal-errors) for more info. |
 
 ## class ChannelOptions
 
