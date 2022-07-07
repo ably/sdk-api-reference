@@ -714,7 +714,7 @@
 
 ||| Spec | Description |
 |---|---|---|---|
-| decode([byte] delta, [byte] base) -> [byte]  || The `VCDiffDecoder.decode` method receives the stored base payload of the last message on a channel. If the base payload is a string, it should be encoded to binary using UTF-8, before being passed as the `base` argument to the `VCDiffDecoder.decode` method. |
+| decode([byte] delta, [byte] base) -> [byte]  || |
 
 ## class DeltaExtras
 
