@@ -466,7 +466,7 @@ The `Message` object represents an individual message that is sent to, or receiv
 || `clientId` ||| The client ID of the publisher of this message. |
 | +fromEncoded(JsonObject, ChannelOptions?) -> Message ||| TM3 | A static factory method to create a `Message` object from a deserialized Message-like object encoded using Ably's wire protocol. |
 || `JsonObject` ||| A `Message`-like deserialized object. |
-|| `ChannelOptions` ||| A [`ChannelOptions`]{@link} object. If you have an encrypted channel, use this to allow the library can decrypt the data. |
+|| `ChannelOptions` ||| A [`ChannelOptions`]{@link} object. If you have an encrypted channel, use this to allow the library to decrypt the data. |
 ||| `Message` || A `Message` object. |
 | +fromEncodedArray(JsonArray, ChannelOptions?) -> [Message] ||| TM3 | A static factory method to create an array of `Message` objects from an array of deserialized Message-like object encoded using Ably's wire protocol. |
 || `JsonArray` ||| An array of `Message`-like deserialized objects. |
