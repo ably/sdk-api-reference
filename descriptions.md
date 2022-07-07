@@ -213,7 +213,7 @@ The `RealtimeChannel` object handles all incoming messages and presence messages
 || `direction` || RTL10a | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
 || `limit` || RTL10a | An upper limit on the number of messages returned, up to 1000. |
 || `untilAttach` || RTL10b | When `true`, ensures message history is up until the point of the channel being attached. See [continuous history](https://ably.com/docs/realtime/history#continuous-history) for more info. Requires the direction to be backwards (the default). If the channel is not attached, or if direction is set to `forwards`, this option results in an error. |
-||| `PaginatedResult<Message>` || A paginated set of historical messages. |
+||| `PaginatedResult<Message>` || A paginated list of [`Message`]{@link} objects. |
 | publish(Message) => io ||| RTL6i | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
 || `Message` ||| A [`Message`]{@link} object. |
 | publish([Message]) => io ||| RTL6i | Sends several messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
