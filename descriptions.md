@@ -91,7 +91,7 @@ The `ClientOptions` object is a plain JavaScript object and is used in the `Ably
 
 ## class AuthOptions
 
-The `AuthOptions` object is a plain JavaScript object and is used when making authentication requests. If passed in, an `AuthOptions` object will be used instead of the default values given when the library was instantiated.
+The `AuthOptions` object is a plain JavaScript object used when making authentication requests. If passed in, an `AuthOptions` object will be used instead of the default values given when the library is instantiated.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
