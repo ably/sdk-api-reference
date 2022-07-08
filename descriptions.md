@@ -346,14 +346,16 @@ The `ChannelOptions` object is used when creating a channel object, to configure
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|----|
-| +withCipherKey(key: Binary \| String)? -> ChannelOptions || A `ChannelOptions` object. | TB3 | Optional constructor `withCipherKey`, that takes a key only. |
+| +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Constructor `withCipherKey`, that takes a key only. |
+|| `key` ||| A private key used to encrypt and decrypt payloads. |
+||| `ChannelOptions` || A [`ChannelOptions`]{@link} object. |
 | cipher: (CipherParams \| Params)? ||| RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
-| params?: `Dict<String, String>` ||| TB2c | Optional [parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
+| params?: `Dict<String, String>` ||| TB2c | [Channel Parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
 | modes?: [ChannelMode] ||| TB2d | For realtime client libraries only. An array of [`ChannelMode`]{@link} objects. |
 
 ## class ChannelDetails
 
-The `ChannelDetails` object represents information for a channel including `channelId`, `status` and occupancy.
+The `ChannelDetails` object represents information for a channel including `channelId` and `status`.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -489,7 +491,7 @@ The `Message` object represents an individual message that is sent to, or receiv
 | +fromEncodedArray(JsonArray, ChannelOptions?) -> [Message] ||| TM3 | A static factory method to create an array of `Message` objects from an array of deserialized Message-like object encoded using Ably's wire protocol. |
 || `JsonArray` ||| An array of `Message`-like deserialized objects. |
 || `ChannelOptions` ||| A [`ChannelOptions`]{@link} object. If you have an encrypted channel, use this to allow the library to decrypt the data. |
-||| [`Message`] || An array of Message-like deserialized objects. |
+||| [`Message`] || An array of [`Message`]{@link} objects. |
 | clientId: String? ||| RSL1g1, TM2b | The client ID of the publisher of this message. |
 | connectionId: String? ||| TM2c | The connection ID of the publisher of this message. |
 | data: Data? ||| TM2d | The message payload, if provided. |
