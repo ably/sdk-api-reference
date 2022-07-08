@@ -120,7 +120,7 @@ The `TokenParams` object is a plain JavaScript object and is used in the paramet
 
 ## class Auth
 
-The `Auth` object creates Ably `TokenRequest` objects with `createTokenRequest` or obtain Ably Tokens from Ably with `requestToken`, and then issue them to less trusted clients.
+The `Auth` object creates Ably `TokenRequest` objects with `createTokenRequest` or is used to obtain Ably Tokens from Ably with `requestToken`, and then issue them to less trusted clients.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
