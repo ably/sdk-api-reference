@@ -436,7 +436,7 @@ The `ConnectionDetails` object is optionally passed to the client library in the
 |---|---|---|---|---|
 | clientId: String? ||| RSA12a, CD2a | Contains the client ID assigned to the token. If `clientId` is `null` or omitted, then the client is prohibited from assuming a `clientId` in any operations, however if `clientId` is a wildcard string `*`, then the client is permitted to assume any `clientId`. Any other string value for `clientId` implies that the `clientId` is both enforced and assumed for all operations from this client. |
 | connectionKey: String ||| RTN15e, CD2b | The connection secret key string that is used to resume a connection and its state. |
-| connectionStateTtl: Duration ||| CD2f, RTN14e, DF1a | The duration that Ably will persist the connection state when a Realtime client is abruptly disconnected. |
+| connectionStateTtl: Duration ||| CD2f, RTN14e, DF1a | The duration that Ably will persist the connection state for when a Realtime client is abruptly disconnected. |
 | maxFrameSize: Int ||| CD2d | Overrides the default `maxFrameSize`. |
 | maxInboundRate: Int ||| CD2e | The maximum allowable number of requests per second from a client or Ably. In the case of a realtime connection, this restriction applies to the number of [`ProtocolMessage`]{@link} objects sent, whereas in the case of REST, it is the total number of REST requests per second. |
 | maxMessageSize: Int ||| CD2c | Overrides the default `maxMessageSize`.|
