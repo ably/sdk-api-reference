@@ -157,7 +157,7 @@ The `TokenRequest` object represents properties used to generate an Ably TokenRe
 ||| `TokenRequest` || An Ably token request object. |
 | capability: String ||| TE3 | Capability of the requested Ably Token. If the Ably TokenRequest is successful, the capability of the returned Ably Token will be the intersection of this capability with the capability of the issuing key. The capability is a JSON stringified canonicalized representation of the resource paths and associated operations. Read more about capabilities in the [capabilities docs](https://ably.com/docs/realtime/authentication). |
 | clientId: String? ||| TE2 | The client ID to associate with the requested Ably Token. When provided, the Ably Token may only be used to perform operations on behalf of that client ID. |
-| keyName: String ||| TE2 | The key name of the key against which this request is made. The key name is public, whereas the key secret is private. |
+| keyName: String ||| TE2 | The name of the key against which this request is made. The key name is public, whereas the key secret is private. |
 | mac: String ||| TE2 | The Message Authentication Code for this request. |
 | nonce: String ||| TE2 | An opaque nonce string of at least 16 characters. |
 | timestamp: Time? ||| TE5 | The Unix timestamp of this request in milliseconds. |
