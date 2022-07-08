@@ -56,7 +56,7 @@ The `ClientOptions` object is a plain JavaScript object and is used in the `Ably
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| embeds AuthOptions ||| TO3j | An [`AuthOptions`]{@link} object. |
+| embeds AuthOptions ||| TO3j | Embeds an [`AuthOptions`]{@link} object. |
 | autoConnect: Bool default true ||| RTC1b, TO3e | When `true`, the client connects to Ably as soon as it is instantiated. You can optionally set this to `false` and explicitly connect to Ably when required using the [`connect()`]{@link} method. |
 | clientId: String? ||| RSC17, RSA4, RSA15, TO3a | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key. Note that a `clientId` may also be implicit in a token used to instantiate the library. An error will be raised if a `clientId` specified here conflicts with the `clientId` implicit in the token. |
 | defaultTokenParams: TokenParams? ||| TO3j11 | When a [`TokenParams`]{@link} object is provided, it overrides the client library defaults when issuing new Ably Tokens or Ably `TokenRequest`s. |
@@ -490,10 +490,10 @@ The `Connection` object enables the management of a connection with Ably.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| embeds `EventEmitter<ConnectionEvent, ConnectionStateChange>` ||| RTN4a, RTN4e, RTN4g | An [`EventEmitter`]{@link} object. |
+| embeds `EventEmitter<ConnectionEvent, ConnectionStateChange>` ||| RTN4a, RTN4e, RTN4g | Embeds an [`EventEmitter`]{@link} object. |
 | errorReason: ErrorInfo? ||| RTN14a | When a connection failure occurs this property contains the [`ErrorInfo`]{@link}. |
-| id: String? ||| RTN8 | A unique public identifier String for this connection, used to identify this member in presence events and messages. |
-| key: String? ||| RTN9 | A unique private connection key String used to recover or resume a connection, assigned by Ably. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. This private connection key can also be used by other REST clients to publish on behalf of this client. See the [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf) for more info. |
+| id: String? ||| RTN8 | A unique public identifier for this connection, used to identify this member in presence events and messages. |
+| key: String? ||| RTN9 | A unique private connection key used to recover or resume a connection, assigned by Ably. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. This private connection key can also be used by other REST clients to publish on behalf of this client. See the [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf) for more info. |
 | recoveryKey: String? ||| RTN16b, RTN16c | The recovery key string can be used by another client to recover this connection's state in the recover client options property. See [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options) for more information. |
 | serial: Int? ||| RTN10 | The serial number of the last message to be received on this connection, used automatically by the library when recovering or resuming a connection. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. |
 | state: ConnectionState ||| RTN4d | The current state of this connection. See [Connection states](https://ably.com/docs/realtime/connection#connection-states) for more information. |
@@ -525,13 +525,13 @@ The `ConnectionState` enum is a string with a value matching any of the realtime
 
 ## class ConnectionStateChange
 
-A `ConnectionStateChange` object encapsulates state change information emitted by the [`Connection`]{@link} object.
+A `ConnectionStateChange` object encapsulates [`ConnectionState`]{@link} change information emitted by the [`Connection`]{@link} object.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| current: ConnectionState ||| TA2 | The new state. |
-| event: ConnectionEvent ||| TA5 | The event that triggered this state change. |
-| previous: ConnectionState ||| TA2 | The previous state. For the `update` event, this is equal to the current state. |
+| current: ConnectionState ||| TA2 | The new [`ConnectionState`]{@link}. |
+| event: ConnectionEvent ||| TA5 | The event that triggered this [`ConnectionState`]{@link} change. |
+| previous: ConnectionState ||| TA2 | The previous [`ConnectionState`]{@link}. For the `update` event, this is equal to the current [`ConnectionState`]{@link}. |
 | reason: ErrorInfo? ||| RTN4f, TA3 | An [`ErrorInfo`]{@link} object containing any information relating to the transition. |
 | retryIn: Duration? ||| RTN14d, TA2 | Duration in milliseconds, after which the client retries a connection where applicable. |
 
