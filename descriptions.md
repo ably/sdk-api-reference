@@ -202,7 +202,7 @@ The `RealtimeChannel` object handles all incoming messages and presence messages
 | state: ChannelState ||| RTL2b | The current [`ChannelState`]{@link} of this [`Channel`]{@link}. |
 | presence: RealtimePresence ||| RTL9 | Provides access to the [`Presence`]{@link} object for this channel which can be used to access members present on the channel, or participate in presence. |
 | properties: ChannelProperties ||| CP1, RTL15 | A [`ChannelProperties`]{@link} object representing properties of the channel state. |
-| push: PushChannel ||| Provides access to the [`PushChannel`]{@link} object for this channel. |
+| push: PushChannel |||| Provides access to the [`PushChannel`]{@link} object for this channel. |
 | modes: readonly [ChannelMode] ||| RTL4m | An array of [`ChannelMode`]{@link} objects. |
 | params: readonly `Dict<String, String>` ||| RTL4k1 | Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
 | attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link}. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, [`attach()`]{@link} is called implicitly if [`subscribe()`]{@link} for the channel is called, or [`enter()`]{@link} or [`subscribe()`]{@link} is called on the [`Presence`]{@link} object for this channel. |
