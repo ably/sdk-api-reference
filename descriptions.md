@@ -116,7 +116,7 @@ The `TokenParams` object is a plain JavaScript object and is used in the paramet
 | clientId: String? ||| TK2c | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key. Note that a `clientId` may also be implicit in a token used to instantiate the library. An error is raised if a `clientId` specified here conflicts with the `clientId` implicit in the token. Find out more about [identified clients](https://ably.com/docs/core-features/authentication#identified-clients). |
 | nonce: String? ||| RSA9c, Tk2d | An unquoted, un-escaped random string of at least 16 characters, used to ensure the [`TokenRequest`]{@link} cannot be reused. |
 | timestamp: Time? ||| RSA9d, Tk2d | The Unix timestamp of this request. Timestamps, in conjunction with the `nonce`, are used to prevent requests from being replayed. `timestamp` is a "one-time" value, and is valid in a request, but is not validly a member of any default token params such as `ClientOptions.defaultTokenParams`. |
-| ttl: Duration api-default 60min ||| RSA9e, TK2a | Requested time to live for the token in milliseconds. When omitted, Ably will default to a TTL of 60 minutes. |
+| ttl: Duration api-default 60min ||| RSA9e, TK2a | Requested time to live for the token in milliseconds.  |
 
 ## class Auth
 
