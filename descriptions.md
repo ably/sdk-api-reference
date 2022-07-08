@@ -164,13 +164,24 @@ The `Realtime` object extends the REST client and provides the functionality ava
 
 ## class `Channels<ChannelType>`
 
-||| Spec | Description |
-|---|---|---|---|
-| exists(String) -> Bool || RSN2, RTS2 | |
-| get(String) -> ChannelType || RSN3a, RTS3a | |
-| get(String, ChannelOptions) -> ChannelType || RSN3c, RTS3c | |
-| iterate() -> `Iterator<ChannelType>` || RSN2, RTS2 | |
-| release(String) || RSN4, RTS4 | |
+The `Channels` object is used to create and destroy [`Channel`]{@link} objects.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| exists(String) -> Bool || | RSN2, RTS2 | Checks if a certain channel exists. |
+|| `String` ||| The channel name. |
+||| `Bool` || `true` if the channel exists, otherwise `false`. |
+| get(String) -> ChannelType ||| RSN3a, RTS3a | Creates a new `ChannelType`, or returns the existing channel object. |
+|| `String` ||| The channel name. |
+||| `ChannelType` || A `ChannelType` object. |
+| get(String, ChannelOptions) -> ChannelType ||| RSN3c, RTS3c | Creates a new `ChannelType` object, with the specified [`ClientOptions`]{@link}, or returns the existing channel object. |
+|| `String` ||| The channel name. |
+|| `ChannelOptions` ||| [`ChannelOptions`]{@link} used to configure the channel. |
+||| `ChannelType` || A `ChannelType` object. |
+| iterate() -> `Iterator<ChannelType>` ||| RSN2, RTS2 | Iterates through the existing channels. |
+||| `ChannelType` || Each iteration returns a `ChannelType` object. |
+| release(String) ||| RSN4, RTS4 | Releases a [`Channel`]{@link} object, deleting it, and enabling it to be garbage collected. It also removes any listeners associated with the channel. To release a channel, the [`ChannelState`]{@link} must be `initialized`, `detached`, or `failed`. |
+|| `String` ||| The channel name. |
 
 ## class RestChannel
 
@@ -199,33 +210,57 @@ The `Realtime` object extends the REST client and provides the functionality ava
 
 ## class RealtimeChannel
 
-||| Spec | Description |
-|---|---|---|---|
-| embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` || RTL2a, RTL2d, RTL2e | |
-| errorReason: ErrorInfo? || RTL4e | |
-| state: ChannelState || RTL2b | |
-| presence: RealtimePresence || RTL9 | |
-| properties: ChannelProperties || CP1, RTL15 | |
-| push: PushChannel || |
-| modes: readonly [ChannelMode] || RTL4m | |
-| params: readonly `Dict<String, String>` || RTL4k1 | |
-| attach() => io || RTL4d | |
-| detach() => io || RTL5e | |
-| history() => io `PaginatedResult<Message>` || RSL2a | |
-|| start: Time, | RTL10a | |
-|| end: Time api-default now(), | RTL10a | |
-|| direction: .Backwards \| .Forwards api-default .Backwards, | RTL10a | |
-|| limit: int api-default 100, | RTL10a | |
-|| untilAttach: Bool default false | RTL10b | |
-| publish(Message) => io || RTL6i | |
-| publish([Message]) => io || RTL6i | |
-| publish(name: String?, data: Data?) => io || RTL6i | |
-| subscribe((Message) ->) => io || RTL7a | |
-| subscribe(String, (Message) ->) => io || RTL7b | |
-| unsubscribe() || RTL8a, RTE5 | |
-| unsubscribe((Message) ->) || RTL8a | |
-| unsubscribe(String, (Message) ->) || RTL8a | |
-| setOptions(options: ChannelOptions) => io || RTL16 | |
+The `RealtimeChannel` object handles all incoming messages and presence messages when it is attached. Incoming is defined as "received from Ably over the realtime transport".
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` ||| RTL2a, RTL2d, RTL2e | The `RealtimeChannel` implements [`EventEmitter`]{@link} and emits [`ChannelEvent`]{@link} events, where a `ChannelEvent` is either a [`ChannelState`]{@link} or `UPDATE`. |
+| errorReason: ErrorInfo? ||| RTL4e | An error as an [`ErrorInfo`]{@link} object when a channel failure occurs. |
+| state: ChannelState ||| RTL2b | The current [`ChannelState`]{@link} of this [`Channel`]{@link}. |
+| presence: RealtimePresence ||| RTL9 | Provides access to the [`Presence`]{@link} object for this channel which can be used to access members present on the channel, or participate in presence. |
+| properties: ChannelProperties ||| CP1, RTL15 | A [`ChannelProperties`]{@link} object representing properties of the channel state. |
+| push: PushChannel |||| Provides access to the [`PushChannel`]{@link} object for this channel. |
+| modes: readonly [ChannelMode] ||| RTL4m | An array of [`ChannelMode`]{@link} objects. |
+| params: readonly `Dict<String, String>` ||| RTL4k1 | Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
+| attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link}. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, [`attach()`]{@link} is called implicitly if [`subscribe()`]{@link} for the channel is called, or [`enter()`]{@link} or [`subscribe()`]{@link} is called on the [`Presence`]{@link} object for this channel. |
+| detach() => io ||| RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the [`on`]{@link} or [`once`]{@link} methods of the [`EventEmitter`]{@link} object. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
+| history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100, untilAttach: Bool default false) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a paginated set of historical messages for this channel. If the channel is configured to persist messages to disk, then message history will typically be available for 24 – 72 hours. If not, messages are only retained in memory by the Ably service for two minutes. |
+|| `start` || RTL10a | The time from which messages are retrieved, specified as a Unix timestamp. |
+|| `end` || RTL10a | The time until messages are retrieved, specified as a Unix timestamp. |
+|| `direction` || RTL10a | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
+|| `limit` || RTL10a | An upper limit on the number of messages returned, up to 1000. |
+|| `untilAttach` || RTL10b | When `true`, ensures message history is up until the point of the channel being attached. See [continuous history](https://ably.com/docs/realtime/history#continuous-history) for more info. Requires the direction to be backwards (the default). If the channel is not attached, or if direction is set to `forwards`, this option results in an error. |
+||| `PaginatedResult<Message>` || A paginated list of [`Message`]{@link} objects. |
+| publish(Message) => io ||| RTL6i | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+|| `Message` ||| A [`Message`]{@link} object. |
+| publish([Message]) => io ||| RTL6i | Sends several messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+|| [`Message`] ||| An array of [`Message`]{@link} objects. |
+| publish(name: String?, data: Data?) => io ||| RTL6i | Sends a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel, so long as [transient publishing](https://ably.com/docs/realtime/channels#transient-publish) is available in the library. Otherwise, the client will implicitly attach. |
+|| `name` ||| Event name. |
+|| `data` ||| Message payload. |
+| subscribe((Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel. The caller supplies a listener function, which is called each time one or more messages arrives on the channel. |
+|| `(Message)` ||| Event listener function. |
+| subscribe(String, (Message) ->) => io ||| RTL7b | Registers a listener for messages with a given event `name` on this channel. The caller supplies a listener function, which is called each time one or more matching messages arrives on the channel. |
+|| `String` ||| Event name. |
+|| `(Message)` ||| Event listener function. |
+| subscribe([String], (Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel for multiple event name values. |
+|| [`String`] ||| An array of event names. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe(String, (Message) ->) ||| RTL8a | Deregisters the given listener for the specified event name. This removes an earlier event-specific subscription. |
+|| `String` ||| Event name. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe((Message) ->) ||| RTL8a | Deregisters the given listener (for any/all event names). This removes an earlier subscription. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe([String], (Message) ->) ||| RTL8a | Deregisters the given listener from all event names in the array. |
+|| [`String`] ||| An array of event names. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe(String) ||| RTL8a | Deregisters all listeners for the given event name. |
+|| `String` ||| Event name. |
+| unsubscribe([String]) ||| RTL8a | Deregisters all listeners for all event names in the array. |
+|| [`String`] ||| An array of event names. |
+| unsubscribe() ||| RTL8a, RTE5 | Deregisters all listeners to messages on this channel. This removes all earlier subscriptions. |
+| setOptions(options: ChannelOptions) => io ||| RTL16 | Sets the [`ChannelOptions`]{@link} for the channel. |
+|| `options` ||| A [`ChannelOptions`]{@link} object. |
 
 ## class BatchOperations
 
@@ -332,54 +367,67 @@ The `BatchPresence` object contains the presence state of each batch presence re
 
 ## class ChannelStateChange
 
-||| Spec | Description |
-|---|---|---|---|
-| current: ChannelState || RTL2a, RTL2b | |
-| event: ChannelEvent || TH5 | |
-| previous: ChannelState || RTL2a, RTL2b | |
-| reason: ErrorInfo? || RTL2e, TH3 | |
-| resumed: Boolean || RTL2f, TH4 | |
+The `ChannelStateChange`  object encapsulates state change information emitted by the `Channel` object.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| current: ChannelState ||| RTL2a, RTL2b | The new current [`ChannelState`]{@link}. |
+| event: ChannelEvent ||| TH5 | The event that triggered this [`ChannelState`]{@link} change. |
+| previous: ChannelState ||| RTL2a, RTL2b | The previous state. For the `update` event, this is equal to the `current` [`ChannelState`]{@link}. |
+| reason: ErrorInfo? ||| RTL2e, TH3 | An [`ErrorInfo`]{@link} object containing any information relating to the transition. |
+| resumed: Boolean ||| RTL2f, TH4 | Indicates whether message continuity on this channel is preserved, see [Nonfatal channel errors](https://ably.com/docs/realtime/channels#nonfatal-errors) for more info. |
 
 ## class ChannelOptions
 
-||| Spec | Description |
-|---|---|---|---|
-| +withCipherKey(key: Binary \| String)? -> ChannelOptions || TB3 | |
-| cipher: (CipherParams \| Params)? || RSL5a, TB2b | |
-| params?: `Dict<String, String>` || TB2c | |
-| modes?: [ChannelMode] || TB2d | |
+The `ChannelOptions` object is used when creating a channel object, to configure the channel.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|----|
+| +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Constructor `withCipherKey`, that takes a key only. |
+|| `key` ||| A private key used to encrypt and decrypt payloads. |
+||| `ChannelOptions` || A [`ChannelOptions`]{@link} object. |
+| cipher: (CipherParams \| Params)? ||| RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
+| params?: `Dict<String, String>` ||| TB2c | [Channel Parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
+| modes?: [ChannelMode] ||| TB2d | For realtime client libraries only. An array of [`ChannelMode`]{@link} objects. |
 
 ## class ChannelDetails
 
-||| Spec | Description |
-|---|---|---|---|
-| channelId: String || CHD2a | |
-| name: String || CHD2b | |
-| status: ChannelStatus || CHD2c | |
+The `ChannelDetails` object represents information for a channel including `channelId` and `status`.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channelId: String ||| CHD2a | The identifier of the channel. |
+| status: ChannelStatus ||| CHD2b | A [`ChannelStatus`]{@link} object. |
 
 ## class ChannelStatus
 
-||| Spec | Description |
-|---|---|---|---|
-| isActive: Boolean || CHS2a | |
-| occupancy: ChannelOccupancy || CHS2b | |
+The `ChannelStatus` object contains the status and occupancy of a channel.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| isActive: Boolean ||| CHS2a | If `true`, the channel is active, otherwise `false`. |
+| occupancy: ChannelOccupancy ||| CHS2b | A [`ChannelOccupancy`]{@link} object. |
 
 ## class ChannelOccupancy
 
-||| Spec | Description |
-|---|---|---|---|
-| metrics: ChannelMetrics || CHO2a | |
+The `ChannelOccupancy` object contains channel metrics.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| metrics: ChannelMetrics ||| CHO2a | A [`ChannelMetrics`]{@link} object. |
 
 ## class ChannelMetrics
 
-||| Spec | Description |
-|---|---|---|---|
-| connections: Int || CHM2a | |
-| presenceConnections: Int || CHM2b | |
-| presenceMembers: Int || CHM2c | |
-| presenceSubscribers: Int || CHM2d | |
-| publishers: Int || CHM2e | |
-| subscribers: Int || CHM2f | |
+The `ChannelMetrics` object contains the count of `publishers` and `subscribers`, `connections` and `presenceConnections`, `presenceMembers` and `presenceSubscribers`.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| connections: Int ||| CHM2a | The total number of connections to the channel. |
+| presenceConnections: Int ||| CHM2b | The total number of presence connections to the channel. |
+| presenceMembers: Int ||| CHM2c | The total number of presence members for the channel. |
+| presenceSubscribers: Int ||| CHM2d | The total number of presence subscribers for the channel. |
+| publishers: Int ||| CHM2e | The total number of publishers to the channel. |
+| subscribers: Int ||| CHM2f | The total number of subscribers to the channel. |
 
 ## class CipherParams
 
@@ -497,20 +545,33 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 
 ## class Message
 
-||| Spec | Description |
-|---|---|---|---|
-| constructor(name: String?, data: Data?) || TM2 | |
-| constructor(name: String?, data: Data?, clientId: String?) || TM2 | |
-| +fromEncoded(JsonObject, ChannelOptions?) -> Message || TM3 | |
-| +fromEncodedArray(JsonArray, ChannelOptions?) -> [Message] || TM3 | |
-| clientId: String? || RSL1g1, TM2b | |
-| connectionId: String? || TM2c | |
-| data: Data? || TM2d | |
-| encoding: String? || TM2e | |
-| extras: JsonObject? || TM2i | |
-| id: String || TM2a | |
-| name: String? || TM2g | |
-| timestamp: Time || TM2f | |
+The `Message` object represents an individual message that is sent to, or received from, Ably.
+
+| Method / Property | Parameter| Returns | Spec | Description |
+|---|---|---|---|---|
+| constructor(name: String?, data: Data?) ||| TM2 | Construct a `Message` object with an event name and payload. |
+|| `name` ||| Event name. |
+|| `data` ||| The message payload. |
+| constructor(name: String?, data: Data?, clientId: String?) ||| TM2 | Construct a `Message` object with an event name, payload, and a unique client ID. |
+|| `name` ||| Event name. |
+|| `data` ||| The message payload. |
+|| `clientId` ||| The client ID of the publisher of this message. |
+| +fromEncoded(JsonObject, ChannelOptions?) -> Message ||| TM3 | A static factory method to create a `Message` object from a deserialized Message-like object encoded using Ably's wire protocol. |
+|| `JsonObject` ||| A `Message`-like deserialized object. |
+|| `ChannelOptions` ||| A [`ChannelOptions`]{@link} object. If you have an encrypted channel, use this to allow the library to decrypt the data. |
+||| `Message` || A `Message` object. |
+| +fromEncodedArray(JsonArray, ChannelOptions?) -> [Message] ||| TM3 | A static factory method to create an array of `Message` objects from an array of deserialized Message-like object encoded using Ably's wire protocol. |
+|| `JsonArray` ||| An array of `Message`-like deserialized objects. |
+|| `ChannelOptions` ||| A [`ChannelOptions`]{@link} object. If you have an encrypted channel, use this to allow the library to decrypt the data. |
+||| [`Message`] || An array of [`Message`]{@link} objects. |
+| clientId: String? ||| RSL1g1, TM2b | The client ID of the publisher of this message. |
+| connectionId: String? ||| TM2c | The connection ID of the publisher of this message. |
+| data: Data? ||| TM2d | The message payload, if provided. |
+| encoding: String? ||| TM2e | This is typically empty, as all messages received from Ably are automatically decoded client-side using this value. However, if the message encoding cannot be processed, this attribute contains the remaining transformations not applied to the `data` payload. |
+| extras: JsonObject? ||| TM2i | A combination of metadata or ancillary payloads. The only valid payload for `extras` is the `push` object. |
+| id: String ||| TM2a | A Unique ID assigned by Ably to this message. |
+| name: String? ||| TM2g | The event name. |
+| timestamp: Time ||| TM2f | Timestamp of when the message was received by Ably, as a Unix timestamp. |
 
 ## class PresenceMessage
 
