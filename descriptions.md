@@ -209,28 +209,31 @@ The `Channels` object is used to create and destroy [`Channel`]{@link} objects.
 
 ## class RestChannel
 
-||| Spec | Description |
-|---|---|---|---|
-| name: String? ||| |
-| presence: RestPresence || RSL3 | |
-| history() => io `PaginatedResult<Message>` || RSL2a | |
-|| start: Time, | RSL2b1 | |
-|| end: Time api-default now(), | RSL2b1 | |
-|| direction: .Backwards \| .Forwards api-default .Backwards, | RSL2b2 | |
-|| limit: int api-default 100 | RSL2b3 | |
-| status() => ChannelDetails || RSL8 | |
-| publish() => io || RSL1 | |
-|| Message || |
-|| params?: `Dict<String, Stringifiable>` || |
-| publish() => io || RSL1 | |
-|| [Message] || |
-|| params?: `Dict<String, Stringifiable>` || |
-| publish() => io || RSL1 | |
-|| name: String? || |
-|| data: Data? || |
-| setOptions() => io || RSL7 | |
-|| options: ChannelOptions || |
-| push: PushChannel || RSH4 | |
+The `RestChannel` object is used to interact with a specific channel instance. A channel instance is created or returned by [`channels.get()`]{@link}.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| name: String? |||| A unique channel name. |
+| presence: RestPresence ||| RSL3 | The [`Presence`]{@link} object associated with the channel. Enables the retrieval of presence members on the channel. |
+| history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a paginated list of historical messages for the channel. |
+|| `start` || RSL2b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
+|| `end` || RSL2b1 | The time until messages are retrieved, specified as a Unix timestamp. |
+|| `direction` || RSL2b2 | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
+|| `limit` || RSL2b3 | An upper limit on the number of messages returned. The default is 100. |
+||| `PaginatedResult<Message>` || A paginated list of [`Message`]{@link} objects. |
+| status() => ChannelDetails ||| RSL8 | Retrieves metadata for the channel, such as status and occupancy metrics. Returns a [`ChannelDetails`]{@link} object. |
+| publish(Message, params?: `Dict<String, Stringifiable>`) => io ||| RSL1 | Sends a message to the channel. |
+|| `Message` ||| A [`Message`]{@link} object. |
+|| `params` ||| Optional parameters, such as [`quickAck`](https://faqs.ably.com/why-are-some-rest-publishes-on-a-channel-slow-and-then-typically-faster-on-subsequent-publishes) sent as part of the query string. |
+| publish([Message], params?: `Dict<String, Stringifiable>` ||| RSL1 | Sends an array of messages to the channel. |
+|| [`Message`] ||| An array of [`Message`]{@link} objects. |
+|| `params` ||| Optional parameters, such as [`quickAck`](https://faqs.ably.com/why-are-some-rest-publishes-on-a-channel-slow-and-then-typically-faster-on-subsequent-publishes) sent as part of the query string. |
+| publish(name: String?, data: Data?) => io ||| RSL1 | Sends a message to the channel. |
+|| `name` ||| The name of the message. |
+|| `data` ||| The payload of the message. |
+| setOptions(options: ChannelOptions) => io ||| RSL7 | Sets the [`ChannelOptions`]{@link} for the channel, such as encryption-related parameters. |
+|| `options` ||| The [`ChannelOptions`]{@link} to set for the channel. |
+| push: PushChannel ||| RSH4 | The [`PushChannel`]{@link} object associated with the channel. This enables devices to subscribe to push notifications for the channel. |
 
 ## class RealtimeChannel
 
