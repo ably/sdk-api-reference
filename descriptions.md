@@ -157,7 +157,7 @@
 
 ## class RestChannel
 
-The `RestChannel` objects is used to interact with a specific channel instance. A channel instance is created or returned by [`channels.get()`]{@link}.
+The `RestChannel` object is used to interact with a specific channel instance. A channel instance is created or returned by [`channels.get()`]{@link}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
