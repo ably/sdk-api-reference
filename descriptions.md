@@ -136,7 +136,7 @@ The `Auth` object creates Ably `TokenRequest` objects with `createTokenRequest` 
 | requestToken(TokenParams?, AuthOptions?) => io TokenDetails ||| RSA8e | Calls the [`requestToken` REST API endpoint](https://ably.com/docs/rest-api#request-token) to obtain an Ably Token according to the specified `tokenParams` and `authOptions`. Both `authOptions` and `tokenParams` are optional. When omitted or `null`, the default token parameters and authentication options for the client library are used, as specified in the `ClientOptions` when the client library was instantiated, or later updated with an explicit `authorize` request. Values passed in are used instead of (rather than being merged with) the default values. To understand why an Ably `TokenRequest` may be issued to clients in favor of a token, see [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication). |
 || `TokenParams` ||| A [`TokenParams`]{@link} object. |
 || `AuthOptions` ||| An [`AuthOptions`]{@link} object. |
-||| `TokenDetails` || An Ably authentication token. |
+||| `TokenDetails` || A [`TokenDetails`]{@link} object. |
 
 
 ## class TokenDetails
