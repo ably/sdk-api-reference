@@ -602,13 +602,10 @@ The `Push` object enables registering and deregistering a device for push notifi
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | admin: PushAdmin ||| RSH1 | The [`PushAdmin`]{@link} object associated with the device. |
-| activate(registerCallback: ((ErrorInfo?, DeviceDetails?) -> io String)?, updateFailedCallback: ((ErrorInfo) ->)) => io ErrorInfo? ||| RSH2a | |
-|| `registerCallback` ||| |
-|| `updateFailedCallback` ||| |
-||| `ErrorInfo` || |
-| deactivate(deregisterCallback: ((ErrorInfo?, deviceId: String?) -> io)?) => io ErrorInfo? ||| RSH2b | |
-|| `deregisterCallback` ||| |
-||| `ErrorInfo` || |
+| activate(registerCallback: ((ErrorInfo?, DeviceDetails?) -> io String)?, updateFailedCallback: ((ErrorInfo) ->)) => io ErrorInfo? ||| RSH2a | Activates the device for push notifications with FCM or APNS, obtaining a unique identifier from them. Subsequently registers the device with Ably and stores the `deviceIdentityToken` in local storage. |
+||| `ErrorInfo` || Describes why the activation was unsuccessful as an [`ErrorInfo`]{@link} object. |
+| deactivate(deregisterCallback: ((ErrorInfo?, deviceId: String?) -> io)?) => io ErrorInfo? ||| RSH2b | Deactivates the device from receiving push notifications with Ably and FCM or APNS. |
+||| `ErrorInfo` || Describes why the deactivation was unsuccessful as an [`ErrorInfo`]{@link} object. |
 
 ## class PushAdmin
 
