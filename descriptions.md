@@ -597,6 +597,8 @@ The `LocalDevice` object extends [`DeviceDetails`]{@link} and contains the devic
 
 ## class Push
 
+The `Push` object enables registering and deregistering a device for push notifications.
+
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | admin: PushAdmin ||| RSH1 | The [`PushAdmin`]{@link} object associated with the device. |
