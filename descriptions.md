@@ -524,10 +524,10 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 | subscribe((PresenceMessage) ->) => io ||| RTP6a | Registers a listener that is called each time a [`PresenceMessage`]{@link} is received on the channel, such as a new member entering the presence set. |
 | subscribe(PresenceAction, (PresenceMessage) ->) => io ||| RTP6b | Registers a listener that is called each time a [`PresenceMessage`]{@link} matching a given [`PresenceAction`]{@link} is received on the channel, such as a new member entering the presence set. |
 || `PresenceAction` || | A specific [`PresenceAction`]{@link} to register the listener for. |
-| unsubscribe() ||| RTP7a, RTE5 | Unregisters all listeners currently receiving [`PresenceMessage`]{@link} for the channel. |
-| unsubscribe((PresenceMessage) ->) ||| RTP7a | Unregisters a specific listener that is registered to receive [`PresenceMessage`]{@link} on the channel. |
-| unsubscribe(PresenceAction, (PresenceMessage) ->) ||| RTP7b | Unregisters a specific listener that is registered to receive [`PresenceMessage`]{@link} on the channel for a given [`PresenceAction`]{@link}. |
-|| `PresenceAction` || | A specific [`PresenceAction`]{@link} to unregister the listener for. |
+| unsubscribe() ||| RTP7a, RTE5 | Deregisters all listeners currently receiving [`PresenceMessage`]{@link} for the channel. |
+| unsubscribe((PresenceMessage) ->) ||| RTP7a | Deregisters a specific listener that is registered to receive [`PresenceMessage`]{@link} on the channel. |
+| unsubscribe(PresenceAction, (PresenceMessage) ->) ||| RTP7b | Deregisters a specific listener that is registered to receive [`PresenceMessage`]{@link} on the channel for a given [`PresenceAction`]{@link}. |
+|| `PresenceAction` || | A specific [`PresenceAction`]{@link} to deregister the listener for. |
 | enter(Data?, extras?: JsonObject) => io ||| RTP8 | Enters the presence set for the channel, optionally passing a `data` payload. A [clientID]{@link} is required to be present on a channel. An optional callback may be provided to notify of the success or failure of the operation. |
 || `Data` || | The payload associated with the presence member. |
 || `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
