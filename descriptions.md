@@ -25,7 +25,7 @@ The `Rest` object offers a simple stateless API to interact directly with Ably's
 || `body` ||| JSON body for the request. |
 || `headers` ||| Headers for the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
-| stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
+| stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the REST `/stats` API and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
 || `start` | | RSC6b1 | The time from which stats are retrieved, specified as a Unix timestamp. |
 || `end` | | RSC6b1 | The time until stats are retrieved, specified as a Unix timestamp. |
 || `direction` | | RSC6b2 | The order for which stats are returned in. The default is `Backwards` which orders stats from most recent to oldest. |
@@ -61,7 +61,7 @@ The `Realtime` object extends the REST client and provides the functionality ava
 || `body` ||| JSON body for the request. |
 || `headers` ||| Headers for the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
-| stats: ||| Same as Rest.stats, RTC5a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
+| stats: ||| Same as Rest.stats, RTC5a | Queries the REST `/stats` API and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
 | close() ||| proxy for RTN12 | Calls `connection.close()` and causes the connection to close, entering the closing state. Once closed, the library will not attempt to re-establish the connection without an explicit call to `connect()`. |
 | connect() ||| proxy for RTN11 | Calls `connection.connect()` and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is unnecessary unless the `autoConnect` property of the [`ClientOptions`]{@link} object is disabled. |
 | time() => io Time ||| RTC6a | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably `TokenRequest`s with a more accurate timestamp should use the [`queryTime`]{@link} property of the [`ClientOption`]{@link} object instead of this method. |
@@ -150,7 +150,7 @@ The `Auth` object creates Ably `TokenRequest` objects with `createTokenRequest` 
 || `TokenParams` ||| A [`TokenParams`]{@link} object. |
 || `AuthOptions` ||| An [`AuthOptions`]{@link} object. |
 ||| `TokenRequest` || A [`TokenRequest`]{@link} object. |
-| requestToken(TokenParams?, AuthOptions?) => io TokenDetails ||| RSA8e | Calls the [`requestToken` REST API endpoint](https://ably.com/docs/rest-api#request-token) to obtain an Ably Token according to the specified `tokenParams` and `authOptions`. Both `authOptions` and `tokenParams` are optional. When omitted or `null`, the default token parameters and authentication options for the client library are used, as specified in the `ClientOptions` when the client library was instantiated, or later updated with an explicit `authorize` request. Values passed in are used instead of (rather than being merged with) the default values. To understand why an Ably `TokenRequest` may be issued to clients in favor of a token, see [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication). |
+| requestToken(TokenParams?, AuthOptions?) => io TokenDetails ||| RSA8e | Calls the `requestToken` REST API endpoint to obtain an Ably Token according to the specified `tokenParams` and `authOptions`. Both `authOptions` and `tokenParams` are optional. When omitted or `null`, the default token parameters and authentication options for the client library are used, as specified in the `ClientOptions` when the client library was instantiated, or later updated with an explicit `authorize` request. Values passed in are used instead of (rather than being merged with) the default values. To understand why an Ably `TokenRequest` may be issued to clients in favor of a token, see [Token Authentication explained](https://ably.com/docs/core-features/authentication/#token-authentication). |
 || `TokenParams` ||| A [`TokenParams`]{@link} object. |
 || `AuthOptions` ||| An [`AuthOptions`]{@link} object. |
 ||| `TokenDetails` || A [`TokenDetails`]{@link} object. |
@@ -911,7 +911,7 @@ The `EventEmitter` object is a generic interface for event registration and deli
 
 ## class `PaginatedResult<T>`
 
-The `PaginatedResult<T>` object represents a page of results for all message and presence history, stats, and REST presence requests. The response from an [Ably REST API paginated query](https://ably.com/docs/rest-api/#pagination) is accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
+The `PaginatedResult<T>` object represents a page of results for all message and presence history, stats, and REST presence requests. The response from a REST API paginated query is accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
