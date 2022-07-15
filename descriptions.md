@@ -454,12 +454,12 @@ The `ChannelMetrics` object contains the count of `publishers` and `subscribers`
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| connections: Int ||| CHM2a | The total number of connections to the channel. |
-| presenceConnections: Int ||| CHM2b | The total number of presence connections to the channel. |
-| presenceMembers: Int ||| CHM2c | The total number of presence members for the channel. |
-| presenceSubscribers: Int ||| CHM2d | The total number of presence subscribers for the channel. |
-| publishers: Int ||| CHM2e | The total number of publishers to the channel. |
-| subscribers: Int ||| CHM2f | The total number of subscribers to the channel. |
+| connections: Int ||| CHM2a | The number of realtime connections attached to the channel. |
+| presenceConnections: Int ||| CHM2b | The number of realtime connections attached to the channel with permission to enter the presence set, regardless of whether or not they have entered it. This requires the `presence` capability and for a client to not have specified a [`ChannelMode`]{@link} flag that excludes `PRESENCE`. |
+| presenceMembers: Int ||| CHM2c | The number of members in the presence set of the channel. |
+| presenceSubscribers: Int ||| CHM2d | The number of realtime attachments receiving presence messages on the channel. This requires the `subscribe` capability and for a client to not have specified a [`ChannelMode`]{@link} flag that excludes `PRESENCE_SUBSCRIBE`. |
+| publishers: Int ||| CHM2e | The number of realtime attachments permitted to publish messages to the channel. This requires the `publish` capability and for a client to not have specified a [`ChannelMode`]{@link} flag that excludes `PUBLISH`. |
+| subscribers: Int ||| CHM2f | The number of realtime attachments receiving messages on the channel. This requires the `subscribe` capability and for a client to not have specified a [`ChannelMode`]{@link} flag that excludes `SUBSCRIBE`. |
 
 ## class CipherParams
 
