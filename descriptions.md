@@ -530,25 +530,25 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 || `PresenceAction` || | A specific [`PresenceAction`]{@link} to deregister the listener for. |
 | enter(Data?, extras?: JsonObject) => io ||| RTP8 | Enters the presence set for the channel, optionally passing a `data` payload. A [clientID]{@link} is required to be present on a channel. An optional callback may be provided to notify of the success or failure of the operation. |
 || `Data` || | The payload associated with the presence member. |
-|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
 | update(Data?, extras?: JsonObject) => io ||| RTP9 | Updates the `data` payload for a presence member. If called before entering the presence set, this is treated as an `enter` event. An optional callback may be provided to notify of the success or failure of the operation. |
 || `Data` || | The payload to update for the presence member. |
-|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
 | leave(Data?, extras?: JsonObject) => io ||| RTP10 | Leaves the presence set for the channel. A client must have previously entered the presence set before they can leave it. An optional callback may be provided to notify of the success or failure of the operation. |
 || `Data` || | The payload associated with the presence member. |
-|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
 | enterClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP4, RTP14, RTP15 | Enters the presence set of the channel for a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
 || `clientId` || | The ID of the client to enter into the presence set. |
 || `Data` || | The payload associated with the presence member. |
-|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
 | updateClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP15 | Updates the `data` payload for a presence member using a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
 || `clientId` || | The ID of the client to update in the presence set. |
 || `Data` || | The payload to update for the presence member. |
-|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
 | leaveClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP15 | Leaves the presence set of the channel for a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
 || `clientId` || | The ID of the client to leave the presence set for. |
 || `Data` || | The payload associated with the presence member. |
-|| `extras` || | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+|| `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
 
 ## enum PresenceAction
 
@@ -624,7 +624,7 @@ A `PresenceMessage` object represents an individual presence update sent to, or 
 | connectionId: String ||| TP3d | The ID of the connection associated with the client that published the `PresenceMessage`. |
 | data: Data? ||| TP3e | The payload of the `PresenceMessage`. |
 | encoding: String? ||| TP3f | This will typically be empty as all presence messages received from Ably are automatically decoded client-side using this value. However, if the message encoding cannot be processed, this attribute will contain the remaining transformations not applied to the data payload. |
-| extras: JsonObject? ||| TP3i | A JSON object of arbitrary `key:value` pairs that may contain metadata, and/or ancillary payloads. |
+| extras: JsonObject? ||| TP3i | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
 | id: String ||| TP3a | A unique ID assigned to each `PresenceMessage` by Ably. |
 | timestamp: Time ||| TP3g | The time the `PresenceMessage` was received by Ably, as a Unix timestamp. |
 | memberKey() -> String ||| TP3h | Combines `clientId` and `connectionId` to ensure that multiple connected clients with an identical `clientId` are uniquely identifiable. A string function that returns the combined `clientId` and `connectionId`. |
