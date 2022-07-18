@@ -2,60 +2,66 @@
 
 ## class Rest
 
-||| Spec | Description |
-|---|---|---|---|
-| constructor(keyStr: String) || RSC1 | |
-| constructor(tokenStr: String) || RSC1 | |
-| constructor(keyOrTokenStr: String) || RSC1 | |
-| constructor(ClientOptions) || RSC1 | |
-| auth: Auth || RSC5 | |
-| push: Push || |
-| batch: BatchOperations || BO1 | |
-| device() => io LocalDevice || |
-| channels: `Channels<RestChannel>` || RSN1 | |
-| request() => io HttpPaginatedResponse || RSC19 | |
-|| String method, || |
-|| String path, || |
-|| `Dict<String, String>` params?, || |
-|| JsonObject \| JsonArray body?, || |
-|| `Dict<String, String>` headers? || |
-| stats() => io `PaginatedResult<Stats>` | RSC6a | |
-|| start: Time api-default epoch(), | RSC6b1 | |
-|| end: Time api-default now(), | RSC6b1 | |
-|| direction: .Backwards \| .Forwards api-default .Backwards | RSC6b2 | |
-|| limit: int api-default 100, | RSC6b3 | |
-|| unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute | RSC6b4 | |
-| time() => io Time || RSC16 | |
+The `Rest` object offers a simple stateless API to interact directly with Ably's REST API.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| constructor(keyOrTokenStr: String) ||| RSC1 | Constructs a REST client object using an Ably API key or token string. |
+|| `keyOrTokenStr` ||| The Ably API key or token string used to validate the client. |
+| constructor(ClientOptions) ||| RSC1 | Construct a REST client object using an Ably [`ClientOptions`]{@link} object. |
+|| `ClientOptions` ||| A [`ClientOptions`]{@link} object to configure the client connection to Ably. |
+| auth: Auth ||| RSC5 | An [`Auth`]{@link} object. |
+| push: Push ||| RSH7 | A [`Push`]{@link} object. |
+| batch: BatchOperations ||| BO1 | A [`BatchOperations`]{@link} object. |
+| device() => LocalDevice ||  | RSH8 | Retrieves a local device object. |
+||| `LocalDevice` || A [`LocalDevice`]{@link} object that represents the current state of the device as a target for push notifications. |
+| channels: `Channels<RestChannel>` ||| RSN1 | A [`Channel`]{@link} collection object. |
+| request(String method, String path, Dict<String, String> params?, JsonObject \| JsonArray body?, Dict<String, String> headers?) => io HttpPaginatedResponse ||  | RSC19 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
+|| `method` ||| Request method to use such as `GET`, `POST`. |
+|| `path` ||| Request path. |
+|| `params` ||| Parameters for the REST request. |
+|| `body` ||| JSON body for the request. |
+|| `headers` ||| Headers for the request. |
+||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
+| stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
+|| `start` | | RSC6b1 | The time from which stats are retrieved, specified as a Unix timestamp. |
+|| `end` | | RSC6b1 | The time until stats are retrieved, specified as a Unix timestamp. |
+|| `direction` | | RSC6b2 | The order for which stats are returned in. The default is `Backwards` which orders stats from most recent to oldest. |
+|| `limit` | | RSC6b3 | An upper limit on the number of stats returned, up to 1000. |
+|| `unit` | | RSC6b4 | `minute`, `hour`, `day` or `month`. Based on the unit selected, the given `start` or `end` times are rounded down to the start of the relevant interval depending on the unit granularity of the query. |
+||| `PaginatedResult` | | A [`PaginatedResult`]{@link} object containing an array of stats for the first page of results. |
+| time() => io Time ||| RSC16 | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably `TokenRequest`s with a more accurate timestamp should use the `queryTime` property of the [`ClientOptions`]{@link} object instead of this method. |
+||| `Time` || The time as a Unix timestamp. |
 
 ## class Realtime
 
-||| Spec | Description |
-|---|---|---|---|
-| constructor(keyStr: String) || RSC1 | |
-| constructor(tokenStr: String) || RSC1 | |
-| constructor(keyOrTokenStr: String) || RSC1 | |
-| constructor(ClientOptions) || RSC1 | |
-| auth: Auth || RTC4 | |
-| push: Push || |
-| device() => io LocalDevice || |
-| channels: `Channels<RealtimeChannel>` || RTC3, RTS1 | |
-| clientId: String? || proxy for RSA7 | |
-| connection: Connection || RTC2 | |
-| request() => io HttpPaginatedResponse || RTC9 | |
-|| String method || |
-|| String path || |
-|| `Dict<String, String>` params? || |
-|| JsonObject \| JsonArray body? || |
-|| `Dict<String, String>` headers? || |
-| stats: => io `PaginatedResult<Stats>` || Same as Rest.stats, RTC5a | |
-|| start: Time api-default epoch() || |
-|| end: Time api-default now() || |
-|| direction: .Backwards | .Forwards api-default .Backwards || |
-|| limit: int api-default 100 || |
-|| unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute || |
-| close() || proxy for RTN12 || |
-| connect() || proxy for RTN11 || |
-| time() => io Time || RTC6a || |
+The `Realtime` object extends the REST client and provides the functionality available in the REST client, in addition to realtime-specific features.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| constructor(keyOrTokenStr: String) ||| RSC1 | Constructs a realtime client object using an Ably API key or token string. |
+|| `keyOrTokenStr` ||| The Ably API key or token string used to validate the client. |
+| constructor(ClientOptions) ||| RSC1 | Constructs a realtime client object using an Ably [`ClientOptions`]{@link} object. |
+|| `ClientOptions` ||| A [`ClientOptions`]{@link} object to configure the client connection to Ably. |
+| auth: Auth ||| RTC4 | An [`Auth`]{@link} object. |
+| push: Push ||| | A [`Push`]{@link} object. |
+| device() => LocalDevice ||  | RSH8 | Retrieves a local device object. |
+||| `LocalDevice` || A [`LocalDevice`]{@link} object that represents the current state of the device as a target for push notifications. |
+| channels: `Channels<RealtimeChannel>` ||| RTC3, RTS1 | A [`Channel`]{@link} collection object. |
+| clientId: String? ||| proxy for RSA7 | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key. A `clientId` may also be implicit in a token used to instantiate the library; an error will be raised if a `clientId` specified here conflicts with the `clientId` implicit in the token.|
+| connection: Connection ||| RTC2 | A reference to the [`Connection`]{@link} object. |
+| request(String method, String path, Dict<String, String> params?, JsonObject \| JsonArray body?, Dict<String, String> headers?) => io HttpPaginatedResponse ||| RTC9 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
+|| `method` ||| Request method to use such as `GET`, `POST`.|
+|| `path` ||| Request path. |
+|| `params` ||| Parameters for the REST request. |
+|| `body` ||| JSON body for the request. |
+|| `headers` ||| Headers for the request. |
+||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
+| stats: ||| Same as Rest.stats, RTC5a | Queries the [REST `/stats` API](https://ably.com/docs/rest-api#stats) and retrieves your application's usage statistics. A [`PaginatedResult`]{@link} object is returned, containing an array of stats for the first page of results. `PaginatedResult` objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
+| close() ||| proxy for RTN12 | Calls `connection.close()` and causes the connection to close, entering the closing state. Once closed, the library will not attempt to re-establish the connection without an explicit call to `connect()`. |
+| connect() ||| proxy for RTN11 | Calls `connection.connect()` and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is unnecessary unless the `autoConnect` property of the [`ClientOptions`]{@link} object is disabled. |
+| time() => io Time ||| RTC6a | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably `TokenRequest`s with a more accurate timestamp should use the [`queryTime`]{@link} property of the [`ClientOption`]{@link} object instead of this method. |
+||| `Time` || The time as a Unix timestamp. |
 
 ## class ClientOptions
 
@@ -134,14 +140,17 @@
 
 ## class TokenDetails
 
-||| Spec | Description |
-|---|---|---|---|
-| +fromJson(String \| JsonObject) -> TokenDetails || TD7 | |
-| capability: String? || TD5 | |
-| clientId: String? || TD6 | |
-| expires: Time? || TD3 | |
-| issued: Time? || TD4 | |
-| token: String || TD2 | |
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| +fromJson(String \| JsonObject) -> TokenDetails ||| TD7 |Creates a `TokenDetails` object from a String or JsonObject.|
+|||`TokenDetails`||A [`TokenDetails`]{@link} object containing details of a new or exisiting token.|
+||`String`|||Should be parased as a JSON string.|
+||`JsonObject`|||Object of JSON strings.|
+| capability: String? ||| TD5 |Capability associated with the token, JSON stringified.|
+| clientId: String? ||| TD6 |Contains the `clientId` assigned to the token. If null or omitted, the token is prohibited from assuming a client ID in any operations, however if `clientId` is a wildcard string '*', then the token is permitted to assume any client ID. Any other string value for `clientId` implies that the client ID is both enforced and assumed for all operations for this token|
+| expires: Time? ||| TD3 |Contains the expiry time in milliseconds. Where idiomatic in the language, this can be a Date/Time object.|
+| issued: Time? ||| TD4 |Contains the time the token was issued in milliseconds. Where idiomatic in the language, this can be a Date/Time object.|
+| token: String ||| TD2 |Contains the token string.|
 
 ## class TokenRequest
 
@@ -193,44 +202,68 @@
 
 ## class RealtimeChannel
 
-||| Spec | Description |
-|---|---|---|---|
-| embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` || RTL2a, RTL2d, RTL2e | |
-| errorReason: ErrorInfo? || RTL4e | |
-| state: ChannelState || RTL2b | |
-| presence: RealtimePresence || RTL9 | |
-| properties: ChannelProperties || CP1, RTL15 | |
-| push: PushChannel || |
-| modes: readonly [ChannelMode] || RTL4m | |
-| params: readonly `Dict<String, String>` || RTL4k1 | |
-| attach() => io || RTL4d | |
-| detach() => io || RTL5e | |
-| history() => io `PaginatedResult<Message>` || RSL2a | |
-|| start: Time, | RTL10a | |
-|| end: Time api-default now(), | RTL10a | |
-|| direction: .Backwards \| .Forwards api-default .Backwards, | RTL10a | |
-|| limit: int api-default 100, | RTL10a | |
-|| untilAttach: Bool default false | RTL10b | |
-| publish(Message) => io || RTL6i | |
-| publish([Message]) => io || RTL6i | |
-| publish(name: String?, data: Data?) => io || RTL6i | |
-| subscribe((Message) ->) => io || RTL7a | |
-| subscribe(String, (Message) ->) => io || RTL7b | |
-| subscribe(MessageFilterObject, (Message) ->) || RTL22 | |
-| unsubscribe() || RTL8a, RTE5 | |
-| unsubscribe((Message) ->) || RTL8a | |
-| unsubscribe(String, (Message) ->) || RTL8a | |
-| unsubscribe(MessageFilterObject, (Message) ->) || RTL22 | |
-| setOptions(options: ChannelOptions) => io || RTL16 | |
+The `RealtimeChannel` object handles all incoming messages and presence messages when it is attached. Incoming is defined as "received from Ably over the realtime transport".
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` ||| RTL2a, RTL2d, RTL2e | The `RealtimeChannel` implements [`EventEmitter`]{@link} and emits [`ChannelEvent`]{@link} events, where a `ChannelEvent` is either a [`ChannelState`]{@link} or `UPDATE`. |
+| errorReason: ErrorInfo? ||| RTL4e | An error as an [`ErrorInfo`]{@link} object when a channel failure occurs. |
+| state: ChannelState ||| RTL2b | The current [`ChannelState`]{@link} of this [`Channel`]{@link}. |
+| presence: RealtimePresence ||| RTL9 | Provides access to the [`Presence`]{@link} object for this channel which can be used to access members present on the channel, or participate in presence. |
+| properties: ChannelProperties ||| CP1, RTL15 | A [`ChannelProperties`]{@link} object representing properties of the channel state. |
+| push: PushChannel |||| Provides access to the [`PushChannel`]{@link} object for this channel. |
+| modes: readonly [ChannelMode] ||| RTL4m | An array of [`ChannelMode`]{@link} objects. |
+| params: readonly `Dict<String, String>` ||| RTL4k1 | Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
+| attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link}. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, [`attach()`]{@link} is called implicitly if [`subscribe()`]{@link} for the channel is called, or [`enter()`]{@link} or [`subscribe()`]{@link} is called on the [`Presence`]{@link} object for this channel. |
+| detach() => io ||| RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the [`on`]{@link} or [`once`]{@link} methods of the [`EventEmitter`]{@link} object. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
+| history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100, untilAttach: Bool default false) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a paginated set of historical messages for this channel. If the channel is configured to persist messages to disk, then message history will typically be available for 24 – 72 hours. If not, messages are only retained in memory by the Ably service for two minutes. |
+|| `start` || RTL10a | The time from which messages are retrieved, specified as a Unix timestamp. |
+|| `end` || RTL10a | The time until messages are retrieved, specified as a Unix timestamp. |
+|| `direction` || RTL10a | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
+|| `limit` || RTL10a | An upper limit on the number of messages returned, up to 1000. |
+|| `untilAttach` || RTL10b | When `true`, ensures message history is up until the point of the channel being attached. See [continuous history](https://ably.com/docs/realtime/history#continuous-history) for more info. Requires the direction to be backwards (the default). If the channel is not attached, or if direction is set to `forwards`, this option results in an error. |
+||| `PaginatedResult<Message>` || A paginated list of [`Message`]{@link} objects. |
+| publish(Message) => io ||| RTL6i | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+|| `Message` ||| A [`Message`]{@link} object. |
+| publish([Message]) => io ||| RTL6i | Sends several messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+|| [`Message`] ||| An array of [`Message`]{@link} objects. |
+| publish(name: String?, data: Data?) => io ||| RTL6i | Sends a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel, so long as [transient publishing](https://ably.com/docs/realtime/channels#transient-publish) is available in the library. Otherwise, the client will implicitly attach. |
+|| `name` ||| Event name. |
+|| `data` ||| Message payload. |
+| subscribe((Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel. The caller supplies a listener function, which is called each time one or more messages arrives on the channel. |
+|| `(Message)` ||| Event listener function. |
+| subscribe(String, (Message) ->) => io ||| RTL7b | Registers a listener for messages with a given event `name` on this channel. The caller supplies a listener function, which is called each time one or more matching messages arrives on the channel. |
+|| `String` ||| Event name. |
+|| `(Message)` ||| Event listener function. |
+| subscribe([String], (Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel for multiple event name values. |
+|| [`String`] ||| An array of event names. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe(String, (Message) ->) ||| RTL8a | Deregisters the given listener for the specified event name. This removes an earlier event-specific subscription. |
+|| `String` ||| Event name. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe((Message) ->) ||| RTL8a | Deregisters the given listener (for any/all event names). This removes an earlier subscription. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe([String], (Message) ->) ||| RTL8a | Deregisters the given listener from all event names in the array. |
+|| [`String`] ||| An array of event names. |
+|| `(Message)` ||| Event listener function. |
+| unsubscribe(String) ||| RTL8a | Deregisters all listeners for the given event name. |
+|| `String` ||| Event name. |
+| unsubscribe([String]) ||| RTL8a | Deregisters all listeners for all event names in the array. |
+|| [`String`] ||| An array of event names. |
+| unsubscribe() ||| RTL8a, RTE5 | Deregisters all listeners to messages on this channel. This removes all earlier subscriptions. |
+| setOptions(options: ChannelOptions) => io ||| RTL16 | Sets the [`ChannelOptions`]{@link} for the channel. |
+|| `options` ||| A [`ChannelOptions`]{@link} object. |
 
 ## class MessageFilterObject
 
-||| Spec | Description |
-|---|---|---|---|
-| hasRef: bool || RTL22b | |
-| refId: string || RTL22a | |
-| refType: string || RTL22a | |
-| name: string || RTL22a | |
+The `MessageFilterObject` handles the attaching and removing of a listener which only executes when a message matches a set of criteria.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| hasRef: bool ||| RTL22b | Checks whether the message has a `extras.ref`.|
+| refId: string ||| RTL22a | Checks that the message matches one or more of: `extras.ref.timeserial`, `extras.ref.type` or `name`. |
+| refType: string ||| RTL22a | Checks if a message’s `extras.ref.type` matches the supplied value.|
+| name: string ||| RTL22a | Check if a message’s `name` matches the supplied value |
 
 ## class ChannelProperties
 
@@ -275,6 +308,26 @@
 | clientId: string || |
 | action: string? || |
 | error: ErrorInfo? || |
+
+## class MessageFilter
+
+ The `MessageFilter` object supplies filter options to subscribe to a message.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+|isRef: bool|||MFI2a| Checks if a message contains the specified `extra.ref`.|
+|refTimeserial: string|||MFI2b| Checks if a message contains the specified `extras.ref.timeserial`.|
+|refType: string|||MFI2c| Checks if a message contains the specified `extras.ref.type`. |
+|name: string|||MFI2d|Checks if a message contains the specified `name`.|
+ 
+## class ReferenceExtras
+
+The `ReferenceExtras` object supplies fields to be referenced by the `MessageFilter` object.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+|timeserial: string|||REX2a| Provides a `timeserial` field that can be referenced by `MessageFilter`.|
+|type: string|||REX2b|Provides a `type` field that can be referenced by `MessageFilter`, should be written in reverse domain name notation. `com.ably.` values are reserved|
 
 ## class PushChannel
 
@@ -333,12 +386,16 @@
 
 ## class ChannelOptions
 
-||| Spec | Description |
-|---|---|---|---|
-| +withCipherKey(key: Binary \| String)? -> ChannelOptions || TB3 | |
-| cipher: (CipherParams \| CipherParamOptions)? || RSL5a, TB2b | |
-| params?: `Dict<String, String>` || TB2c | |
-| modes?: [ChannelMode] || TB2d | |
+The `ChannelOptions` object is used to configure a channel when creating a channel object.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|----|
+| +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Constructor `withCipherKey`, that takes a key only. |
+|| `key` ||| A private key used to encrypt and decrypt payloads. |
+||| `ChannelOptions` || A [`ChannelOptions`]{@link} object. |
+| cipher: (CipherParams \| CipherParamOptions)? ||| RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
+| params?: `Dict<String, String>` ||| TB2c | [Channel Parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
+| modes?: [ChannelMode] ||| TB2d | For realtime client libraries only. An array of [`ChannelMode`]{@link} objects. |
 
 ## class ChannelDetails
 
@@ -383,21 +440,28 @@
 
 ## class CipherParamOptions 
 
-CO1 (may be implemented as a hashmap or a class depending on language)
+`CipherParamOptions` is used creating a @CipherParams@ instance, may be implemented as a hashmap or a class depending on language.
 
-||| Spec | Description |
-|---|---|---|---|
-| algorithm?: String || CO2a | |
-| key: Binary \| String || CO2b | |
-| keyLength?: Int || CO2c | |
-| mode?: String || CO2d | |
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| algorithm?: String ||| CO2a | The algorithm used for encryption; currently the only supported non-null value is AES. |
+| key: Binary \| String ||| CO2b | The private key used to encrypt and decrypt payloads. |
+| keyLength?: Int ||| CO2c | The length in bits of the @key@; for example 128 or 256. |
+| mode?: String ||| CO2d | The cipher mode; currently only supports the non-null value @CBC@. |
 
 ## class Crypto
 
-||| Spec | Description |
-|---|---|---|---|
-| +getDefaultParams(CipherParamOptions) -> CipherParams || RSE1 | |
-| +generateRandomKey(keyLength: Int?) => io Binary || RSE2 | |
+The `Crypto` object ensures that message payloads are encrypted, can never be decrypted by Ably, and can only be decrypted by other clients that share the same secret symmetric key.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Retrieves, or optionally sets, the [`CipherParams`]{@link} for the channel. |
+|| `CipherParamOptions` ||| Overrides the default parameters. A suitable `key` must be provided as a minimum. |
+||| `CipherParams` || A [`CipherParams`]{@link} object, using the default values for any field not supplied. |
+| +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key to be used in the encryption of the channel. |
+|| `keyLength` ||| The length of the key, in bits, to be generated. If not specified, this is equal to the default `keyLength` of the default algorithm: for AES this is 256 bits. |
+||| `Binary` || The key as a binary, for example, a byte array. If the language cryptographic randomness primitives are blocking or async, a callback is used. The callback returns the generated binary key. |
+
 
 ## class RestPresence
 
@@ -703,16 +767,29 @@ Internal only.
 
 ## class `EventEmitter<Event, Data>`
 
-||| Spec | Description |
-|---|---|---|---|
-| on((Data...) ->) || RTE4 | |
-| on(Event, (Data...) ->) || RTE4 | |
-| once((Data...) ->) || RTE4 | |
-| once(Event, (Data...) ->) || RTE4 | |
-| off() || RTE5 | |
-| off((Data...) ->) || RTE5 | |
-| off(Event, (Data...) ->) || RTE5 | |
-| emit(Event, Data...) || internal, RTE6 | |
+The `EventEmitter` object is a generic interface for event registration and delivery used in a number of the types in the Realtime client library. For example, the [`Connection`]{@link} object emits events for connection state using the EventEmitter pattern.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| on((Data...) ->) ||| RTE4 | Registers the provided listener all events. If `on` is called more than once with the same listener and event, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `on`, and an event is emitted once, the listener would be invoked twice. |
+|| `Data` ||| The event listener. |
+| on(Event, (Data...) ->) ||| RTE4 | Registers the provided listener for the specified event. If `on` is called more than once with the same listener and event, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `on`, and an event is emitted once, the listener would be invoked twice. |
+|| `Event` ||| The named event to listen for. |
+|| `Data` ||| The event listener. |
+| once((Data...) ->) ||| RTE4 | Registers the provided listener for the first event that is emitted. If `once` is called more than once with the same listener, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `once`, and an event is emitted once, the listener would be invoked twice. However, all subsequent events emitted would not invoke the listener as `once` ensures that each registration is only invoked once. |
+|| `Data` ||| The event listener. |
+| once(Event, (Data...) ->) ||| RTE4 | Registers the provided listener for the first occurrence of a single named event specified as the `Event` argument. If `once` is called more than once with the same listener, the listener is added multiple times to its listener registry. Therefore, as an example, assuming the same listener is registered twice using `once`, and an event is emitted once, the listener would be invoked twice. However, all subsequent events emitted would not invoke the listener as `once` ensures that each registration is only invoked once. |
+|| `Event` ||| The named event to listen for. |
+|| `Data` ||| The event listener. |
+| off() ||| RTE5 | Deregisters all registrations, for all events and listeners. |
+| off((Data...) ->) ||| RTE5 | Deregisters the specified listener. Removes all registrations matching the given listener, regardless of whether they are associated with an event or not. |
+|| `Data` ||| The event listener. |
+| off(Event, (Data...) ->) ||| RTE5 | Removes all registrations that match both the specified listener and the specified event. |
+|| `Event` ||| The named event. |
+|| `Data` ||| The event listener. |
+| emit(Event, Data...) ||| RTE6 | Emits an event, calling registered listeners with the given event name and any other given arguments. If an exception is raised in any of the listeners, the exception is caught by the `EventEmitter` and the exception is logged to the Ably logger. |
+|| `Event` ||| The named event. |
+|| `Data` ||| The event listener. |
 
 ## class `PaginatedResult<T>`
 
@@ -750,10 +827,12 @@ Internal only.
 
 ## class DeltaExtras
 
-||| Spec | Description |
-|---|---|---|---|
-| from: String ||| |
-| format: String ||| |
+The `DeltaExtras` object is JSON-encodable and used to contain any arbitrary key-value pairs, which may also contain other primitive JSON types, JSON-encodable objects, or JSON-encodable arrays. 
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| from: String |||| The ID of the message the delta was generated from. |
+| format: String |||| The delta compression format. Only `vcdiff` is supported. |
 
 ## class InteractionExtras
 
