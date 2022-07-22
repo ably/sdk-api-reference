@@ -25,7 +25,7 @@ The `Rest` object offers a simple stateless API to interact directly with Ably's
 || `body` ||| JSON body for the request. |
 || `headers` ||| Headers for the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HTTPPaginatedResponse} object returned by the HTTP request, containing an empty or JSON-encodable object. |
-| stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the REST `/stats` API and retrieves your application's usage statistics. A [`PaginatedResult`]{@link PaginatedResult} object is returned, containing an array of [`Stats`]{@link Stats} objects. [`PaginatedResult`]{@link PaginatedResult} objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
+| stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the REST `/stats` API and retrieves your application's usage statistics. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`Stats`]{@link Stats} objects. See the [Stats docs](https://ably.com/docs/general/statistics). |
 || `start` || RSC6b1 | The time from which stats are retrieved, specified as a Unix timestamp. |
 || `end` || RSC6b1 | The time until stats are retrieved, specified as a Unix timestamp. |
 || `direction` || RSC6b2 | The order for which stats are returned in. The default is `Backwards` which orders stats from most recent to oldest. |
@@ -61,7 +61,7 @@ The `Realtime` object extends the REST client and provides the functionality ava
 || `body` ||| JSON body for the request. |
 || `headers` ||| Headers for the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HTTPPaginatedResponse} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
-| stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| Same as RestClient.stats, RTC5 | Queries the REST `/stats` API and retrieves your application's usage statistics. A [`PaginatedResult`]{@link PaginatedResult} object is returned, containing an array of [`Stats`]{@link Stats} objects. [`PaginatedResult`]{@link PaginatedResult} objects are iterable providing a means to page through historical statistics. See the [Stats docs](https://ably.com/docs/general/statistics). |
+| stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| Same as RestClient.stats, RTC5 | Queries the REST `/stats` API and retrieves your application's usage statistics. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`Stats`]{@link Stats} objects. See the [Stats docs](https://ably.com/docs/general/statistics). |
 || `start` ||| The time from which stats are retrieved, specified as a Unix timestamp. |
 || `end` ||| The time until stats are retrieved, specified as a Unix timestamp. |
 || `direction` ||| The order for which stats are returned in. The default is `Backwards` which orders stats from most recent to oldest. |
@@ -221,12 +221,12 @@ The `RestChannel` object is used to interact with a specific channel instance. A
 |---|---|---|---|---|
 | name: String? |||| A unique channel name. |
 | presence: RestPresence ||| RSL3 | The [`RestPresence`]{@link RestPresence} object associated with the channel. Enables the retrieval of presence members on the channel. |
-| history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a paginated list of historical messages for the channel. |
+| history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`Message`]{@link Message} objects for the channel. If the channel is configured to persist messages to disk, then message history will typically be available for 24–72 hours. If not, messages are only retained in memory by the Ably service for two minutes. |
 || `start` || RSL2b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
 || `end` || RSL2b1 | The time until messages are retrieved, specified as a Unix timestamp. |
 || `direction` || RSL2b2 | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
 || `limit` || RSL2b3 | An upper limit on the number of messages returned. The default is 100. |
-||| `PaginatedResult<Message>` || A paginated list of [`Message`]{@link Message} objects. |
+||| `PaginatedResult<Message>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Message`]{@link Message} objects. |
 | status() => ChannelDetails ||| RSL8 | Retrieves metadata for the channel, such as status and occupancy metrics. Returns a [`ChannelDetails`]{@link ChannelDetails} object. |
 ||| `ChannelDetails` || A [`ChannelDetails`]{@link ChannelDetails} object. |
 | publish(Message, params?: `Dict<String, Stringifiable>`) => io ||| RSL1 | Sends a message to the channel. |
@@ -258,13 +258,13 @@ The `RealtimeChannel` object handles all incoming messages and presence messages
 | params: readonly `Dict<String, String>` ||| RTL4k1 | Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
 | attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link RealtimeChannel#subscribe}. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, `attach()` is called implicitly if [`subscribe()`]{@link RealtimeChannel#subscribe} for the channel is called, or [`enter()`]{@link RealtimePresence#enter} or [`subscribe()`]{@link RealtimePresence#subscribe} are called on the [`RealtimePresence`]{@link RealtimePresence} object for this channel. |
 | detach() => io ||| RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the [`on`]{@link EventEmitter#on} or [`once`]{@link EventEmitter#once} methods of the [`EventEmitter`]{@link EventEmitter} object. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
-| history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100, untilAttach: Bool default false) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a paginated set of historical messages for this channel. If the channel is configured to persist messages to disk, then message history will typically be available for 24 – 72 hours. If not, messages are only retained in memory by the Ably service for two minutes. |
+| history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100, untilAttach: Bool default false) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`Message`]{@link Message} objects for the channel. If the channel is configured to persist messages to disk, then message history will typically be available for 24–72 hours. If not, messages are only retained in memory by the Ably service for two minutes. |
 || `start` || RTL10a | The time from which messages are retrieved, specified as a Unix timestamp. |
 || `end` || RTL10a | The time until messages are retrieved, specified as a Unix timestamp. |
 || `direction` || RTL10a | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
 || `limit` || RTL10a | An upper limit on the number of messages returned, up to 1000. |
 || `untilAttach` || RTL10b | When `true`, ensures message history is up until the point of the channel being attached. See [continuous history](https://ably.com/docs/realtime/history#continuous-history) for more info. Requires the direction to be backwards (the default). If the channel is not attached, or if direction is set to `forwards`, this option results in an error. |
-||| `PaginatedResult<Message>` || A paginated list of [`Message`]{@link Message} objects. |
+||| `PaginatedResult<Message>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Message`]{@link Message} objects. |
 | publish(Message) => io ||| RTL6i | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
 || `Message` ||| A [`Message`]{@link Message} object. |
 | publish([Message]) => io ||| RTL6i | Sends several messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
@@ -498,17 +498,17 @@ The `RestPresence` object associated with a channel, enabling the retrieval of t
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| get(limit: int api-default 100, clientId: String?, connectionId: String?) => io `PaginatedResult<PresenceMessage>` ||| RSPa | Retrieves the current members present on the channel and the metadata for each member, such as their [`PresenceAction`]{@link PresenceAction} and ID. Returns a paginated list of [`PresenceMessage`]{@link PresenceMessage} objects. |
+| get(limit: int api-default 100, clientId: String?, connectionId: String?) => io `PaginatedResult<PresenceMessage>` ||| RSPa | Retrieves the current members present on the channel and the metadata for each member, such as their [`PresenceAction`]{@link PresenceAction} and ID. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`PresenceMessage`]{@link PresenceMessage} objects. |
 || `limit` || RSP3a | An upper limit on the number of messages returned. |
 || `clientId` || RSP3a2 | Filters the list of returned presence members by a specific client using its ID. |
 || `connectionId` || RSP3a3 | Filters the list of returned presence members by a specific connection using its ID. |
-||| `PaginatedResult<PresenceMessage>` || A paginated list of [`PresenceMessage`]{@link PresenceMessage} objects. |
-| history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<PresenceMessage>` ||| RSP4a | Retrieves a list of historic presence messages that occurred on the channel. Returns a paginated list of [`PresenceMessage`]{@link PresenceMessage} objects. |
+||| `PaginatedResult<PresenceMessage>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PresenceMessage`]{@link PresenceMessage} objects. |
+| history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<PresenceMessage>` ||| RSP4a | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`PresenceMessage`]{@link PresenceMessage} objects for the channel. If the channel is configured to persist messages to disk, then presence message history will typically be available for 24–72 hours. If not, presence messages are only retained in memory by the Ably service for two minutes. |
 || `start` || RSP4b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
 || `end` || RSP4b1 | The time until messages are retrieved, specified as a Unix timestamp. |
 || `direction` || RSP4b2 | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
 || `limit` || RSP4b3 | An upper limit on the number of messages returned. |
-||| `PaginatedResult<PresenceMessage>` || A paginated list of [`PresenceMessage`]{@link PresenceMessage} objects. |
+||| `PaginatedResult<PresenceMessage>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PresenceMessage`]{@link PresenceMessage} objects. |
 
 ## class RealtimePresence
 
@@ -522,12 +522,12 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 || `clientId` || RTP11c2 | Filters the array of returned presence members by a specific client using its ID. |
 || `connectionId` || RTP11c3 | Filters the array of returned presence members by a specific connection using its ID. |
 ||| [`PresenceMessage`] || An array of [`PresenceMessage`]{@link PresenceMessage} objects. |
-| history(start: Time, end: Time, direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<PresenceMessage>` ||| RTP12c | Retrieves a list of historic presence messages that occurred on the channel. Returns a paginated list of [`PresenceMessage`]{@link PresenceMessage} objects. |
+| history(start: Time, end: Time, direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<PresenceMessage>` ||| RTP12c | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`PresenceMessage`]{@link PresenceMessage} objects for the channel. If the channel is configured to persist messages to disk, then presence message history will typically be available for 24–72 hours. If not, presence messages are only retained in memory by the Ably service for two minutes. |
 || `start` || RTP12a | The time from which messages are retrieved, specified as a Unix timestamp. |
 || `end` || RTP12a | The time until messages are retrieved, specified as a Unix timestamp. |
 || `direction` || RTP12a | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
 || `limit` || RTP12a | An upper limit on the number of messages returned. |
-||| `PaginatedResult<PresenceMessage>` || A paginated list of [`PresenceMessage`]{@link PresenceMessage} objects. |
+||| `PaginatedResult<PresenceMessage>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PresenceMessage`]{@link PresenceMessage} objects. |
 | subscribe((PresenceMessage) ->) => io ||| RTP6a | Registers a listener that is called each time a [`PresenceMessage`]{@link PresenceMessage} is received on the channel, such as a new member entering the presence set. A callback may optionally be passed in to this call to be notified of success or failure of the channel [`attach()`]{@link RealtimeChannel#attach} operation. |
 || `(PresenceMessage)` ||| An event listener function. |
 | subscribe(PresenceAction, (PresenceMessage) ->) => io ||| RTP6b | Registers a listener that is called each time a [`PresenceMessage`]{@link PresenceMessage} matching a given [`PresenceAction`]{@link PresenceAction} is received on the channel, such as a new member entering the presence set. A callback may optionally be passed in to this call to be notified of success or failure of the channel [`attach()`]{@link RealtimeChannel#attach} operation. |
@@ -804,9 +804,9 @@ The `PushDeviceRegistrations` object is used to manage push notification registr
 | get(deviceId: String) => io DeviceDetails ||| RSH1b1 | Retrieves the [`DeviceDetails`]{@link DeviceDetails} of a device registered to receive push notifications using its `deviceId`. |
 || `deviceId` ||| The unique ID of the device. |
 ||| `DeviceDetails` || A [`DeviceDetails`]{@link DeviceDetails} object. |
-| list(params: `Dict<String, String>`) => io `PaginatedResult<DeviceDetails>` ||| RSH1b2 | Retrieves all devices matching the filter `params` provided. Returns a [`DeviceDetails`]{@link DeviceDetails} object for each matched device. |
+| list(params: `Dict<String, String>`) => io `PaginatedResult<DeviceDetails>` ||| RSH1b2 | Retrieves all devices matching the filter `params` provided. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`DeviceDetails`]{@link DeviceDetails} objects. |
 || `params` ||| An object containing key-value pairs to filter devices by. Can contain `clientId`, `deviceId` and a `limit` on the number of devices returned, up to 1,000. |
-||| `PaginatedResult<DeviceDetails>` || A paginated list of [`DeviceDetails`]{@link DeviceDetails} objects. |
+||| `PaginatedResult<DeviceDetails>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`DeviceDetails`]{@link DeviceDetails} objects. |
 | save(DeviceDetails) => io DeviceDetails ||| RSH1b3 | Registers or updates a [`DeviceDetails`]{@link DeviceDetails} object with Ably. Returns the new, or updated [`DeviceDetails`]{@link DeviceDetails} object. |
 || `DeviceDetails` ||| The [`DeviceDetails`]{@link DeviceDetails} object to create or update. |
 ||| `DeviceDetails` || A [`DeviceDetails`]{@link DeviceDetails} object. |
@@ -823,12 +823,12 @@ The `PushChannelSubscriptions` object is used to manage device push channel subs
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| list(params: `Dict<String, String>`) => io `PaginatedResult<PushChannelSubscription>` ||| RSH1c1 | Retrieves all push channel subscriptions matching the filter `params` provided. Returns a [`PushChannelSubscription`]{@link PushChannelSubscription} object for each matched subscriptions. |
+| list(params: `Dict<String, String>`) => io `PaginatedResult<PushChannelSubscription>` ||| RSH1c1 | Retrieves all push channel subscriptions matching the filter `params` provided. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects. |
 || `params` ||| An object containing key-value pairs to filter subscriptions by. Can contain `channel`, `clientId`, `deviceId` and a `limit` on the number of devices returned, up to 1,000. |
-||| `PaginatedResult<PushChannelSubscription>` || A paginated list of [`PushChannelSubscription`]{@link PushChannelSubscription} objects. |
-| listChannels(params: `Dict<String, String>`?) => io `PaginatedResult<String>` ||| RSH1c2 | Retrieves all channels with at least one device subscribed to push notifications.  |
+||| `PaginatedResult<PushChannelSubscription>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects. |
+| listChannels(params: `Dict<String, String>`?) => io `PaginatedResult<String>` ||| RSH1c2 | Retrieves all channels with at least one device subscribed to push notifications. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of channel names. |
 || `params` ||| An object containing key-value pairs to filter channels by. Can contain a `limit` on the number of channels returned, up to 1,000. |
-||| `PaginatedResult<String>` || A paginated list of channel names. |
+||| `PaginatedResult<String>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of channel names. |
 | save(PushChannelSubscription) => io PushChannelSubscription ||| RSH1c3 | Subscribes a device, or a group of devices sharing the same `clientId` to push notifications on a channel. Returns a [`PushChannelSubscription`]{@link PushChannelSubscription} object. |
 || `PushChannelSubscription` ||| A [`PushChannelSubscription`]{@link PushChannelSubscription} object. |
 ||| `PushChannelSubscription` || A [`PushChannelSubscription`]{@link PushChannelSubscription} object describing the new or updated subscriptions. |
