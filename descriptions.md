@@ -228,6 +228,7 @@ The `RestChannel` object is used to interact with a specific channel instance. A
 || `limit` || RSL2b3 | An upper limit on the number of messages returned. The default is 100. |
 ||| `PaginatedResult<Message>` || A paginated list of [`Message`]{@link Message} objects. |
 | status() => ChannelDetails ||| RSL8 | Retrieves metadata for the channel, such as status and occupancy metrics. Returns a [`ChannelDetails`]{@link ChannelDetails} object. |
+||| `ChannelDetails` || A [`ChannelDetails`]{@link ChannelDetails} object. |
 | publish(Message, params?: `Dict<String, Stringifiable>`) => io ||| RSL1 | Sends a message to the channel. |
 || `Message` ||| A [`Message`]{@link Message} object. |
 || `params` ||| Optional parameters, such as [`quickAck`](https://faqs.ably.com/why-are-some-rest-publishes-on-a-channel-slow-and-then-typically-faster-on-subsequent-publishes) sent as part of the query string. |
@@ -271,22 +272,22 @@ The `RealtimeChannel` object handles all incoming messages and presence messages
 | publish(name: String?, data: Data?) => io ||| RTL6i | Sends a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel, so long as [transient publishing](https://ably.com/docs/realtime/channels#transient-publish) is available in the library. Otherwise, the client will implicitly attach. |
 || `name` ||| Event name. |
 || `data` ||| Message payload. |
-| subscribe((Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel. The caller supplies a listener function, which is called each time one or more messages arrives on the channel. |
-|| `(Message)` ||| Event listener function. |
-| subscribe(String, (Message) ->) => io ||| RTL7b | Registers a listener for messages with a given event name on this channel. The caller supplies a listener function, which is called each time one or more matching messages arrives on the channel. |
+| subscribe((Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel. The caller supplies a listener function, which is called each time one or more messages arrives on the channel. A callback may optionally be passed in to this call to be notified of success or failure of the channel [`attach()`]{@link RealtimeChannel#attach} operation. |
+|| `(Message)` ||| An event listener function. |
+| subscribe(String, (Message) ->) => io ||| RTL7b | Registers a listener for messages with a given event name on this channel. The caller supplies a listener function, which is called each time one or more matching messages arrives on the channel. A callback may optionally be passed in to this call to be notified of success or failure of the channel [`attach()`]{@link RealtimeChannel#attach} operation. |
 || `String` ||| Event name. |
-|| `(Message)` ||| Event listener function. |
-| subscribe([String], (Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel for multiple event name values. |
+|| `(Message)` ||| An event listener function. |
+| subscribe([String], (Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel for multiple event name values. A callback may optionally be passed in to this call to be notified of success or failure of the channel [`attach()`]{@link RealtimeChannel#attach} operation. |
 || [`String`] ||| An array of event names. |
-|| `(Message)` ||| Event listener function. |
+|| `(Message)` ||| An event listener function. |
 | unsubscribe(String, (Message) ->) ||| RTL8a | Deregisters the given listener for the specified event name. This removes an earlier event-specific subscription. |
 || `String` ||| Event name. |
-|| `(Message)` ||| Event listener function. |
+|| `(Message)` ||| An event listener function. |
 | unsubscribe((Message) ->) ||| RTL8a | Deregisters the given listener (for any/all event names). This removes an earlier subscription. |
-|| `(Message)` ||| Event listener function. |
+|| `(Message)` ||| An event listener function. |
 | unsubscribe([String], (Message) ->) ||| RTL8a | Deregisters the given listener from all event names in the array. |
 || [`String`] ||| An array of event names. |
-|| `(Message)` ||| Event listener function. |
+|| `(Message)` ||| An event listener function. |
 | unsubscribe(String) ||| RTL8a | Deregisters all listeners for the given event name. |
 || `String` ||| Event name. |
 | unsubscribe([String]) ||| RTL8a | Deregisters all listeners for all event names in the array. |
@@ -484,7 +485,7 @@ The `Crypto` object ensures that message payloads are encrypted, can never be de
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Retrieves, or optionally sets, the [`CipherParams`]{@link CipherParams} for the channel. |
+| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Returns a [`CipherParams`]{@link CipherParams} object, using the default values for any fields not supplied. |
 || `Params` ||| Overrides the default parameters. A suitable `key` must be provided as a minimum. |
 ||| `CipherParams` || A [`CipherParams`]{@link CipherParams} object, using the default values for any field not supplied. |
 | +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key to be used in the encryption of the channel. |
@@ -527,9 +528,11 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 || `direction` || RTP12a | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
 || `limit` || RTP12a | An upper limit on the number of messages returned. |
 ||| `PaginatedResult<PresenceMessage>` || A paginated list of [`PresenceMessage`]{@link PresenceMessage} objects. |
-| subscribe((PresenceMessage) ->) => io ||| RTP6a | Registers a listener that is called each time a [`PresenceMessage`]{@link PresenceMessage} is received on the channel, such as a new member entering the presence set. |
-| subscribe(PresenceAction, (PresenceMessage) ->) => io ||| RTP6b | Registers a listener that is called each time a [`PresenceMessage`]{@link PresenceMessage} matching a given [`PresenceAction`]{@link PresenceAction} is received on the channel, such as a new member entering the presence set. |
-|| `PresenceAction` || | A specific [`PresenceAction`]{@link PresenceAction} to register the listener for. |
+| subscribe((PresenceMessage) ->) => io ||| RTP6a | Registers a listener that is called each time a [`PresenceMessage`]{@link PresenceMessage} is received on the channel, such as a new member entering the presence set. A callback may optionally be passed in to this call to be notified of success or failure of the channel [`attach()`]{@link RealtimeChannel#attach} operation. |
+|| `(PresenceMessage)` ||| An event listener function. |
+| subscribe(PresenceAction, (PresenceMessage) ->) => io ||| RTP6b | Registers a listener that is called each time a [`PresenceMessage`]{@link PresenceMessage} matching a given [`PresenceAction`]{@link PresenceAction} is received on the channel, such as a new member entering the presence set. A callback may optionally be passed in to this call to be notified of success or failure of the channel [`attach()`]{@link RealtimeChannel#attach} operation. |
+|| `PresenceAction` ||| A specific [`PresenceAction`]{@link PresenceAction} to register the listener for. |
+|| `(PresenceMessage)` ||| An event listener function. |
 | unsubscribe() ||| RTP7a, RTE5 | Deregisters all listeners currently receiving [`PresenceMessage`]{@link PresenceMessage} for the channel. |
 | unsubscribe((PresenceMessage) ->) ||| RTP7a | Deregisters a specific listener that is registered to receive [`PresenceMessage`]{@link PresenceMessage} on the channel. |
 | unsubscribe(PresenceAction, (PresenceMessage) ->) ||| RTP7b | Deregisters a specific listener that is registered to receive [`PresenceMessage`]{@link PreesenceMessage} on the channel for a given [`PresenceAction`]{@link PresenceAction}. |
@@ -659,7 +662,8 @@ The `Connection` object enables the management of a connection with Ably.
 | state: ConnectionState ||| RTN4d | The current [`ConnectionState`]{@link ConnectionState} of the connection. |
 | close() ||| RTN12 | Causes the connection to close, entering the [`CLOSING`]{@link ConnectionState#CLOSING} state. Once closed, the library does not attempt to re-establish the connection without an explicit call to [`connect()`]{@link Connection#connect}. |
 | connect() ||| RTC1b, RTN3, RTN11 | Explicitly calling `connect()` is unnecessary unless the `autoConnect` attribute of the [`ClientOptions`]{@link ClientOptions} object is `false`. Unless already connected or connecting, this method causes the connection to open, entering the [`CONNECTING`]{@link ConnectionState#CONNECTING} state. |
-| ping() => io ||| RTN13 | When connected, sends a heartbeat ping to the Ably server and executes the callback with any error and the response time in milliseconds when a heartbeat ping request is echoed from the server. This can be useful for measuring true round-trip latency to the connected Ably server. |
+| ping() => io Duration ||| RTN13 | When connected, sends a heartbeat ping to the Ably server and executes the callback with any error and the response time in milliseconds when a heartbeat ping request is echoed from the server. This can be useful for measuring true round-trip latency to the connected Ably server. |
+||| `Duration` || The response time in milliseconds. |
 
 ## enum ConnectionState
 
