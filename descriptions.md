@@ -2,7 +2,7 @@
 
 ## class Rest
 
-The `Rest` object offers a simple stateless API to interact directly with Ably's REST API.
+A client that offers a simple stateless API to interact directly with Ably's REST API.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -37,7 +37,7 @@ The `Rest` object offers a simple stateless API to interact directly with Ably's
 
 ## class Realtime
 
-The `Realtime` object extends the REST client and provides the functionality available in the REST client, in addition to realtime-specific features.
+A client that extends the functionality of the [REST]{@link Rest} client and provides additional realtime-specific features.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -75,7 +75,7 @@ The `Realtime` object extends the REST client and provides the functionality ava
 
 ## class ClientOptions
 
-The `ClientOptions` object is a plain JavaScript object and is used in the `Ably.Realtime` constructor’s options argument. `ClientOptions` extends `AuthOptions`.
+Passes additional client-specific properties to the REST [`constructor()`]{@link Rest#constructor} or the Realtime [`constructor()`]{@link Realtime#constructor}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -114,7 +114,7 @@ The `ClientOptions` object is a plain JavaScript object and is used in the `Ably
 
 ## class AuthOptions
 
-The `AuthOptions` object is a plain JavaScript object used when making authentication requests. If passed in, an `AuthOptions` object will be used instead of the default values given when the library is instantiated.
+Passes authentication-specific properties in authentication requests to Ably. Properties set using `AuthOptions` are used instead of the default values set when the client library is instantiated, as opposed to being merged with them.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -131,7 +131,7 @@ The `AuthOptions` object is a plain JavaScript object used when making authentic
 
 ## class TokenParams
 
-The `TokenParams` object is a plain JavaScript object and is used to define Ably token characteristics when performing a token request.
+Contains the properties of an Ably Token.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -143,7 +143,7 @@ The `TokenParams` object is a plain JavaScript object and is used to define Ably
 
 ## class Auth
 
-The `Auth` object creates Ably `TokenRequest` objects with `createTokenRequest` or is used to obtain Ably Tokens from Ably with `requestToken`, and then issue them to less trusted clients.
+Creates Ably [`TokenRequest`]{@link TokenRequest} objects and obtains Ably Tokens from Ably to subsequently issue to less trusted clients.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -161,10 +161,9 @@ The `Auth` object creates Ably `TokenRequest` objects with `createTokenRequest` 
 || `AuthOptions` ||| An [`AuthOptions`]{@link AuthOptions} object. |
 ||| `TokenDetails` || A [`TokenDetails`]{@link TokenDetails} object. |
 
-
 ## class TokenDetails
 
-The `TokenDetails` object represents an Ably token string and its associated metadata.
+Contains an Ably Token and its associated metadata.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -178,7 +177,7 @@ The `TokenDetails` object represents an Ably token string and its associated met
 
 ## class TokenRequest
 
-The `TokenRequest` object represents properties used to generate an Ably TokenRequest. Tokens are generated using `Auth.requestToken`.
+Contains the properties used to generate an Ably `TokenRequest`. Tokens are generated using [`requestToken`]{@link Auth#requestToken}.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -194,7 +193,7 @@ The `TokenRequest` object represents properties used to generate an Ably TokenRe
 
 ## class `Channels<ChannelType>`
 
-The `Channels` object is used to create and destroy [`Channel`]{@link} objects.
+Creates and destroys [`RestChannel`]{@link RestChannel} and [`RealtimeChannel`]{@link RealtimeChannel} objects.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -215,7 +214,7 @@ The `Channels` object is used to create and destroy [`Channel`]{@link} objects.
 
 ## class RestChannel
 
-The `RestChannel` object is used to interact with a specific channel instance. A channel instance is created or returned by [`channels.get()`]{@link}.
+Enables messages to be published and retrieved from history for a channel.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -244,7 +243,7 @@ The `RestChannel` object is used to interact with a specific channel instance. A
 
 ## class RealtimeChannel
 
-The `RealtimeChannel` object handles all incoming messages and presence messages when it is attached. Incoming is defined as "received from Ably over the realtime transport".
+Enables messages to be subscribed to, published and retrieved from history for a channel. Also provides access to the [`RealtimePresence`]{@link RealtimePresence} object of a channel.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -298,7 +297,7 @@ The `RealtimeChannel` object handles all incoming messages and presence messages
 
 ## class BatchOperations
 
-The `BatchOperations` object is used to publish messages to multiple channels, or retrieve the presence state from multiple channels, as batch operations. 
+Enables messages to be published to multiple channels, or retrieves the presence state from multiple channels, as batch operations. 
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -312,7 +311,7 @@ The `BatchOperations` object is used to publish messages to multiple channels, o
 
 ## class `BatchResult<T>`
 
-The `BatchResult<T>` object contains the results of a batch operation.
+Contains the results of a [`BatchOperations`]{@link BatchOperations} request.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -321,7 +320,7 @@ The `BatchResult<T>` object contains the results of a batch operation.
 
 ## class BatchPublishResponse
 
-The `BatchPublishResponse` object contains the response information for each batch publish operation.
+Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`publish()]{@link BatchOperations#publish} request. 
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -331,7 +330,7 @@ The `BatchPublishResponse` object contains the response information for each bat
 
 ## class BatchPresenceResponse
 
-The `BatchPresenceResponse` contains the response information for each batch presence operation.
+Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`getPresence()]{@link BatchOperations#getPresence} request. 
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -340,7 +339,7 @@ The `BatchPresenceResponse` contains the response information for each batch pre
 
 ## class BatchPresence
 
-The `BatchPresence` object contains the presence state of each batch presence request.
+Contains the presence state of each [`BatchPresenceResponse`]{@link BatchPresenceResponse}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -350,7 +349,7 @@ The `BatchPresence` object contains the presence state of each batch presence re
 
 ## class PushChannel
 
-The `PushChannel` object enables devices to subscribe to push notifications for the channel.
+Enables devices to subscribe to push notifications for a channel.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -363,7 +362,7 @@ The `PushChannel` object enables devices to subscribe to push notifications for 
 
 ## class BatchSpec
 
-The `BatchSpec` object contains the channel names and messages to batch publish to. 
+Sets the channel names and message contents to [`publish()]{@link BatchOperations#publish} to in [`BatchOperations`]{@link BatchOperations}. 
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -372,7 +371,7 @@ The `BatchSpec` object contains the channel names and messages to batch publish 
 
 ## enum ChannelState
 
-`ChannelState` describes the possible states of a `Channel`.
+Describes the possible states of a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -386,7 +385,7 @@ The `BatchSpec` object contains the channel names and messages to batch publish 
 
 ## enum ChannelEvent
 
-`ChannelEvent` describes the events emitted by a `Channel`. An event is either an `UPDATE` or a `ChannelState`.
+Describes the events emitted by a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object. An event is either an `UPDATE` or a [`ChannelState`]{@link ChannelState}.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -395,7 +394,7 @@ The `BatchSpec` object contains the channel names and messages to batch publish 
 
 ## enum ChannelMode
 
-`ChannelMode` describes the possible flags used to configure client capabilities.
+Describes the possible flags used to configure client capabilities.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -406,7 +405,7 @@ The `BatchSpec` object contains the channel names and messages to batch publish 
 
 ## class ChannelStateChange
 
-The `ChannelStateChange`  object encapsulates state change information emitted by the `Channel` object.
+Contains state change information emitted by [`RestChannel`]{@link RestChannel} and [`RealtimeChannel`]{@link RealtimeChannel} objects.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -418,7 +417,7 @@ The `ChannelStateChange`  object encapsulates state change information emitted b
 
 ## class ChannelOptions
 
-The `ChannelOptions` object is used when creating a channel object, to configure the channel.
+Passes additional properties for to a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object, such as encryption, [`ChannelMode`s]{link ChannelMode} and channel parameters.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|----|
@@ -431,7 +430,7 @@ The `ChannelOptions` object is used when creating a channel object, to configure
 
 ## class ChannelDetails
 
-The `ChannelDetails` object represents information for a channel including `channelId` and `status`.
+Contains the details of a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object such as its ID and [`ChannelStatus`]{@link ChannelStatus}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -440,7 +439,7 @@ The `ChannelDetails` object represents information for a channel including `chan
 
 ## class ChannelStatus
 
-The `ChannelStatus` object contains the status and occupancy of a channel.
+Contains the status of a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object such as whether it is active and its [ChannelOccupancy]{@link ChannelOccupancy}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -449,7 +448,7 @@ The `ChannelStatus` object contains the status and occupancy of a channel.
 
 ## class ChannelOccupancy
 
-The `ChannelOccupancy` object contains channel metrics.
+Contains the metrics of a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -457,7 +456,7 @@ The `ChannelOccupancy` object contains channel metrics.
 
 ## class ChannelMetrics
 
-The `ChannelMetrics` object contains the count of `publishers` and `subscribers`, `connections` and `presenceConnections`, `presenceMembers` and `presenceSubscribers`.
+Contains the metrics associated with a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel}, such as the number of publishers, subscribers and connections it has.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -470,7 +469,7 @@ The `ChannelMetrics` object contains the count of `publishers` and `subscribers`
 
 ## class CipherParams
 
-The `CipherParams` object contains properties to configure encryption for a channel.
+Sets the properties to configure encryption for a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object.
 
 | Method / Property | Parameter | Spec | Description |
 |---|---|---|---|
@@ -481,7 +480,7 @@ The `CipherParams` object contains properties to configure encryption for a chan
 
 ## class Crypto
 
-The `Crypto` object ensures that message payloads are encrypted, can never be decrypted by Ably, and can only be decrypted by other clients that share the same secret symmetric key.
+Contains the properties required to configure the encryption of [`Message`]{@link Message} payloads.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -494,7 +493,7 @@ The `Crypto` object ensures that message payloads are encrypted, can never be de
 
 ## class RestPresence
 
-The `RestPresence` object associated with a channel, enabling the retrieval of the current and historic presence set for the channel.
+Enables the retrieval of the current and historic presence set for a channel.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -512,7 +511,7 @@ The `RestPresence` object associated with a channel, enabling the retrieval of t
 
 ## class RealtimePresence
 
-The `RealtimePresence` object associated with a channel, enabling clients to enter, update and leave the presence set and for the retrieval of the current and historic presence set for the channel.
+Enables the presence set to be entered, subscribed to and retrieved from history for a channel.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -561,7 +560,7 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 
 ## enum PresenceAction
 
-`PresenceAction` describes the possible actions presence members can emit.
+Describes the possible actions presence members can emit.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -573,7 +572,7 @@ The `RealtimePresence` object associated with a channel, enabling clients to ent
 
 ## class ConnectionDetails
 
-The `ConnectionDetails` object is optionally passed to the client library in the `CONNECTED` property of `ProtocolMessage#connectionDetails`. It informs the client about any constraints it should adhere to, and provides additional metadata about the connection. For example, if a request is made to publish a message that exceeds the `maxMessageSize`, the client library can reject the message immediately, without communicating with the Ably service.
+Contains any constraints a client should adhere to and provides additional metadata about a [`Connection]{@link Connection}, such as if a request to [`publish()`]{@link Realtime#publish} a message that exceeds the maximum message size should be rejected immediately without communicating with Ably.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -588,7 +587,7 @@ The `ConnectionDetails` object is optionally passed to the client library in the
 
 ## class Message
 
-The `Message` object represents an individual message that is sent to, or received from, Ably.
+Contains an individual message that is sent to, or received from, Ably.
 
 | Method / Property | Parameter| Returns | Spec | Description |
 |---|---|---|---|---|
@@ -618,7 +617,7 @@ The `Message` object represents an individual message that is sent to, or receiv
 
 ## class PresenceMessage
 
-A `PresenceMessage` object represents an individual presence update sent to, or received from Ably.
+Contains an individual presence update sent to, or received from, Ably.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -641,7 +640,7 @@ A `PresenceMessage` object represents an individual presence update sent to, or 
 
 ## class AuthDetails
 
-The `AuthDetails` object contains the token string used to authenticate a client with Ably.
+Contains the token string used to authenticate a client with Ably.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -649,7 +648,7 @@ The `AuthDetails` object contains the token string used to authenticate a client
 
 ## class Connection
 
-The `Connection` object enables the management of a connection with Ably.
+Enables the management of a connection to Ably.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -667,7 +666,7 @@ The `Connection` object enables the management of a connection with Ably.
 
 ## enum ConnectionState
 
-The `ConnectionState` enum is a string with a value matching any of the realtime connection states.
+Describes the realtime [`Connection`]{@link Connection} object states.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -682,7 +681,7 @@ The `ConnectionState` enum is a string with a value matching any of the realtime
 
 ## enum ConnectionEvent
 
-`ConnectionEvent` describes the events emitted by a [`Connection`]{@link} object. An event is either an `UPDATE` or a `ConnectionState`.
+Describes the events emitted by a [`Connection`]{@link} object. An event is either an `UPDATE` or a [`ConnectionState`]{@link ConnectionState}.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -691,7 +690,7 @@ The `ConnectionState` enum is a string with a value matching any of the realtime
 
 ## class ConnectionStateChange
 
-A `ConnectionStateChange` object encapsulates [`ConnectionState`]{@link} change information emitted by the [`Connection`]{@link} object.
+Contains [`ConnectionState`]{@link} change information emitted by the [`Connection`]{@link} object.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -723,7 +722,7 @@ A `ConnectionStateChange` object encapsulates [`ConnectionState`]{@link} change 
 
 ## enum StatsIntervalGranularity
 
-`StatsIntervalGranularity` describes the interval unit over which statistics are gathered.
+Describes the interval unit over which statistics are gathered.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -734,7 +733,7 @@ A `ConnectionStateChange` object encapsulates [`ConnectionState`]{@link} change 
 
 ## class DeviceDetails
 
-The `DeviceDetails` object contains the properties of a device registered for push notifications.
+Contains the properties of a device registered for push notifications.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -747,7 +746,7 @@ The `DeviceDetails` object contains the properties of a device registered for pu
 
 ## class DevicePushDetails
 
-The `DevicePushDetails` object contains the details of the push registration of a device.
+Contains the details of the push registration of a device.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -757,7 +756,7 @@ The `DevicePushDetails` object contains the details of the push registration of 
 
 ## class LocalDevice (extends DeviceDetails)
 
-The `LocalDevice` object extends [`DeviceDetails`]{@link} and contains the device identity token and secret.
+Contains the device identity token and secret of a device. `LocalDevice` extends [`DeviceDetails`]{@link}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -766,7 +765,7 @@ The `LocalDevice` object extends [`DeviceDetails`]{@link} and contains the devic
 
 ## class Push
 
-The `Push` object enables registering and deregistering a device for push notifications.
+Enables a device to be registered and deregistered from receiving push notifications.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -778,7 +777,7 @@ The `Push` object enables registering and deregistering a device for push notifi
 
 ## class PushAdmin
 
-The `PushAdmin` object enables the management of device registrations and push notification subscriptions, as well as enabling publishing of push notifications to devices.
+Enables the management of device registrations and push notification subscriptions Also enables the publishing of push notifications to devices.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -790,11 +789,11 @@ The `PushAdmin` object enables the management of device registrations and push n
 
 ## class JsonObject
 
-The `JsonObject` object denotes any type or interface in the target language that represents an RFC4627 object or array value respectively. Such types serialize to, and may be deserialized from, the corresponding JSON text. This object is platform-dependent, typically a Dict-like object.
+Describes any type or interface in the target language that represents an RFC4627 object or array value respectively. Such types serialize to, and may be deserialized from, the corresponding JSON text. `JsonObject` is platform-dependent, typically a Dict-like object.
 
 ## class PushDeviceRegistrations
 
-The `PushDeviceRegistrations` object is used to manage push notification registrations with Ably.
+Enables the management of push notification registrations with Ably.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -819,7 +818,7 @@ The `PushDeviceRegistrations` object is used to manage push notification registr
 
 ## class PushChannelSubscriptions
 
-The `PushChannelSubscriptions` object is used to manage device push channel subscriptions.
+Enables device push channel subscriptions.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -839,7 +838,7 @@ The `PushChannelSubscriptions` object is used to manage device push channel subs
 
 ## enum DevicePlatform
 
-`DevicePlatform` describes the device receiving push notifications.
+Describes the device receiving push notifications.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -849,7 +848,7 @@ The `PushChannelSubscriptions` object is used to manage device push channel subs
 
 ## enum DeviceFormFactor
 
-`DeviceFormFactor` is the type of device receiving a push notification.
+Describes the type of device receiving a push notification.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -864,7 +863,7 @@ The `PushChannelSubscriptions` object is used to manage device push channel subs
 
 ## class PushChannelSubscription
 
-The `PushChannelSubscription` object contains the subscriptions a device, or a group of devices sharing the same `clientId`, has to a channel to receive push notifications.
+Contains the subscriptions of a device, or a group of devices sharing the same `clientId`, has to a channel in order to receive push notifications.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -882,7 +881,7 @@ The `PushChannelSubscription` object contains the subscriptions a device, or a g
 
 ## class ErrorInfo
 
-The `ErrorInfo` object is a generic Ably error object that contains an Ably-specific status code, and a generic status code. Errors returned from the Ably server are compatible with the `ErrorInfo` structure and should result in errors that inherit from `ErrorInfo`.
+A generic Ably error object that contains an Ably-specific status code, and a generic status code. Errors returned from the Ably server are compatible with the `ErrorInfo` structure and should result in errors that inherit from `ErrorInfo`.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -895,7 +894,7 @@ The `ErrorInfo` object is a generic Ably error object that contains an Ably-spec
 
 ## class `EventEmitter<Event, Data>`
 
-The `EventEmitter` object is a generic interface for event registration and delivery used in a number of the types in the Realtime client library. For example, the [`Connection`]{@link} object emits events for connection state using the EventEmitter pattern.
+A generic interface for event registration and delivery used in a number of the types in the Realtime client library. For example, the [`Connection`]{@link} object emits events for connection state using the EventEmitter pattern.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -921,7 +920,7 @@ The `EventEmitter` object is a generic interface for event registration and deli
 
 ## class `PaginatedResult<T>`
 
-The `PaginatedResult<T>` object represents a page of results for all message and presence history, stats, and REST presence requests. The response from a REST API paginated query is accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
+Contains a page of results for message or presence history, stats, or REST presence requests. A `PaginatedResult` response from a REST API paginated query is also accompanied by metadata that indicates the relative queries available to the `PaginatedResult` object.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -937,7 +936,7 @@ The `PaginatedResult<T>` object represents a page of results for all message and
 
 ## class HttpPaginatedResponse
 
-The `HttpPaginatedResponse` object is a superset of `PaginatedResult`, which represents a page of results plus metadata indicating the relative queries available to it. `HttpPaginatedResponse` additionally carries information about the response to an HTTP request. It is used when making [custom HTTP requests](https://ably.com/docs/api/rest-sdk#request).
+A superset of [`PaginatedResult`]{@link PaginatedResult} which represents a page of results plus metadata indicating the relative queries available to it. `HttpPaginatedResponse` additionally carries information about the response to an HTTP request.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -951,7 +950,7 @@ The `HttpPaginatedResponse` object is a superset of `PaginatedResult`, which rep
 
 ## enum PluginType
 
-`PluginType` describes the type of plugin used.
+Describes the type of plugin used.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -959,7 +958,7 @@ The `HttpPaginatedResponse` object is a superset of `PaginatedResult`, which rep
 
 ## class VCDiffDecoder
 
-The `VCDiffDecode` object is capable of decoding `vcdiff` encoded messages. See [delta compression](https://ably.com/docs/realtime/channels/channel-parameters/deltas) for more information.
+Enables `vcdiff` encoded messages to be decoded.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -970,7 +969,7 @@ The `VCDiffDecode` object is capable of decoding `vcdiff` encoded messages. See 
 
 ## class DeltaExtras
 
-The `DeltaExtras` object is JSON-encodable and used to contain any arbitrary key-value pairs, which may also contain other primitive JSON types, JSON-encodable objects, or JSON-encodable arrays. 
+Contains any arbitrary key-value pairs, which may also contain other primitive JSON types, JSON-encodable objects, or JSON-encodable arrays from delta compression.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
