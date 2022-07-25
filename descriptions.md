@@ -219,7 +219,7 @@ Enables messages to be published and retrieved from history for a channel.
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | name: String? |||| The channel name. |
-| presence: RestPresence ||| RSL3 | The [`RestPresence`]{@link RestPresence} object associated with the channel. Enables the retrieval of presence members on the channel. |
+| presence: RestPresence ||| RSL3 | The [`RestPresence`]{@link RestPresence} object associated with the channel. Enables the present set to be retrieved from history. |
 | history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`Message`]{@link Message} objects for the channel. If the channel is configured to persist messages to disk, then message history will typically be available for 24–72 hours. If not, messages are only retained in memory by the Ably service for two minutes. |
 || `start` || RSL2b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
 || `end` || RSL2b1 | The time until messages are retrieved, specified as a Unix timestamp. |
@@ -228,17 +228,17 @@ Enables messages to be published and retrieved from history for a channel.
 ||| `PaginatedResult<Message>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Message`]{@link Message} objects. |
 | status() => ChannelDetails ||| RSL8 | Retrieves metadata for the channel, such as status and occupancy metrics. Returns a [`ChannelDetails`]{@link ChannelDetails} object. |
 ||| `ChannelDetails` || A [`ChannelDetails`]{@link ChannelDetails} object. |
-| publish(Message, params?: `Dict<String, Stringifiable>`) => io ||| RSL1 | Sends a message to the channel. |
+| publish(Message, params?: `Dict<String, Stringifiable>`) => io ||| RSL1 | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
 || `Message` ||| A [`Message`]{@link Message} object. |
 || `params` ||| Optional parameters, such as [`quickAck`](https://faqs.ably.com/why-are-some-rest-publishes-on-a-channel-slow-and-then-typically-faster-on-subsequent-publishes) sent as part of the query string. |
-| publish([Message], params?: `Dict<String, Stringifiable>` ||| RSL1 | Sends an array of messages to the channel. |
+| publish([Message], params?: `Dict<String, Stringifiable>` ||| RSL1 | Sends an array of messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
 || [`Message`] ||| An array of [`Message`]{@link Message} objects. |
 || `params` ||| Optional parameters, such as [`quickAck`](https://faqs.ably.com/why-are-some-rest-publishes-on-a-channel-slow-and-then-typically-faster-on-subsequent-publishes) sent as part of the query string. |
-| publish(name: String?, data: Data?) => io ||| RSL1 | Sends a message to the channel. |
+| publish(name: String?, data: Data?) => io ||| RSL1 | Sends a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
 || `name` ||| The name of the message. |
 || `data` ||| The payload of the message. |
-| setOptions(options: ChannelOptions) => io ||| RSL7 | Sets the [`ChannelOptions`]{@link ChannelOptions} for the channel, such as encryption-related parameters. |
-|| `options` ||| The [`ChannelOptions`]{@link ChannelOptions} to set for the channel. |
+| setOptions(options: ChannelOptions) => io ||| RSL7 | Sets the [`ChannelOptions`]{@link ChannelOptions} for the channel. |
+|| `options` ||| A [`ChannelOptions`]{@link ChannelOptions} object. |
 | push: PushChannel ||| RSH4 | The [`PushChannel`]{@link PushChannel} object associated with the channel. This enables devices to subscribe to push notifications for the channel. |
 
 ## class RealtimeChannel
@@ -248,11 +248,12 @@ Enables messages to be subscribed to, published and retrieved from history for a
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` ||| RTL2a, RTL2d, RTL2e | `RealtimeChannel` implements [`EventEmitter`]{@link EventEmitter} and emits [`ChannelEvent`]{@link ChannelEvent} events, where a `ChannelEvent` is either a [`ChannelState`]{@link ChannelState} or an [`UPDATE`]{@link ChannelEvent#UPDATE}. |
+| name: String? |||| The channel name. |
 | errorReason: ErrorInfo? ||| RTL4e | An error as an [`ErrorInfo`]{@link ErrorInfo} object when a channel failure occurs. |
 | state: ChannelState ||| RTL2b | The current [`ChannelState`]{@link ChannelState} of the channel. |
-| presence: RealtimePresence ||| RTL9 | Provides access to the [`RealtimePresence`]{@link RealtimePresence} object for this channel which can be used to access members present on the channel, or participate in presence. |
+| presence: RealtimePresence ||| RTL9 | The [`RealtimePresence`]{@link RealtimePresence} object associated with the channel. Enables the presence set to be entered, subscribed to and retrieved from history. |
 | properties: ChannelProperties ||| CP1, RTL15 | A [`ChannelProperties`]{@link ChannelProperties} object representing properties of the channel state. |
-| push: PushChannel |||| Provides access to the [`PushChannel`]{@link PushChannel} object for this channel. |
+| push: PushChannel |||| The [`PushChannel`]{@link PushChannel} object associated with the channel. This enables devices to subscribe to push notifications for the channel. |
 | modes: readonly [ChannelMode] ||| RTL4m | An array of [`ChannelMode`]{@link ChannelMode} objects. |
 | params: readonly `Dict<String, String>` ||| RTL4k1 | Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
 | attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link RealtimeChannel#subscribe}. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, `attach()` is called implicitly if [`subscribe()`]{@link RealtimeChannel#subscribe} for the channel is called, or [`enter()`]{@link RealtimePresence#enter} or [`subscribe()`]{@link RealtimePresence#subscribe} are called on the [`RealtimePresence`]{@link RealtimePresence} object for this channel. |
@@ -266,7 +267,7 @@ Enables messages to be subscribed to, published and retrieved from history for a
 ||| `PaginatedResult<Message>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Message`]{@link Message} objects. |
 | publish(Message) => io ||| RTL6i | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
 || `Message` ||| A [`Message`]{@link Message} object. |
-| publish([Message]) => io ||| RTL6i | Sends several messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+| publish([Message]) => io ||| RTL6i | Sends an array of messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
 || [`Message`] ||| An array of [`Message`]{@link Message} objects. |
 | publish(name: String?, data: Data?) => io ||| RTL6i | Sends a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel, so long as [transient publishing](https://ably.com/docs/realtime/channels#transient-publish) is available in the library. Otherwise, the client will implicitly attach. |
 || `name` ||| The event name. |
