@@ -15,7 +15,7 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 | auth: Auth ||| RSC5 | An [`Auth`]{@link Auth} object. |
 | push: Push ||| RSH7 | A [`Push`]{@link Push} object. |
 | batch: BatchOperations ||| BO1 | A [`BatchOperations`]{@link BatchOperations} object. |
-| device() => LocalDevice ||  | RSH8 | Retrieves a local device object. |
+| device() => LocalDevice ||  | RSH8 | Retrieves a [`LocalDevice`]{@link LocalDevice} object. |
 ||| `LocalDevice` || A [`LocalDevice`]{@link LocalDevice} object that represents the current state of the device as a target for push notifications. |
 | channels: `Channels<RestChannel>` ||| RSN1 | A [`Channels`]{@link Channels} collection object. |
 | request(String method, String path, `Dict<String, String>` params?, JsonObject \| JsonArray body?, `Dict<String, String>` headers?) => io HttpPaginatedResponse ||  | RSC19 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
@@ -49,7 +49,7 @@ A client that extends the functionality of the [REST]{@link Rest} client and pro
 || `ClientOptions` ||| A [`ClientOptions`]{@link ClientOptions} object to configure the client connection to Ably. |
 | auth: Auth ||| RTC4 | An [`Auth`]{@link Auth} object. |
 | push: Push ||| | A [`Push`]{@link Push} object. |
-| device() => LocalDevice ||  | RSH8 | Retrieves a local device object. |
+| device() => LocalDevice ||  | RSH8 | Retrieves a [`LocalDevice`]{@link LocalDevice} object. |
 ||| `LocalDevice` || A [`LocalDevice`]{@link LocalDevice} object that represents the current state of the device as a target for push notifications. |
 | channels: `Channels<RealtimeChannel>` ||| RTC3, RTS1 | A [`Channels`]{@link Channels} collection object. |
 | clientId: String? ||| proxy for RSA7 | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string. This option is primarily intended to be used in situations where the library is instantiated with a key. A `clientId` may also be implicit in a token used to instantiate the library; an error will be raised if a `clientId` specified here conflicts with the `clientId` implicit in the token. |
