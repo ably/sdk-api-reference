@@ -21,7 +21,7 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 | request(String method, String path, `Dict<String, String>` params?, JsonObject \| JsonArray body?, `Dict<String, String>` headers?) => io HttpPaginatedResponse ||  | RSC19 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || `method` ||| The request method to use, such as `GET`, `POST`. |
 || `path` ||| The request path. |
-|| `params` ||| The parameters of the request. |
+|| `params` ||| The parameters of the request. The parameters depend on the endpoint being queried. See the [REST API reference](https://ably.com/docs/api/rest-api) for the available parameters of each endpoint. |
 || `body` ||| The JSON body of the request. |
 || `headers` ||| The headers of the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HttpPaginatedResponse} object returned by the HTTP request, containing an empty or JSON-encodable object. |
@@ -57,7 +57,7 @@ A client that extends the functionality of the [REST]{@link Rest} client and pro
 | request(String method, String path, `Dict<String, String>` params?, JsonObject \| JsonArray body?, `Dict<String, String>` headers?) => io HttpPaginatedResponse ||| RTC9 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || `method` ||| The request method to use, such as `GET`, `POST`. |
 || `path` ||| The request path. |
-|| `params` ||| The parameters of the request. |
+|| `params` ||| The parameters of the request. The parameters depend on the endpoint being queried. See the [REST API reference](https://ably.com/docs/api/rest-api) for the available parameters of each endpoint. |
 || `body` ||| The JSON body of the request. |
 || `headers` ||| The headers of the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HttpPaginatedResponse} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
