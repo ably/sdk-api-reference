@@ -131,7 +131,7 @@ Passes authentication-specific properties in authentication requests to Ably. Pr
 
 ## class TokenParams
 
-Contains the properties of an Ably Token.
+Defines the properties of an Ably Token.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -177,7 +177,7 @@ Contains an Ably Token and its associated metadata.
 
 ## class TokenRequest
 
-Contains the properties used to generate an Ably `TokenRequest`. Tokens are generated using [`requestToken`]{@link Auth#requestToken}.
+Contains the properties of a request for a token to Ably. Tokens are generated using [`requestToken`]{@link Auth#requestToken}.
 
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -214,7 +214,7 @@ Creates and destroys [`RestChannel`]{@link RestChannel} and [`RealtimeChannel`]{
 
 ## class RestChannel
 
-Enables messages to be published and retrieved from history for a channel.
+Enables messages to be published and historic messages to be retrieved for a channel.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -243,7 +243,7 @@ Enables messages to be published and retrieved from history for a channel.
 
 ## class RealtimeChannel
 
-Enables messages to be subscribed to, published and retrieved from history for a channel. Also provides access to the [`RealtimePresence`]{@link RealtimePresence} object of a channel.
+Enables messages to be published and subscribed to. Also enables historic messages to be retrieved and provides access to the [`RealtimePresence`]{@link RealtimePresence} object of a channel.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -321,7 +321,7 @@ Contains the results of a [`BatchOperations`]{@link BatchOperations} request.
 
 ## class BatchPublishResponse
 
-Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`publish()]{@link BatchOperations#publish} request. 
+Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`publish()`]{@link BatchOperations#publish} request. 
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -331,7 +331,7 @@ Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`publi
 
 ## class BatchPresenceResponse
 
-Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`getPresence()]{@link BatchOperations#getPresence} request. 
+Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`getPresence()`]{@link BatchOperations#getPresence} request. 
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -363,7 +363,7 @@ Enables devices to subscribe to push notifications for a channel.
 
 ## class BatchSpec
 
-Sets the channel names and message contents to [`publish()]{@link BatchOperations#publish} to in [`BatchOperations`]{@link BatchOperations}. 
+Sets the channel names and message contents to [`publish()`]{@link BatchOperations#publish} to in [`BatchOperations`]{@link BatchOperations}. 
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -512,7 +512,7 @@ Enables the retrieval of the current and historic presence set for a channel.
 
 ## class RealtimePresence
 
-Enables the presence set to be entered, subscribed to and retrieved from history for a channel.
+Enables the presence set to be entered and subscribed to, and the historic presence set to be retrieved for a channel.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -561,7 +561,7 @@ Enables the presence set to be entered, subscribed to and retrieved from history
 
 ## enum PresenceAction
 
-Describes the possible actions presence members can emit.
+Describes the possible actions members in the presence set can emit.
 
 | Enum | Spec | Description |
 |---|---|---|
@@ -778,7 +778,7 @@ Enables a device to be registered and deregistered from receiving push notificat
 
 ## class PushAdmin
 
-Enables the management of device registrations and push notification subscriptions Also enables the publishing of push notifications to devices.
+Enables the management of device registrations and push notification subscriptions. Also enables the publishing of push notifications to devices.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -790,7 +790,7 @@ Enables the management of device registrations and push notification subscriptio
 
 ## class JsonObject
 
-Describes any type or interface in the target language that represents an RFC4627 object or array value respectively. Such types serialize to, and may be deserialized from, the corresponding JSON text. `JsonObject` is platform-dependent, typically a Dict-like object.
+Describes any type or interface in the target language that represents an RFC4627 object or array value respectively. Such types serialize to, and may be deserialized from, the corresponding JSON text. `JsonObject` is platform-dependent, typically a dictionary-like object.
 
 ## class PushDeviceRegistrations
 
@@ -895,7 +895,7 @@ A generic Ably error object that contains an Ably-specific status code, and a ge
 
 ## class `EventEmitter<Event, Data>`
 
-A generic interface for event registration and delivery used in a number of the types in the Realtime client library. For example, the [`Connection`]{@link} object emits events for connection state using the EventEmitter pattern.
+A generic interface for event registration and delivery used in a number of the types in the Realtime client library. For example, the [`Connection`]{@link} object emits events for connection state using the `EventEmitter` pattern.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
