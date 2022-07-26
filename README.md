@@ -11,3 +11,4 @@ When creating and updating descriptions, use the following guidelines:
 * Method signature should always be left intact.
 * Class descriptions should start "The XXX object…"
 * Parameter and return values should be in backticks.
+* The expression key-value pairs should be hyphenated as used on [Wikipedia](https://en.wikipedia.org/wiki/Name%E2%80%93value_pair).
