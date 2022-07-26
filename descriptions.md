@@ -24,7 +24,7 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 || `params` ||| The parameters of the request. |
 || `body` ||| The JSON body of the request. |
 || `headers` ||| The headers of the request. |
-||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HTTPPaginatedResponse} object returned by the HTTP request, containing an empty or JSON-encodable object. |
+||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HttpPaginatedResponse} object returned by the HTTP request, containing an empty or JSON-encodable object. |
 | stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the REST `/stats` API and retrieves your application's usage statistics. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`Stats`]{@link Stats} objects. See the [Stats docs](https://ably.com/docs/general/statistics). |
 || `start` || RSC6b1 | The time from which stats are retrieved, specified as a Unix timestamp. |
 || `end` || RSC6b1 | The time until stats are retrieved, specified as a Unix timestamp. |
@@ -60,7 +60,7 @@ A client that extends the functionality of the [REST]{@link Rest} client and pro
 || `params` ||| The parameters of the request. |
 || `body` ||| The JSON body of the request. |
 || `headers` ||| The headers of the request. |
-||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HTTPPaginatedResponse} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
+||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HttpPaginatedResponse} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
 | stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| Same as RestClient.stats, RTC5 | Queries the REST `/stats` API and retrieves your application's usage statistics. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`Stats`]{@link Stats} objects. See the [Stats docs](https://ably.com/docs/general/statistics). |
 || `start` ||| The time from which stats are retrieved, specified as a Unix timestamp. |
 || `end` ||| The time until stats are retrieved, specified as a Unix timestamp. |
@@ -367,8 +367,8 @@ Sets the channel names and message contents to [`publish()]{@link BatchOperation
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| channels: [String] || An array of channel names to publish messages to. |
-| messages: [Message] || An array of [`Message`]{@link Message} objects to publish. |
+| channels: [String] |||| An array of channel names to publish messages to. |
+| messages: [Message] |||| An array of [`Message`]{@link Message} objects to publish. |
 
 ## enum ChannelState
 
@@ -535,7 +535,7 @@ Enables the presence set to be entered, subscribed to and retrieved from history
 || `(PresenceMessage)` ||| An event listener function. |
 | unsubscribe() ||| RTP7a, RTE5 | Deregisters all listeners currently receiving [`PresenceMessage`]{@link PresenceMessage} for the channel. |
 | unsubscribe((PresenceMessage) ->) ||| RTP7a | Deregisters a specific listener that is registered to receive [`PresenceMessage`]{@link PresenceMessage} on the channel. |
-| unsubscribe(PresenceAction, (PresenceMessage) ->) ||| RTP7b | Deregisters a specific listener that is registered to receive [`PresenceMessage`]{@link PreesenceMessage} on the channel for a given [`PresenceAction`]{@link PresenceAction}. |
+| unsubscribe(PresenceAction, (PresenceMessage) ->) ||| RTP7b | Deregisters a specific listener that is registered to receive [`PresenceMessage`]{@link PresenceMessage} on the channel for a given [`PresenceAction`]{@link PresenceAction}. |
 || `PresenceAction` || | A specific [`PresenceAction`]{@link PresenceAction} to deregister the listener for. |
 | enter(Data?, extras?: JsonObject) => io ||| RTP8 | Enters the presence set for the channel, optionally passing a `data` payload. A `clientId` is required to be present on a channel. An optional callback may be provided to notify of the success or failure of the operation. |
 || `Data` || | The payload associated with the presence member. |
@@ -573,7 +573,7 @@ Describes the possible actions presence members can emit.
 
 ## class ConnectionDetails
 
-Contains any constraints a client should adhere to and provides additional metadata about a [`Connection]{@link Connection}, such as if a request to [`publish()`]{@link Realtime#publish} a message that exceeds the maximum message size should be rejected immediately without communicating with Ably.
+Contains any constraints a client should adhere to and provides additional metadata about a [`Connection`]{@link Connection}, such as if a request to [`publish()`]{@link Realtime#publish} a message that exceeds the maximum message size should be rejected immediately without communicating with Ably.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
