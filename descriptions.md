@@ -868,14 +868,14 @@ Contains the subscriptions of a device, or a group of devices sharing the same `
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| +forDevice(channel: String, deviceId: String) => PushChannelSubscription |||| |
-|| `channel` ||| |
-|| `deviceId` ||| |
-||| `PushChannelSubscription` || |
-| +forClientId(channel: String, clientId: String) => PushChannelSubscription |||| |
-|| `channel` ||| |
-|| `deviceId` ||| |
-||| `PushChannelSubscription` || |
+| +forDevice(channel: String, deviceId: String) => PushChannelSubscription |||| A static factory method to create a `PushChannelSubscription` object for a channel and single device. |
+|| `channel` ||| The channel name. |
+|| `deviceId` ||| The unique ID of the device. |
+||| `PushChannelSubscription` || A `PushChannelSubscription` object. |
+| +forClientId(channel: String, clientId: String) => PushChannelSubscription |||| A static factory method to create a `PushChannelSubscription` object for a channel and group of devices sharing the same `clientId`. |
+|| `channel` ||| The channel name. |
+|| `clientId` ||| The ID of the client. |
+||| `PushChannelSubscription` || A `PushChannelSubscription` object. |
 | deviceId: String? ||| PCS2, PCS5, PCS6 | The unique ID of the device. |
 | clientId: String? ||| PCS3, PCS6 | The ID of the client the device, or devices are associated to. |
 | channel: String ||| PCS4 | The channel the push notification subscription is for. |
