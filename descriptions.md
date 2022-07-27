@@ -11,6 +11,9 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 | constructor(tokenStr: String) ||| RSC1 | Constructs a REST client object using an Ably token string. |
 || `tokenStr` ||| The Ably API token string used to validate the client. |
 | constructor(ClientOptions) ||| RSC1 | Constructs a REST client object using an Ably [`ClientOptions`]{@link ClientOptions} object. |
+| constructor(keyOrTokenStr: String) ||| RSC1 | Constructs a REST client object using an Ably API key or token string. |
+|| `keyOrTokenStr` ||| The Ably API key or token string used to validate the client. |
+| constructor(ClientOptions) ||| RSC1 | Construct a REST client object using an Ably [`ClientOptions`]{@link} object. |
 || `ClientOptions` ||| A [`ClientOptions`]{@link ClientOptions} object to configure the client connection to Ably. |
 | auth: Auth ||| RSC5 | An [`Auth`]{@link Auth} object. |
 | push: Push ||| RSH7 | A [`Push`]{@link Push} object. |
@@ -45,6 +48,9 @@ A client that extends the functionality of the [REST]{@link Rest} client and pro
 || `keyStr` ||| The Ably API key string used to validate the client. |
 | constructor(tokenStr: String) ||| RSC1 | Constructs a realtime client object using an Ably token string. |
 || `tokenStr` ||| The Ably API token string used to validate the client. |
+| constructor(keyOrTokenStr: String) ||| RSC1 | Constructs a realtime client object using an Ably API key or token string. |
+|| `keyOrTokenStr` ||| The Ably API key or token string used to validate the client. |
+| constructor(ClientOptions) ||| RSC1 | Constructs a realtime client object using an Ably [`ClientOptions`]{@link} object. |
 | constructor(ClientOptions) ||| RSC1 | Constructs a realtime client object using an Ably [`ClientOptions`]{@link ClientOptions} object. |
 || `ClientOptions` ||| A [`ClientOptions`]{@link ClientOptions} object to configure the client connection to Ably. |
 | auth: Auth ||| RTC4 | An [`Auth`]{@link Auth} object. |
@@ -87,12 +93,13 @@ Passes additional client-specific properties to the REST [`constructor()`]{@link
 | environment: String? ||| RSC15b, TO3k1 | Enables a [custom environment](https://ably.com/docs/platform-customization), region or cluster to be used with the Ably service. Note that once a custom environment is specified, the [fallback host functionality](https://faqs.ably.com/routing-around-network-and-dns-issues) is disabled by default. |
 | logHandler: ||| platform specific - TO3c | Controls the log output of the library. This is a function to handle each line of log output. If handler is not specified, `console.log()` is used. |
 | logLevel: ||| platform specific - TO3b | Controls the log output of the library. This is a number controlling the verbosity of the output. Valid values are: 0 (no logs), 1 (errors only), 2 (errors plus connection and channel state changes), 3 (abbreviated debug output), and 4 (full debug output). |
-| logExceptionReportingUrl: String default "[library specific]" ||| TO3c (deprecated) | Defaults to a string value for an Ably error reporting DSN (Data Source Name), which is typically a URL in the format `https://[KEY]:[SECRET]@errors.ably.io/[ID]`. When set to `null`, `false` or an empty string (depending on what is idiomatic for the platform), exception reporting is disabled. |
+| logExceptionReportingUrl: String default "[library specific]" ||| TO3m (deprecated) | Defaults to a string value for an Ably error reporting DSN (Data Source Name), which is typically a URL in the format `https://[KEY]:[SECRET]@errors.ably.io/[ID]`. When set to `null`, `false` or an empty string (depending on what is idiomatic for the platform), exception reporting is disabled. |
 | port: Int default 80 ||| TO3k4 | Enables a non-default Ably port to be specified. For development environments only. |
 | queueMessages: Bool default true ||| RTP16b, TO3g | If `false`, this disables the default behavior whereby the library queues messages on a connection in the disconnected or connecting states. The default behavior enables applications to submit messages immediately upon instantiating the library without having to wait for the connection to be established. Applications may use this option to disable queueing if they wish to have application-level control over the queueing. |
 | restHost: String default "rest.ably.io" ||| RSC12, TO3k2 | Enables a non-default Ably host to be specified. For development environments only. |
 | realtimeHost: String default "realtime.ably.io" ||| RTC1d, TO3k3 | Enables a non-default Ably host to be specified for realtime connections. For development environments only. |
 | fallbackHosts: String[] default nil ||| RSC15b, RSC15a, TO3k6 | An array of fallback hosts to be used in the case of an error necessitating the use of an alternative host. When a custom environment is specified, the [fallback host functionality](https://faqs.ably.com/routing-around-network-and-dns-issues) is disabled. If your customer success manager has provided you with a set of custom fallback hosts, please specify them here.|
+| fallbackHostsUseDefault: Bool default false || TO3k7 (deprecated) | An array allowing default fallback hoss to be used. The `fallbackHostsUseDefault` option is deprecated and future library releases will ignore any supplied value. |
 | recover: String? ||| RTC1c, TO3i | Enables a connection to inherit the state of a previous connection that may have existed under a different instance of the Realtime library. This might typically be used by clients of the browser library to ensure connection state can be preserved when the user refreshes the page. A recovery key string can be explicitly provided, or alternatively if a callback function is provided, the client library will automatically persist the recovery key between page reloads and call the callback when the connection is recoverable. The callback is then responsible for confirming whether the connection should be recovered or not. See [connection state recovery](https://ably.com/docs/realtime/connection/#connection-state-recovery) for further information. |
 | tls: Bool default true ||| RSC18, TO3d | Use a non-secure connection. By default, a TLS connection is used to connect to Ably. |
 | tlsPort: Int default 443 ||| TO3k5 | Enables a non-default Ably TLS port to be specified. For development environments only. |
@@ -104,10 +111,12 @@ Passes additional client-specific properties to the REST [`constructor()`]{@link
 | channelRetryTimeout: Duration default 15s ||| RTL13b, TO3l7 | When a channel becomes [`SUSPENDED`]{@link ConnectionState#suspended} following a server initiated [`DETACHED`]{@link ConnectionState#detached}, after this delay, if the channel is still [`SUSPENDED`]{@link ConnectionState#suspended} and the connection is [`CONNECTED`]{@link ConnectionState#connected}, the client library will attempt to re-attach the channel automatically. |
 | httpOpenTimeout: Duration default 4s ||| TO3l3 | Timeout for opening the connection, available in the client library if supported by the transport. |
 | httpRequestTimeout: Duration default 10s ||| TO3l4 | Timeout for any single HTTP request and response. |
+| realtimeRequestTimeout: Duration default 10s || TO3l11 | Time before client library considers request a failure. |
 | httpMaxRetryCount: Int default 3 ||| TO3l5 | The maximum number of fallback hosts to use as a fallback when an HTTP request to the primary host is unreachable or indicates that it is unserviceable. |
 | httpMaxRetryDuration: Duration default 15s ||| TO3l6 | The maximum elapsed time in which fallback host retries for HTTP requests will be attempted. |
 | maxMessageSize: Int default 65536 ||| TO3l8 | The maximum size of messages that can be published in one go. For realtime publishes, the default can be overridden by the `maxMessageSize` in the [`ConnectionDetails`]{@link ConnectionDetails} object. |
 | maxFrameSize: Int default 524288 ||| TO3l8 | The maximum size of a single POST body or WebSocket frame. This is mostly only relevant for a REST client request (for batch publishes), since publishes will hit the `maxMessageSize` limit before this. |
+| fallbackRetryTimeout: Duration default 600s || TO3l10 | The maximum period in milliseconds before HTTP requests are retried against the default endpoint.|
 | plugins: `Dict<PluginType, Plugin>` ||| TO3o | A map between a [`PluginType`]{@link PluginType} and a `Plugin` object. The client library may cast a `Plugin` object to particular plugin subclass for a specific plugin type. |
 | idempotentRestPublishing: bool default true ||| RSL1k1, RTL6a1, TO3n | When `true`, enables idempotent publishing by assigning a unique message ID client-side, allowing the Ably servers to discard automatic publish retries following a failure such as a network fault. |
 | agents: [String: String?]? ||| RSC7d6 - interface only offered by some libraries | For use only by other Ably-authored SDKs, on a need-to-have basis. |
@@ -169,11 +178,11 @@ Contains an Ably Token and its associated metadata.
 |---|---|---|---|---|
 | +fromJson(String \| JsonObject) -> TokenDetails ||| TD7 | A static factory method to create a `TokenDetails` object from a deserialized TokenDetails-like object or a JSON stringified `TokenDetails` object. This method is provided to minimize bugs as a result of differing types by platform for fields such as `timestamp` or `ttl`. For example, in Ruby `ttl` in the `TokenDetails` object is exposed in seconds as that is idiomatic for the language, yet when serialized to JSON using `to_json` it is automatically converted to the Ably standard which is milliseconds. By using the `fromJson` method when constructing a `TokenDetails` object, Ably ensures that all fields are consistently serialized and deserialized across platforms. |
 ||| `TokenDetails` || An Ably authentication token. |
-| capability: String ||| TD5 | The permissions associated with this Ably Token. The capability is a JSON stringified canonicalized representation of the resource paths and associated operations. Read more about capabilities in the [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained). |
+| capability: String? ||| TD5 | The permissions associated with this Ably Token. The capability is a JSON stringified canonicalized representation of the resource paths and associated operations. Read more about capabilities in the [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained). |
 | clientId: String? ||| TD6 | The client ID, if any, bound to this Ably Token. If a client ID is included, then the Ably Token authenticates its bearer as that client ID, and the Ably Token may only be used to perform operations on behalf of that client ID. The client is then considered to be an [identified client](https://ably.com/docs/core-features/authentication#identified-clients). |
 | expires: Time ||| TD3 | The Unix timestamp at which this token expires. |
-| issued: Time ||| TD4 | The Unix timestamp at which this token was issued. |
-| token: String ||| TD2 | The [Ably Token](https://ably.com/docs/core-features/authentication#ably-tokens) itself. A typical Ably Token string appears with the form `xVLyHw.A-pwh7wicf3afTfgiw4k2Ku33kcnSA7z6y8FjuYpe3QaNRTEo4`. |
+| issued: Time? ||| TD4 | The Unix timestamp at which this token was issued. |
+| token: String? ||| TD2 | The [Ably Token](https://ably.com/docs/core-features/authentication#ably-tokens) itself. A typical Ably Token string appears with the form `xVLyHw.A-pwh7wicf3afTfgiw4k2Ku33kcnSA7z6y8FjuYpe3QaNRTEo4`. |
 
 ## class TokenRequest
 
@@ -280,6 +289,9 @@ Enables messages to be published and subscribed to. Also enables historic messag
 | subscribe([String], (Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel for multiple event name values. A callback may optionally be passed in to this call to be notified of success or failure of the channel [`attach()`]{@link RealtimeChannel#attach} operation. |
 || [`String`] ||| An array of event names. |
 || `(Message)` ||| An event listener function. |
+| subscribe(MessageFilterObject, (Message) ->) ||| RTL22 | Registers all listeners to messages on this channel. This removes all earlier subscriptions. |
+|| `MessageFilterObject` ||| Handles the attaching of a listener based on a set criteria. |
+|| `(Message)` ||| An event listener function. |
 | unsubscribe(String, (Message) ->) ||| RTL8a | Deregisters the given listener for the specified event name. This removes an earlier event-specific subscription. |
 || `String` ||| The event name. |
 || `(Message)` ||| An event listener function. |
@@ -293,8 +305,30 @@ Enables messages to be published and subscribed to. Also enables historic messag
 | unsubscribe([String]) ||| RTL8a | Deregisters all listeners for all event names in the array. |
 || [`String`] ||| An array of event names. |
 | unsubscribe() ||| RTL8a, RTE5 | Deregisters all listeners to messages on this channel. This removes all earlier subscriptions. |
+| unsubscribe(MessageFilterObject, (Message) ->) ||| RTL22 | Deregisters all listeners to messages on this channel. This removes all earlier subscriptions. |
+|| `MessageFilterObject` ||| Handles the removing of a listener based on a set criteria. |
+|| `(Message)` ||| An event listener function. |
 | setOptions(options: ChannelOptions) => io ||| RTL16 | Sets the [`ChannelOptions`]{@link ChannelOptions} for the channel. |
 || `options` ||| A [`ChannelOptions`]{@link ChannelOptions} object. |
+
+## class MessageFilterObject
+
+The `MessageFilterObject` handles the attaching and removing of a listener which only executes when a message matches a set of criteria.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| hasRef: bool ||| RTL22b | Checks whether the message has a `extras.ref`.|
+| refId: string ||| RTL22a | Checks that the message matches one or more of: `extras.ref.timeserial`, `extras.ref.type` or `name`. |
+| refType: string ||| RTL22a | Checks if a message’s `extras.ref.type` matches the supplied value.|
+| name: string ||| RTL22a | Check if a message’s `name` matches the supplied value |
+
+## class ChannelProperties
+
+The `ChannelProperties` represents information for a channel and its properties.
+
+||| Spec | Description |
+|---|---|---|---|
+| attachSerial: String || CP2a | Contains the latest `channelSerial` received in an `ATTACHED` `ProtocolMessage`.|
 
 ## class BatchOperations
 
@@ -479,14 +513,25 @@ Sets the properties to configure encryption for a [`RestChannel`]{@link RestChan
 | keyLength: Int || TZ2b | The length of the key in bits; for example 128 or 256. |
 | mode: String default "CBC" || TZ2c | The cipher mode. Only `CBC` is supported. |
 
+## class CipherParamOptions 
+
+`CipherParamOptions` is used creating a @CipherParams@ instance, may be implemented as a hashmap or a class depending on language.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| algorithm?: String ||| CO2a | The algorithm used for encryption; currently the only supported non-null value is AES. |
+| key: Binary \| String ||| CO2b | The private key used to encrypt and decrypt payloads. |
+| keyLength?: Int ||| CO2c | The length in bits of the @key@; for example 128 or 256. |
+| mode?: String ||| CO2d | The cipher mode; currently only supports the non-null value @CBC@. |
+
 ## class Crypto
 
 Contains the properties required to configure the encryption of [`Message`]{@link Message} payloads.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| +getDefaultParams(Params) -> CipherParams ||| RSE1 | Returns a [`CipherParams`]{@link CipherParams} object, using the default values for any fields not supplied. |
-|| `Params` ||| Overrides the default parameters. A suitable `key` must be provided as a minimum. |
+| +getDefaultParams(CipherParamOptions) -> CipherParams ||| RSE1 | Returns a [`CipherParams`]{@link CipherParams} object, using the default values for any fields not supplied. |
+|| `CipherParamOptions` ||| Overrides the default parameters. A suitable `key` must be provided as a minimum. |
 ||| `CipherParams` || A [`CipherParams`]{@link CipherParams} object, using the default values for any field not supplied. |
 | +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key to be used in the encryption of the channel. |
 || `keyLength` ||| The length of the key, in bits, to be generated. If not specified, this is equal to the default `keyLength` of the default algorithm: for AES this is 256 bits. |
@@ -572,6 +617,8 @@ Describes the possible actions members in the presence set can emit.
 | UPDATE | TP2 | An already present member has updated their member data. Being notified of member data updates can be very useful, for example, it can be used to update the status of a user when they are typing a message. |
 
 ## class ConnectionDetails
+
+Internal only.
 
 Contains any constraints a client should adhere to and provides additional metadata about a [`Connection`]{@link Connection}, such as if a request to [`publish()`]{@link Realtime#publish} a message that exceeds the maximum message size should be rejected immediately without communicating with Ably.
 
@@ -703,34 +750,137 @@ Contains [`ConnectionState`]{@link} change information emitted by the [`Connecti
 
 ## class Stats
 
-||| Spec | Description |
-|---|---|---|---|
-| intervalId: String || TS12a | |
-| intervalTime: Time || TS12b (calculated clientside) | |
-| unit: Stats.IntervalGranularity || TS12c | |
-| intervalGranularity: Stats.IntervalGranularity? || TS12d (deprecated) | |
-| all: Stats.MessageTypes || TS12e | |
-| inbound: Stats.MessageTraffic || TS12f | |
-| outbound: Stats.MessageTraffic || TS12g | |
-| persisted: Stats.MessageTypes || TS12h | |
-| connections: Stats.ConnectionTypes || TS12i | |
-| channels: Stats.ResourceCount || TS12j | |
-| apiRequests: Stats.RequestCount || TS12k | |
-| tokenRequests: Stats.RequestCount || TS12l | |
-| push: Stats.PushStats || TS12m | |
-| xchgProducer: Stats.XchgMessages || TS12n | |
-| xchgConsumer: Stats.XchgMessages || TS12o | |
+`Stats` is a type encapsulating a statistics datapoint retrieved from the REST stats endpoint. All values default to zero where no underlying JSON value exists. To reduce bandwidth and optimise JSON parsing we send sparse JSON to stats requests omitting fields where the value is zero. However the API exposed to developers ensures that all properties of the Stats object such as `stats.all.messages.count` will always return an `Integer` value.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| intervalId: String ||| TS12a | Returns the `intervalId`.|
+| intervalTime: Time ||| TS12b (calculated client-side) | Returns the `intervalTime` object pharsed from the `intervalId`.|
+| unit: Stats.IntervalGranularity ||| TS12c | Returns a value of the enumerable type `StatsIntervalGranularity` from the unit property of the JSON whose permitted values are minute, hour, day, and month.|
+| intervalGranularity: Stats.IntervalGranularity? ||| TS12d (deprecated) | An alias for unit, only for 1.x versions of client libraries that had such a property in a previous 1.x version, to avoid breaking compatibility. Must be from the unit property of the JSON.|
+| all: Stats.MessageTypes ||| TS12e | A MessageTypes object.|
+| inbound: Stats.MessageTraffic ||| TS12f | A MessageTraffic object.|
+| outbound: Stats.MessageTraffic ||| TS12g | A MessageTraffic object.|
+| persisted: Stats.MessageTypes ||| TS12h | A MessageTypes object.|
+| connections: Stats.ConnectionTypes ||| TS12i | A ConnectionTypes object.|
+| channels: Stats.ResourceCount ||| TS12j | A ResourceCount object.|
+| apiRequests: Stats.RequestCount ||| TS12k | A RequestCount object.|
+| tokenRequests: Stats.RequestCount ||| TS12l | A RequestCount object.|
+| push: Stats.PushStats ||| TS12m | A PushStats object.|
+| xchgProducer: Stats.XchgMessages ||| TS12n | An XchgMessages object.|
+| xchgConsumer: Stats.XchgMessages ||| TS12o | An XchgMessages object.|
 
 ## enum StatsIntervalGranularity
 
-Describes the interval unit over which statistics are gathered.
+||| Spec | Description |
+|---|---|---|---|
+| MINUTE || |
+| HOUR || |
+| DAY || |
+| MONTH || |
 
-| Enum | Spec | Description |
-|---|---|---|
-| MINUTE || Interval unit over which statistics are gathered as minutes. |
-| HOUR || Interval unit over which statistics are gathered as hours. |
-| DAY || Interval unit over which statistics are gathered as days. |
-| MONTH || Interval unit over which statistics are gathered as months. |
+## class Stats.ConnectionTypes
+
+Contains a breakdown of summary stats data for different (TLS vs non-TLS) connection types.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| tls: Stats.ResourceCount ||| TS4a | The number of TLS connections.|
+| plain: Stats.ResourceCount ||| TS4b | The number of non-TLS connections.|
+| all: Stats.ResourceCount ||| TS4c | The number of all connections (both TLS & non-TLS).|
+
+## class Stats.MessageCount
+
+Contains the aggregate counts for messages and data transferred.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| count: Int ||| TS5a | The count of all messages.|
+| data: Int ||| TS5b | The total number of bytes transferred for all messages.|
+
+## class Stats.MessageTypes
+
+Contains a breakdown of summary stats data for different (channel vs presence) message types.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| messages: Stats.MessageCount ||| TS6a | The count of channel messages.|
+| presence: Stats.MessageCount ||| TS6b | The count of presence messages.|
+| all: Stats.MessageCount ||| TS6c | The count of all messages (channel & presence).|
+
+## class Stats.MessageTraffic
+
+Contains a breakdown of summary stats data for traffic over various transport types.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| realtime: Stats.MessageTypes ||| TS7a | The count of messages transferred over a realtime transport such as WebSocket.|
+| rest: Stats.MessageTypes ||| TS7b | The count of messages transferred over a rest transport such as WebSocket.|
+| webhook: Stats.MessageTypes ||| TS7c | The count of messages delivered using webhooks.|
+| all: Stats.MessageTypes ||| TS7d | The count of all messages (includes realtime, rest and webhook messages).|
+
+## class Stats.RequestCount
+
+Contains the aggregate counts for requests made. 
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| succeeded: Int||| TS8a | The number of requests that succeeded. |
+| failed: Int ||| TS8b | The number of requests that failed. |
+| refused: Int ||| TS8c | The number of requests that were refused, typically as a result of permissions or a limit being exceeded. |
+
+## class Stats.ResourceCount
+
+Contains the aggregate data for usage of a resource in a specific scope. 
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| opened: Int ||| TS9a | The total number of resources opened of this type. |
+| peak: Int ||| TS9b | The peak number of resources of this type used for this period. |
+| mean: Float ||| TS9c | The average number of resources of this type used for this period. |
+| min: Int ||| TS9d | The minimum total resources of this type used for this period. |
+| refused: Int ||| TS9e | The number of resource requests refused within this period. |
+
+## class Stats.PushStats
+
+Details the stats on push notifications. 
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| messages: Int||| TS10a | Total number of push channel messages. |
+| directPublishes: Int ||| TS10b | Total number of direct publishes. |
+| notifications: Stats.PushNotificationCount ||| TS10c | The count of push notifications. |
+
+## class Stats.PushNotificationCount
+
+Contains a count of push notifications published broken down by outcome. 
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| invalid: Int ||| TS13a | Total number of attempted push notifications which were rejected due to invalid request data. |
+| attempted: Int ||| TS13b | Total number of attempted push notifications including notifications which were rejected as invalid or failed to publish. |
+| successful: Int ||| TS13c | Total number of delivered push notifications. |
+| failed: Int ||| TS13d | Total number of refused push notifications. |
+
+## class Stats.XchgMessages
+
+Contains data about usage of Ably API Streamer as a producer or consumer. 
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| all: Stats.MessageTypes ||| TS11a | Data about all Ably API Streamer usage.|
+| producerPaid: Stats.MessageDirections ||| TS11b | Data about Ably API Streamer usage which was charged to the producer.|
+| consumerPaid: Stats.MessageDirections ||| TS11c | Data about Ably API Streamer usage which was charged to the consumer.|
+
+## class Stats.MessageDirections
+
+Contains data about published and received messages.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| all: MessageTypes ||| TS14a | Data about both received and published messages.|
+| inbound: MessageTraffic ||| TS14b | Data about just received messages.|
+| outbound: MessageTraffic ||| TS14c | Data about just published messages.|
 
 ## class DeviceDetails
 
@@ -915,7 +1065,7 @@ A generic interface for event registration and delivery used in a number of the 
 | off(Event, (Data...) ->) ||| RTE5 | Removes all registrations that match both the specified listener and the specified event. |
 || `Event` ||| The named event. |
 || `Data` ||| The event listener. |
-| emit(Event, Data...) ||| RTE6 | Emits an event, calling registered listeners with the given event name and any other given arguments. If an exception is raised in any of the listeners, the exception is caught by the `EventEmitter` and the exception is logged to the Ably logger. |
+| emit(Event, Data...) ||| internal, RTE6 | Emits an event, calling registered listeners with the given event name and any other given arguments. If an exception is raised in any of the listeners, the exception is caught by the `EventEmitter` and the exception is logged to the Ably logger. |
 || `Event` ||| The named event. |
 || `Data` ||| The event listener. |
 
@@ -976,3 +1126,8 @@ Contains any arbitrary key-value pairs, which may also contain other primitive J
 |---|---|---|---|---|
 | from: String |||| The ID of the message the delta was generated from. |
 | format: String |||| The delta compression format. Only `vcdiff` is supported. |
+
+## class InteractionExtras
+
+ | timeserial: String || | |
+ | type: String || | |
