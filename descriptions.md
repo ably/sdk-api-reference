@@ -358,8 +358,9 @@ Enables devices to subscribe to push notifications for a channel.
 | subscribeClient() => io ||| RSH7b | Subscribes all devices associated with the current device's `clientId` to push notifications for the channel. |
 | unsubscribeDevice() => io ||| RSH7c | Unsubscribes the device from receiving push notifications for the channel. |
 | unsubscribeClient() => io ||| RSH7d | Unsubscribes all devices associated with the current device's `clientId` from receiving push notifications for the channel. |
-| listSubscriptions() => io `PaginatedResult<PushChannelSubscription>` ||| RSH7e | |
-||| `PaginatedResult<PushChannelSubscription>` || |
+| listSubscriptions(params: `Dict<String, String>`) => io `PaginatedResult<PushChannelSubscription>` ||| RSH7e | Retrieves all push subscriptions for the channel. Subscriptions can be filtered using a `params` object. Returns a [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects. |
+|| `params` ||| An object containing key-value pairs to filter subscriptions by. Can contain `clientId`, `deviceId` or a combination of both if `concatFilters` is set to `true`, and a `limit` on the number of subscriptions returned, up to 1,000. |
+||| `PaginatedResult<PushChannelSubscription>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects.|
 
 ## class BatchSpec
 
