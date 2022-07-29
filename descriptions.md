@@ -1,6 +1,6 @@
 # Classes and types
 
-## class Rest
+## class RestClient
 
 A client that offers a simple stateless API to interact directly with Ably's REST API.
 
@@ -33,9 +33,9 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 | time() => io Time ||| RSC16 | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest} with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
 ||| `Time` || The time as a Unix timestamp. |
 
-## class Realtime
+## class RealtimeClient
 
-A client that extends the functionality of the [REST]{@link Rest} client and provides additional realtime-specific features.
+A client that extends the functionality of the [REST]{@link RestClient} client and provides additional realtime-specific features.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -72,7 +72,7 @@ A client that extends the functionality of the [REST]{@link Rest} client and pro
 
 ## class ClientOptions
 
-Passes additional client-specific properties to the REST [`constructor()`]{@link Rest#constructor} or the Realtime [`constructor()`]{@link Realtime#constructor}.
+Passes additional client-specific properties to the REST [`constructor()`]{@link RestClient#constructor} or the Realtime [`constructor()`]{@link RealtimeClient#constructor}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -160,6 +160,8 @@ Creates Ably [`TokenRequest`]{@link TokenRequest} objects and obtains Ably Token
 || `TokenParams` ||| A [`TokenParams`]{@link TokenParams} object. |
 || `AuthOptions` ||| An [`AuthOptions`]{@link AuthOptions} object. |
 ||| `TokenDetails` || A [`TokenDetails`]{@link TokenDetails} object. |
+|`TokenDetails`: TokenDetails?||| RSA16 | A [`TokenDetails`]{@link TokenDetails} object currently. |
+
 
 ## class TokenDetails
 
@@ -312,6 +314,7 @@ The `MessageFilterObject` handles the filter of properties for attaching and rem
 | refTimeserial: string ||| RTL22a | Filters messages by a specific `extras.ref.timeserial` value. |
 | refType: string ||| RTL22a | Filters messages by a specific `extras.ref.type` value. |
 | name: string ||| RTL22a | Filters messages by a specific message `name`. |
+| clientId: string ||| RTL22a | Filters messages by a specific message `clientId`. |
 
 ## class ChannelProperties
 
@@ -609,7 +612,7 @@ Describes the possible actions members in the presence set can emit.
 
 ## class ConnectionDetails
 
-Contains any constraints a client should adhere to and provides additional metadata about a [`Connection`]{@link Connection}, such as if a request to [`publish()`]{@link Realtime#publish} a message that exceeds the maximum message size should be rejected immediately without communicating with Ably.
+Contains any constraints a client should adhere to and provides additional metadata about a [`Connection`]{@link Connection}, such as if a request to [`publish()`]{@link RealtimeClient#publish} a message that exceeds the maximum message size should be rejected immediately without communicating with Ably.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -647,7 +650,7 @@ Contains an individual message that is sent to, or received from, Ably.
 | connectionId: String? ||| TM2c | The connection ID of the publisher of this message. |
 | data: Data? ||| TM2d | The message payload, if provided. |
 | encoding: String? ||| TM2e | This is typically empty, as all messages received from Ably are automatically decoded client-side using this value. However, if the message encoding cannot be processed, this attribute contains the remaining transformations not applied to the `data` payload. |
-| extras: JsonObject? ||| TM2i | A combination of metadata or ancillary payloads. The only valid payload for `extras` is the [`Push`]{@link Push} object. |
+| extras: JsonObject? ||| TM2i | A combination of metadata or ancillary payloads. The only valid payloads for `extras` are the [`Push`]{@link Push} and [`MessageFilterObject`]{@link MessageFilterObject} objects. |
 | id: String ||| TM2a | A Unique ID assigned by Ably to this message. |
 | name: String? ||| TM2g | The event name. |
 | timestamp: Time ||| TM2f | Timestamp of when the message was received by Ably, as a Unix timestamp. |
