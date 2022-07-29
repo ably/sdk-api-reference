@@ -6,9 +6,9 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| constructor(keyOrTokenStr: String) ||| RSC1 | Constructs a REST client object using an Ably API key or token string. |
+| constructor(keyOrTokenStr: String) ||| RSC1 | Constructs a `RestClient` object using an Ably API key or token string. |
 || `keyOrTokenStr` ||| The Ably API key or token string used to validate the client. |
-| constructor(ClientOptions) ||| RSC1 | Construct a REST client object using an Ably [`ClientOptions`]{@link ClientOptions} object. |
+| constructor(ClientOptions) ||| RSC1 | Construct a `RestClient` object using an Ably [`ClientOptions`]{@link ClientOptions} object. |
 || `ClientOptions` ||| A [`ClientOptions`]{@link ClientOptions} object to configure the client connection to Ably. |
 | auth: Auth ||| RSC5 | An [`Auth`]{@link Auth} object. |
 | push: Push ||| RSH7 | A [`Push`]{@link Push} object. |
@@ -35,14 +35,13 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 
 ## class RealtimeClient
 
-A client that extends the functionality of the [REST]{@link RestClient} client and provides additional realtime-specific features.
+A client that extends the functionality of the [RestClient]{@link RestClient} and provides additional realtime-specific features.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| constructor(keyOrTokenStr: String) ||| RSC1 | Constructs a realtime client object using an Ably API key or token string. |
+| constructor(keyOrTokenStr: String) ||| RSC1 | Constructs a `RealtimeClient` object using an Ably API key or token string. |
 || `keyOrTokenStr` ||| The Ably API key or token string used to validate the client. |
-| constructor(ClientOptions) ||| RSC1 | Constructs a realtime client object using an Ably [`ClientOptions`]{@link ClientOptions} object. |
-| constructor(ClientOptions) ||| RSC1 | Constructs a realtime client object using an Ably [`ClientOptions`]{@link ClientOptions} object. |
+| constructor(ClientOptions) ||| RSC1 | Constructs a `RealtimeClient` object using an Ably [`ClientOptions`]{@link ClientOptions} object. |
 || `ClientOptions` ||| A [`ClientOptions`]{@link ClientOptions} object to configure the client connection to Ably. |
 | auth: Auth ||| RTC4 | An [`Auth`]{@link Auth} object. |
 | push: Push ||| | A [`Push`]{@link Push} object. |
@@ -160,7 +159,7 @@ Creates Ably [`TokenRequest`]{@link TokenRequest} objects and obtains Ably Token
 || `TokenParams` ||| A [`TokenParams`]{@link TokenParams} object. |
 || `AuthOptions` ||| An [`AuthOptions`]{@link AuthOptions} object. |
 ||| `TokenDetails` || A [`TokenDetails`]{@link TokenDetails} object. |
-|`TokenDetails`: TokenDetails?||| RSA16 | A [`TokenDetails`]{@link TokenDetails} object currently. |
+|`TokenDetails`: TokenDetails?||| RSA16 | A [`TokenDetails`]{@link TokenDetails} object. |
 
 
 ## class TokenDetails
@@ -298,7 +297,7 @@ Enables messages to be published and subscribed to. Also enables historic messag
 | unsubscribe([String]) ||| RTL8a | Deregisters all listeners for all event names in the array. |
 || [`String`] ||| An array of event names. |
 | unsubscribe() ||| RTL8a, RTE5 | Deregisters all listeners to messages on this channel. This removes all earlier subscriptions. |
-| unsubscribe(MessageFilterObject, (Message) ->) ||| RTL22 | Deregisters all listeners to messages on this channel that match the supplied filter. This removes all earlier subscriptions. |
+| unsubscribe(MessageFilterObject, (Message) ->) ||| RTL22 | Deregisters all listeners to messages on this channel that match the supplied filter. |
 || `MessageFilterObject` ||| A [`MessageFilterObject`]{@link MessageFilterObject}. |
 || `(Message)` ||| An event listener function. |
 | setOptions(options: ChannelOptions) => io ||| RTL16 | Sets the [`ChannelOptions`]{@link ChannelOptions} for the channel. |
@@ -306,11 +305,11 @@ Enables messages to be published and subscribed to. Also enables historic messag
 
 ## class MessageFilterObject
 
-The `MessageFilterObject` handles the filter of properties for attaching and removing of a listener, ensuring execution only when a message matches a set of criteria.
+Contains properties to filter messages with when calling [subscribe()]{@link RealtimeChannel#subscribe}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| isRef: bool ||| RTL22b | Filters messages based on whether they contain a `extras.ref`. |
+| isRef: bool ||| RTL22b | Filters messages based on whether they contain an `extras.ref`. |
 | refTimeserial: string ||| RTL22a | Filters messages by a specific `extras.ref.timeserial` value. |
 | refType: string ||| RTL22a | Filters messages by a specific `extras.ref.type` value. |
 | name: string ||| RTL22a | Filters messages by a specific message `name`. |
@@ -318,11 +317,11 @@ The `MessageFilterObject` handles the filter of properties for attaching and rem
 
 ## class ChannelProperties
 
-The `ChannelProperties` describes the properties of the channel state.
+Describes the properties of the channel state.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| attachSerial: String ||| CP2a | Starts unset when a channel is instantiated then is updated to contain the latest `channelSerial` that can be used with [`RealtimeChannel history`]{@link RealtimeChannel#history} property when messages are sent.|
+| attachSerial: String ||| CP2a | Starts unset when a channel is instantiated, then updated with the `channelSerial` from each [ATTACHED]{@link ChannelState#ATTACHED} event that matches the channel. Used as the value for [untilAttach]{@link RealtimeChannel#history}. |
 
 ## class BatchOperations
 
@@ -453,7 +452,7 @@ Passes additional properties for to a [`RestChannel`]{@link RestChannel} or [`Re
 | +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Constructor `withCipherKey`, that takes a key only. |
 || `key` ||| A private key used to encrypt and decrypt payloads. |
 ||| `ChannelOptions` || A `ChannelOptions` object. |
-| cipher: (CipherParams \| Params)? ||| RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
+| cipher: (CipherParams \| CipherParamOptions)? ||| RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
 | params?: `Dict<String, String>` ||| TB2c | [Channel Parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
 | modes?: [ChannelMode] ||| TB2d | An array of [`ChannelMode`]{@link ChannelMode} objects. |
 
@@ -742,25 +741,25 @@ Contains [`ConnectionState`]{@link} change information emitted by the [`Connecti
 
 ## class Stats
 
-Contains an array of data on your applications useage retrieved from the stats endpoint.
+Contains application statistics for a specified time interval and time period.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| intervalId: String ||| TS12a | The UTC time that the stats begun covering from.| 
-| intervalTime: Time ||| TS12b (calculated client-side) | A `Time` object representing the UTC time that the stats begun covering from. |
-| `unit`: Stats.IntervalGranularity ||| TS12c | A [`StatsIntervalGranularity`]{@link StatsIntervalGranularity} object containing the length of the interval the stats span. |
+| intervalId: String ||| TS12a | The UTC time at which the time period covered begins.| 
+| intervalTime: Time ||| TS12b (calculated client-side) | Represents the `intervalId` as a time object. |
+| `unit`: Stats.IntervalGranularity ||| TS12c | The length of the interval the stats span. Values will be a [`StatsIntervalGranularity`]{@link StatsIntervalGranularity} |
 | intervalGranularity: Stats.IntervalGranularity? ||| TS12d (deprecated) | An alias for unit that must be from the unit property of the JSON. |
-| all: Stats.MessageTypes ||| TS12e | A [Stats.MessageTypes]{@link Stats.MessageTypes} object showing the aggregate count of all message stats.|
-| inbound: Stats.MessageTraffic ||| TS12f | A [Stats.MessageTraffic]{@link Stats.MessageTraffic} object showing the aggregate count of inbound message stats. |
-| outbound: Stats.MessageTraffic ||| TS12g | A [Stats.MessageTraffic]{@link Stats.MessageTraffic} object showing the aggregate count of outbound message stats. |
-| persisted: Stats.MessageTypes ||| TS12h | A [Stats.MessageTypes]{@link Stats.MessageTypes} object showing the aggregate count of persisted message stats. |
-| connections: Stats.ConnectionTypes ||| TS12i | A [Stats.ConnectionTypes`]{@link Stats.ConnectionTypes} object showing a breakdown of connection related stats, such as min, mean and peak connections. |
-| channels: Stats.ResourceCount ||| TS12j |  A [Stats.ResourceCount]{@link Stats.ResourceCount} object showing a breakdown of channels. |
-| apiRequests: Stats.RequestCount ||| TS12k |  A [Stats.RequestCount]{@link Stats.RequestCount} object showing a breakdown of API Requests. |
-| tokenRequests: Stats.RequestCount ||| TS12l | A [Stats.RequestCount]{@link Stats.RequestCount} object showing a breakdown of Ably Token requests. |
-| push: Stats.PushStats ||| TS12m | A [Stats.PushStats]{@link Stats.PushStats} object showing a breakdown of stats on push notifications. |
-| xchgProducer: Stats.XchgMessages ||| TS12n | A [Stats.XchgMessages]{@link Stats.XchgMessages} object containing data about usage of Ably API Streamer as a producer. |
-| xchgConsumer: Stats.XchgMessages ||| TS12o | A [Stats.XchgMessages]{@link Stats.XchgMessages} object containing data about usage of Ably API Streamer as a consumer. |
+| all: Stats.MessageTypes ||| TS12e | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing the aggregate count of all message stats.|
+| inbound: Stats.MessageTraffic ||| TS12f | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing the aggregate count of inbound message stats. |
+| outbound: Stats.MessageTraffic ||| TS12g | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing the aggregate count of outbound message stats. |
+| persisted: Stats.MessageTypes ||| TS12h | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing the aggregate count of persisted message stats. |
+| connections: Stats.ConnectionTypes ||| TS12i | A [`Stats.ConnectionTypes`]{@link Stats.ConnectionTypes} object containing a breakdown of connection related stats, such as min, mean and peak connections. |
+| channels: Stats.ResourceCount ||| TS12j |  A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of channels. |
+| apiRequests: Stats.RequestCount ||| TS12k |  A [`Stats.RequestCount`]{@link Stats.RequestCount} object containing a breakdown of API Requests. |
+| tokenRequests: Stats.RequestCount ||| TS12l | A [`Stats.RequestCount`]{@link Stats.RequestCount} object containing a breakdown of Ably Token requests. |
+| push: Stats.PushStats ||| TS12m | A [`Stats.PushStats`]{@link Stats.PushStats} object containing a breakdown of stats on push notifications. |
+| xchgProducer: Stats.XchgMessages ||| TS12n | A [`Stats.XchgMessages`]{@link Stats.XchgMessages} object containing data about usage of Ably API Streamer as a producer. |
+| xchgConsumer: Stats.XchgMessages ||| TS12o | A [`Stats.XchgMessages`]{@link Stats.XchgMessages} object containing data about usage of Ably API Streamer as a consumer. |
 
 ## enum StatsIntervalGranularity
 
@@ -780,9 +779,9 @@ Contains a breakdown of summary stats data for different (TLS vs non-TLS) connec
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| tls: Stats.ResourceCount ||| TS4a | A [Stats.ResourceCount]{@link Stats.ResourceCount} object containing the count and byte value of TLS connections. |
-| plain: Stats.ResourceCount ||| TS4b | A [Stats.ResourceCount]{@link Stats.ResourceCount} object containing the count and byte value of non-TLS connections. |
-| all: Stats.ResourceCount ||| TS4c | A [Stats.ResourceCount]{@link Stats.ResourceCount} object containing the count and byte value of all connections (both TLS and non-TLS). |
+| tls: Stats.ResourceCount ||| TS4a | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of data for usage of TLS connections. |
+| plain: Stats.ResourceCount ||| TS4b | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of data for usage of non-TLS connections. |
+| all: Stats.ResourceCount ||| TS4c | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of data for usage of all connections (both TLS and non-TLS). |
 
 ## class Stats.MessageCount
 
@@ -799,9 +798,9 @@ Contains a breakdown of summary stats data for different (channel vs presence) m
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| messages: Stats.MessageCount ||| TS6a | A [Stats.MessageCount]{@link Stats.MessageCount} object containing the count and byte value of messages. |
-| presence: Stats.MessageCount ||| TS6b | A [Stats.MessageCount]{@link Stats.MessageCount} object containing the count and byte value of presence events. |
-| all: Stats.MessageCount ||| TS6c | A [Stats.MessageCount]{@link Stats.MessageCount} object containing the count and byte value of messages and presence events. |
+| messages: Stats.MessageCount ||| TS6a | A [`Stats.MessageCount`]{@link Stats.MessageCount} object containing the count and byte value of messages. |
+| presence: Stats.MessageCount ||| TS6b | A [`Stats.MessageCount`]{@link Stats.MessageCount} object containing the count and byte value of presence messages. |
+| all: Stats.MessageCount ||| TS6c | A [`Stats.MessageCount`]{@link Stats.MessageCount} object containing the count and byte value of messages and presence messages. |
 
 ## class Stats.MessageTraffic
 
@@ -809,10 +808,10 @@ Contains a breakdown of summary stats data for traffic over various transport ty
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| `realtime`: Stats.MessageTypes ||| TS7a | A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing the count and byte value of messages transferred over a realtime transport such as WebSocket. |
-| `rest`: Stats.MessageTypes ||| TS7b | A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing the count and byte value of messages transferred over a rest transport such as WebSocket. |
-| `webhook`: Stats.MessageTypes ||| TS7c | A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing the count and byte value of messages delivered using webhooks.|
-| all: Stats.MessageTypes ||| TS7d | A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing the count and byte value of all messages (includes realtime, rest and webhook messages). |
+| realtime: Stats.MessageTypes ||| TS7a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for messages transferred over a realtime transport such as WebSocket. |
+| rest: Stats.MessageTypes ||| TS7b | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for messages transferred over a rest transport such as WebSocket. |
+| webhook: Stats.MessageTypes ||| TS7c | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for messages delivered using webhooks.|
+| all: Stats.MessageTypes ||| TS7d | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for all messages (includes `realtime`, `rest` and `webhook` messages). |
 
 ## class Stats.RequestCount
 
@@ -863,9 +862,9 @@ Contains data about usage of Ably API Streamer as a producer or consumer.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| all: Stats.MessageTypes ||| TS11a | A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing the count and byte value of all Ably API Streamer usage.|
-| producerPaid: Stats.MessageDirections ||| TS11b | A [Stats.MessageDirections]{@link Stats.MessageDirections} object containing the count and byte value of Ably API Streamer usage which was charged to the producer.|
-| consumerPaid: Stats.MessageDirections ||| TS11c | A [Stats.MessageDirections]{@link Stats.MessageDirections} object containing the count and byte value of Ably API Streamer usage which was charged to the consumer.|
+| all: Stats.MessageTypes ||| TS11a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage data for different message types from the Ably API Streamer.|
+| producerPaid: Stats.MessageDirections ||| TS11b | A [`Stats.MessageDirections`]{@link Stats.MessageDirections} object containing a breakdown of usage data about published and received messages from the Ably API Streamer which was charged to the producer.|
+| consumerPaid: Stats.MessageDirections ||| TS11c | A [`Stats.MessageDirections`]{@link Stats.MessageDirections} object containing a breakdown of usage data about published and received messages from the Ably API Streamer which was charged to the consumer.|
 
 ## class Stats.MessageDirections
 
@@ -873,9 +872,9 @@ Contains data about published and received messages.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| all: MessageTypes ||| TS14a | A [Stats.MessageTypes]{@link Stats.MessageTypes} object containing the count and byte value of both received and published messages.|
-| inbound: MessageTraffic ||| TS14b | A [Stats.MessageTraffic]{@link Stats.MessageTraffic} object containing the count and byte value of received messages only.|
-| outbound: MessageTraffic ||| TS14c | A [Stats.MessageTraffic]{@link Stats.MessageTraffic} object containing the count and byte value of published messages only.|
+| all: MessageTypes ||| TS14a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for different message types. |
+| inbound: MessageTraffic ||| TS14b | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing a breakdown of data for various inbound transport types. |
+| outbound: MessageTraffic ||| TS14c | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing a breakdown of data for various outbound transport types. |
 
 ## class DeviceDetails
 
@@ -1128,5 +1127,5 @@ Contains fields used when referencing a previous message.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
- | timeserial: String || | REX2a | A unique identifier indicating the message being interacted with. |
- | type: String || | REX2b | Represents the reason for interacting with the previous message. |
+| timeserial: String || | REX2a | A unique identifier indicating the message being interacted with. |
+| type: String || | REX2b | The reason for interacting with the previous message, for example, `com.ably.reaction` to indiciate a reaction. |
