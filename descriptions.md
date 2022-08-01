@@ -385,8 +385,9 @@ Enables devices to subscribe to push notifications for a channel.
 | subscribeClient() => io ||| RSH7b | Subscribes all devices associated with the current device's `clientId` to push notifications for the channel. |
 | unsubscribeDevice() => io ||| RSH7c | Unsubscribes the device from receiving push notifications for the channel. |
 | unsubscribeClient() => io ||| RSH7d | Unsubscribes all devices associated with the current device's `clientId` from receiving push notifications for the channel. |
-| listSubscriptions() => io `PaginatedResult<PushChannelSubscription>` ||| RSH7e | |
-||| `PaginatedResult<PushChannelSubscription>` || |
+| listSubscriptions(params?: `Dict<String, String>`) => io `PaginatedResult<PushChannelSubscription>` ||| RSH7e | Retrieves all push subscriptions for the channel. Subscriptions can be filtered using a `params` object. Returns a [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects. |
+|| `params` ||| An object containing key-value pairs to filter subscriptions by. Can contain `clientId`, `deviceId` or a combination of both if `concatFilters` is set to `true`, and a `limit` on the number of subscriptions returned, up to 1,000. |
+||| `PaginatedResult<PushChannelSubscription>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects.|
 
 ## class BatchSpec
 
@@ -970,7 +971,7 @@ Enables device push channel subscriptions.
 | list(params: `Dict<String, String>`) => io `PaginatedResult<PushChannelSubscription>` ||| RSH1c1 | Retrieves all push channel subscriptions matching the filter `params` provided. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects. |
 || `params` ||| An object containing key-value pairs to filter subscriptions by. Can contain `channel`, `clientId`, `deviceId` and a `limit` on the number of devices returned, up to 1,000. |
 ||| `PaginatedResult<PushChannelSubscription>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects. |
-| listChannels(params: `Dict<String, String>`?) => io `PaginatedResult<String>` ||| RSH1c2 | Retrieves all channels with at least one device subscribed to push notifications. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of channel names. |
+| listChannels(params?: `Dict<String, String>`) => io `PaginatedResult<String>` ||| RSH1c2 | Retrieves all channels with at least one device subscribed to push notifications. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of channel names. |
 || `params` ||| An object containing key-value pairs to filter channels by. Can contain a `limit` on the number of channels returned, up to 1,000. |
 ||| `PaginatedResult<String>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of channel names. |
 | save(PushChannelSubscription) => io PushChannelSubscription ||| RSH1c3 | Subscribes a device, or a group of devices sharing the same `clientId` to push notifications on a channel. Returns a [`PushChannelSubscription`]{@link PushChannelSubscription} object. |
@@ -1012,14 +1013,14 @@ Contains the subscriptions of a device, or a group of devices sharing the same `
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| +forDevice(channel: String, deviceId: String) => PushChannelSubscription |||| |
-|| `channel` ||| |
-|| `deviceId` ||| |
-||| `PushChannelSubscription` || |
-| +forClientId(channel: String, clientId: String) => PushChannelSubscription |||| |
-|| `channel` ||| |
-|| `deviceId` ||| |
-||| `PushChannelSubscription` || |
+| +forDevice(channel: String, deviceId: String) => PushChannelSubscription |||| A static factory method to create a `PushChannelSubscription` object for a channel and single device. |
+|| `channel` ||| The channel name. |
+|| `deviceId` ||| The unique ID of the device. |
+||| `PushChannelSubscription` || A `PushChannelSubscription` object. |
+| +forClientId(channel: String, clientId: String) => PushChannelSubscription |||| A static factory method to create a `PushChannelSubscription` object for a channel and group of devices sharing the same `clientId`. |
+|| `channel` ||| The channel name. |
+|| `clientId` ||| The ID of the client. |
+||| `PushChannelSubscription` || A `PushChannelSubscription` object. |
 | deviceId: String? ||| PCS2, PCS5, PCS6 | The unique ID of the device. |
 | clientId: String? ||| PCS3, PCS6 | The ID of the client the device, or devices are associated to. |
 | channel: String ||| PCS4 | The channel the push notification subscription is for. |
