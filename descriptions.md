@@ -35,7 +35,7 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 
 ## class RealtimeClient
 
-A client that extends the functionality of the [RestClient]{@link RestClient} and provides additional realtime-specific features.
+A client that extends the functionality of the [`RestClient`]{@link RestClient} and provides additional realtime-specific features.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -305,7 +305,7 @@ Enables messages to be published and subscribed to. Also enables historic messag
 
 ## class MessageFilterObject
 
-Contains properties to filter messages with when calling [subscribe()]{@link RealtimeChannel#subscribe}.
+Contains properties to filter messages with when calling [`subscribe()`]{@link RealtimeChannel#subscribe}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
@@ -321,7 +321,7 @@ Describes the properties of the channel state.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| attachSerial: String ||| CP2a | Starts unset when a channel is instantiated, then updated with the `channelSerial` from each [ATTACHED]{@link ChannelState#ATTACHED} event that matches the channel. Used as the value for [untilAttach]{@link RealtimeChannel#history}. |
+| attachSerial: String ||| CP2a | Starts unset when a channel is instantiated, then updated with the `channelSerial` from each [`ATTACHED`]{@link ChannelState#ATTACHED} event that matches the channel. Used as the value for [`untilAttach`]{@link RealtimeChannel#history}. |
 
 ## class BatchOperations
 
@@ -747,7 +747,7 @@ Contains application statistics for a specified time interval and time period.
 |---|---|---|---|---|
 | intervalId: String ||| TS12a | The UTC time at which the time period covered begins.| 
 | intervalTime: Time ||| TS12b (calculated client-side) | Represents the `intervalId` as a time object. |
-| `unit`: Stats.IntervalGranularity ||| TS12c | The length of the interval the stats span. Values will be a [`StatsIntervalGranularity`]{@link StatsIntervalGranularity} |
+| unit: Stats.IntervalGranularity ||| TS12c | The length of the interval the stats span. Values will be a [`StatsIntervalGranularity`]{@link StatsIntervalGranularity} |
 | intervalGranularity: Stats.IntervalGranularity? ||| TS12d (deprecated) | An alias for unit that must be from the unit property of the JSON. |
 | all: Stats.MessageTypes ||| TS12e | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing the aggregate count of all message stats.|
 | inbound: Stats.MessageTraffic ||| TS12f | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing the aggregate count of inbound message stats. |
@@ -779,9 +779,9 @@ Contains a breakdown of summary stats data for different (TLS vs non-TLS) connec
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| tls: Stats.ResourceCount ||| TS4a | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of data for usage of TLS connections. |
-| plain: Stats.ResourceCount ||| TS4b | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of data for usage of non-TLS connections. |
-| all: Stats.ResourceCount ||| TS4c | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of data for usage of all connections (both TLS and non-TLS). |
+| tls: Stats.ResourceCount ||| TS4a | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over TLS connections. |
+| plain: Stats.ResourceCount ||| TS4b | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over TLS connections. |
+| all: Stats.ResourceCount ||| TS4c | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over TLS connections (both TLS and non-TLS). |
 
 ## class Stats.MessageCount
 
@@ -808,10 +808,10 @@ Contains a breakdown of summary stats data for traffic over various transport ty
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| realtime: Stats.MessageTypes ||| TS7a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for messages transferred over a realtime transport such as WebSocket. |
-| rest: Stats.MessageTypes ||| TS7b | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for messages transferred over a rest transport such as WebSocket. |
-| webhook: Stats.MessageTypes ||| TS7c | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for messages delivered using webhooks.|
-| all: Stats.MessageTypes ||| TS7d | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for all messages (includes `realtime`, `rest` and `webhook` messages). |
+| realtime: Stats.MessageTypes ||| TS7a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for messages transferred over a realtime transport such as WebSocket. |
+| rest: Stats.MessageTypes ||| TS7b | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for messages transferred over a rest transport such as WebSocket. |
+| webhook: Stats.MessageTypes ||| TS7c | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for messages delivered using webhooks.|
+| all: Stats.MessageTypes ||| TS7d | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for all messages (includes `realtime`, `rest` and `webhook` messages). |
 
 ## class Stats.RequestCount
 
@@ -862,9 +862,9 @@ Contains data about usage of Ably API Streamer as a producer or consumer.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| all: Stats.MessageTypes ||| TS11a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage data for different message types from the Ably API Streamer.|
-| producerPaid: Stats.MessageDirections ||| TS11b | A [`Stats.MessageDirections`]{@link Stats.MessageDirections} object containing a breakdown of usage data about published and received messages from the Ably API Streamer which was charged to the producer.|
-| consumerPaid: Stats.MessageDirections ||| TS11c | A [`Stats.MessageDirections`]{@link Stats.MessageDirections} object containing a breakdown of usage data about published and received messages from the Ably API Streamer which was charged to the consumer.|
+| all: Stats.MessageTypes ||| TS11a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for the Ably API Streamer.|
+| producerPaid: Stats.MessageDirections ||| TS11b | A [`Stats.MessageDirections`]{@link Stats.MessageDirections} object containing a breakdown of usage, by messages published and received, for the API Streamer charged to the producer.|
+| consumerPaid: Stats.MessageDirections ||| TS11c | A [`Stats.MessageDirections`]{@link Stats.MessageDirections} object containing a breakdown of usage, by messages published and received, for the API Streamer charged to the consumer.|
 
 ## class Stats.MessageDirections
 
@@ -872,9 +872,9 @@ Contains data about published and received messages.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| all: MessageTypes ||| TS14a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of data for different message types. |
-| inbound: MessageTraffic ||| TS14b | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing a breakdown of data for various inbound transport types. |
-| outbound: MessageTraffic ||| TS14c | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing a breakdown of data for various outbound transport types. |
+| all: MessageTypes ||| TS14a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for messages published and received. |
+| inbound: MessageTraffic ||| TS14b | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing a breakdown of usage by transport type for received messages. |
+| outbound: MessageTraffic ||| TS14c | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing a breakdown of usage by transport type for published messages. |
 
 ## class DeviceDetails
 
