@@ -19,9 +19,9 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 | request(String method, String path, `Dict<String, String>` params?, JsonObject \| JsonArray body?, `Dict<String, String>` headers?) => io HttpPaginatedResponse ||  | RSC19 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || `method` ||| The request method to use, such as `GET`, `POST`. |
 || `path` ||| The request path. |
-|| `params` ||| The parameters of the request. The parameters depend on the endpoint being queried. See the [REST API reference](https://ably.com/docs/api/rest-api) for the available parameters of each endpoint. |
+|| `params` ||| The parameters to include in the URL query of the request. The parameters depend on the endpoint being queried. See the [REST API reference](https://ably.com/docs/api/rest-api) for the available parameters of each endpoint. |
 || `body` ||| The JSON body of the request. |
-|| `headers` ||| The headers of the request. |
+|| `headers` ||| Additional HTTP headers to include in the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HttpPaginatedResponse} object returned by the HTTP request, containing an empty or JSON-encodable object. |
 | stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the REST `/stats` API and retrieves your application's usage statistics. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`Stats`]{@link Stats} objects. See the [Stats docs](https://ably.com/docs/general/statistics). |
 || `start` || RSC6b1 | The time from which stats are retrieved, specified as a Unix timestamp. |
@@ -53,9 +53,9 @@ A client that extends the functionality of the [`RestClient`]{@link RestClient} 
 | request(String method, String path, `Dict<String, String>` params?, JsonObject \| JsonArray body?, `Dict<String, String>` headers?) => io HttpPaginatedResponse ||| RTC9 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || `method` ||| The request method to use, such as `GET`, `POST`. |
 || `path` ||| The request path. |
-|| `params` ||| The parameters of the request. The parameters depend on the endpoint being queried. See the [REST API reference](https://ably.com/docs/api/rest-api) for the available parameters of each endpoint. |
+|| `params` ||| The parameters to include in the URL query of the request. The parameters depend on the endpoint being queried. See the [REST API reference](https://ably.com/docs/api/rest-api) for the available parameters of each endpoint. |
 || `body` ||| The JSON body of the request. |
-|| `headers` ||| The headers of the request. |
+|| `headers` ||| Additional HTTP headers to include in the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HttpPaginatedResponse} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
 | stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| Same as RestClient.stats, RTC5 | Queries the REST `/stats` API and retrieves your application's usage statistics. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`Stats`]{@link Stats} objects. See the [Stats docs](https://ably.com/docs/general/statistics). |
 || `start` ||| The time from which stats are retrieved, specified as a Unix timestamp. |
