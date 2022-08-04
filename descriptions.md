@@ -136,7 +136,7 @@ Defines the properties of an Ably Token.
 |---|---|---|---|---|
 | capability: String api-default `'{"*":["*"]}'` ||| RSA9f, TK2b | The capabilities associated with this Ably Token. The capabilities value is a JSON-encoded representation of the resource paths and associated operations. Read more about capabilities in the [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained). |
 | clientId: String? ||| TK2c | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string, except it cannot contain a `*`. This option is primarily intended to be used in situations where the library is instantiated with a key. Note that a `clientId` may also be implicit in a token used to instantiate the library. An error is raised if a `clientId` specified here conflicts with the `clientId` implicit in the token. Find out more about [identified clients](https://ably.com/docs/core-features/authentication#identified-clients). |
-| nonce: String? ||| RSA9c, Tk2d | An unquoted, un-escaped random string of at least 16 characters, used to ensure the [`TokenRequest`]{@link TokenRequest} cannot be reused. |
+| nonce: String? ||| RSA9c, Tk2d | A cryptographically secure random string of at least 16 characters, used to ensure the [`TokenRequest`]{@link TokenRequest} cannot be reused. |
 | timestamp: Time? ||| RSA9d, Tk2d | The Unix timestamp of this request. Timestamps, in conjunction with the `nonce`, are used to prevent requests from being replayed. `timestamp` is a "one-time" value, and is valid in a request, but is not validly a member of any default token params such as `ClientOptions.defaultTokenParams`. |
 | ttl: Duration api-default 60min ||| RSA9e, TK2a | Requested time to live for the token in milliseconds.  |
 
@@ -190,7 +190,7 @@ Contains the properties of a request for a token to Ably. Tokens are generated u
 | clientId: String? ||| TE2 | The client ID to associate with the requested Ably Token. When provided, the Ably Token may only be used to perform operations on behalf of that client ID. |
 | keyName: String ||| TE2 | The name of the key against which this request is made. The key name is public, whereas the key secret is private. |
 | mac: String ||| TE2 | The Message Authentication Code for this request. |
-| nonce: String ||| TE2 | An opaque nonce string of at least 16 characters. |
+| nonce: String ||| TE2 | A cryptographically secure random string of at least 16 characters, used to ensure the `TokenRequest` cannot be reused. |
 | timestamp: Time? ||| TE5 | The Unix timestamp of this request in milliseconds. |
 | ttl: Duration? api-default 60min ||| TE4 | Requested time to live for the Ably Token in milliseconds. If the Ably `TokenRequest` is successful, the TTL of the returned Ably Token is less than or equal to this value, depending on application settings and the attributes of the issuing key. |
 
