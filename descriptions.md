@@ -107,7 +107,7 @@ Passes additional client-specific properties to the REST [`constructor()`]{@link
 | maxMessageSize: Int default 65536 ||| TO3l8 | The maximum size of messages that can be published in one go. For realtime publishes, the default can be overridden by the `maxMessageSize` in the [`ConnectionDetails`]{@link ConnectionDetails} object. |
 | maxFrameSize: Int default 524288 ||| TO3l8 | The maximum size of a single POST body or WebSocket frame. This is mostly only relevant for a REST client request (for batch publishes), since publishes will hit the `maxMessageSize` limit before this. |
 | fallbackRetryTimeout: Duration default 600s || TO3l10 | The maximum period in milliseconds before HTTP requests are retried against the default endpoint.|
-| plugins: `Dict<PluginType, Plugin>` ||| TO3o | A map between a [`PluginType`]{@link PluginType} and a `Plugin` object. The client library may cast a `Plugin` object to particular plugin subclass for a specific plugin type. |
+| plugins: `Dict<PluginType, Plugin>` ||| TO3o | A map between a [`PluginType`]{@link PluginType} and a `Plugin` object. |
 | idempotentRestPublishing: bool default true ||| RSL1k1, RTL6a1, TO3n | When `true`, enables idempotent publishing by assigning a unique message ID client-side, allowing the Ably servers to discard automatic publish retries following a failure such as a network fault. |
 | agents: [String: String?]? ||| RSC7d6 - interface only offered by some libraries | For use only by other Ably-authored SDKs, on a need-to-have basis. |
 
