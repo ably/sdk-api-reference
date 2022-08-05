@@ -229,7 +229,7 @@ Enables messages to be published and historic messages to be retrieved for a cha
 || `direction` || RSL2b2 | The order for which messages are returned in. The default is `Backwards` which orders messages from most recent to oldest. |
 || `limit` || RSL2b3 | An upper limit on the number of messages returned. The default is 100. |
 ||| `PaginatedResult<Message>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Message`]{@link Message} objects. |
-| status() => ChannelDetails ||| RSL8 | Retrieves metadata for the channel, such as status and occupancy metrics. Returns a [`ChannelDetails`]{@link ChannelDetails} object. |
+| status() => ChannelDetails ||| RSL8 | Retrieves a [`ChannelDetails`]{@link ChannelDetails} object for the channel, which includes status and occupancy metrics. |
 ||| `ChannelDetails` || A [`ChannelDetails`]{@link ChannelDetails} object. |
 | publish(Message, params?: `Dict<String, Stringifiable>`) => io ||| RSL1 | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
 || `Message` ||| A [`Message`]{@link Message} object. |
