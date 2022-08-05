@@ -252,7 +252,7 @@ Enables messages to be published and subscribed to. Also enables historic messag
 |---|---|---|---|---|
 | embeds `EventEmitter<ChannelEvent, ChannelStateChange?>` ||| RTL2a, RTL2d, RTL2e | `RealtimeChannel` implements [`EventEmitter`]{@link EventEmitter} and emits [`ChannelEvent`]{@link ChannelEvent} events, where a `ChannelEvent` is either a [`ChannelState`]{@link ChannelState} or an [`UPDATE`]{@link ChannelEvent#UPDATE}. |
 | name: String? |||| The channel name. |
-| errorReason: ErrorInfo? ||| RTL4e | An error as an [`ErrorInfo`]{@link ErrorInfo} object when a channel failure occurs. |
+| errorReason: ErrorInfo? ||| RTL4e | An [`ErrorInfo`]{@link ErrorInfo} object describing the last error which occurred on the channel, if any. |
 | state: ChannelState ||| RTL2b | The current [`ChannelState`]{@link ChannelState} of the channel. |
 | presence: RealtimePresence ||| RTL9 | The [`RealtimePresence`]{@link RealtimePresence} object associated with the channel. Enables the presence set to be entered, subscribed to and retrieved from history. |
 | properties: ChannelProperties ||| CP1, RTL15 | A [`ChannelProperties`]{@link ChannelProperties} object representing properties of the channel state. |
@@ -695,7 +695,7 @@ Enables the management of a connection to Ably.
 |  Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | embeds `EventEmitter<ConnectionEvent, ConnectionStateChange>` ||| RTN4a, RTN4e, RTN4g | Embeds an [`EventEmitter`]{@link EventEmitter} object. |
-| errorReason: ErrorInfo? ||| RTN14a | When a connection failure occurs this property contains the [`ErrorInfo`]{@link ErrorInfo}. |
+| errorReason: ErrorInfo? ||| RTN14a | An [`ErrorInfo`]{@link ErrorInfo} object describing the last error received if a connection failure occurs. |
 | id: String? ||| RTN8 | A unique public identifier for this connection, used to identify this member. |
 | key: String? ||| RTN9 | A unique private connection key used to recover or resume a connection, assigned by Ably. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. This private connection key can also be used by other REST clients to publish on behalf of this client. See the [publishing over REST on behalf of a realtime client docs](https://ably.com/docs/rest/channels#publish-on-behalf) for more info. |
 | recoveryKey: String? ||| RTN16b, RTN16c | The recovery key string can be used by another client to recover this connection's state in the recover client options property. See [connection state recover options](https://ably.com/docs/realtime/connection#connection-state-recover-options) for more information. |
@@ -898,7 +898,7 @@ Contains the details of the push registration of a device.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| errorReason: ErrorInfo? |||| Any error information associated with the device push registration as an [`ErrorInfo`]{@link ErrorInfo} object. |
+| errorReason: ErrorInfo? |||| An [`ErrorInfo`]{@link ErrorInfo} object describing the most recent error when the `state` is `Failing` or `Failed`. |
 | recipient: JsonObject |||| A JSON object of key-value pairs that contains of the push transport and address. |
 | state: .Active \| .Failing \| .Failed |||| The current state of the push registration. |
 
