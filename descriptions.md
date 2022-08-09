@@ -448,7 +448,7 @@ Contains state change information emitted by [`RestChannel`]{@link RestChannel} 
 
 ## class ChannelOptions
 
-Passes additional properties for to a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object, such as encryption, [`ChannelMode`s]{link ChannelMode} and channel parameters.
+Passes additional properties to a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object, such as encryption, [`ChannelMode`]{@link ChannelMode} and channel parameters.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|----|
@@ -470,7 +470,7 @@ Contains the details of a [`RestChannel`]{@link RestChannel} or [`RealtimeChanne
 
 ## class ChannelStatus
 
-Contains the status of a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object such as whether it is active and its [ChannelOccupancy]{@link ChannelOccupancy}.
+Contains the status of a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object such as whether it is active and its [`ChannelOccupancy`]{@link ChannelOccupancy}.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
