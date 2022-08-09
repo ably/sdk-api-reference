@@ -406,7 +406,7 @@ Describes the possible states of a [`RestChannel`]{@link RestChannel} or [`Realt
 
 | Enum | Spec | Description |
 |---|---|---|
-| INITIALIZED || A channel with this state has been initialized but no attach has yet been attempted. |
+| INITIALIZED || The channel has been initialized but no attach has yet been attempted. |
 | ATTACHING || An attach has been initiated by sending a request to Ably. This is a transient state, followed either by a transition to `ATTACHED`, `SUSPENDED`, or `FAILED`. |
 | ATTACHED || The attach has succeeded. In the `ATTACHED` state a client may publish and subscribe to messages, or be present on the channel. |
 | DETACHING || A detach has been initiated on an `ATTACHED` channel by sending a request to Ably. This is a transient state, followed either by a transition to `DETACHED` or `FAILED`. |
