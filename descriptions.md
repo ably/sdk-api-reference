@@ -783,7 +783,7 @@ Contains a breakdown of summary stats data for different (TLS vs non-TLS) connec
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | tls: Stats.ResourceCount ||| TS4a | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over TLS connections. |
-| plain: Stats.ResourceCount ||| TS4b | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over TLS connections. |
+| plain: Stats.ResourceCount ||| TS4b | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over non-TLS connections. |
 | all: Stats.ResourceCount ||| TS4c | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over TLS connections (both TLS and non-TLS). |
 
 ## class Stats.MessageCount
