@@ -748,7 +748,7 @@ Contains application statistics for a specified time interval and time period.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| intervalId: String ||| TS12a | The UTC time at which the time period covered begins.| 
+| intervalId: String ||| TS12a | The UTC time at which the time period covered begins. If `unit` is set to `minute` this will be in the format `YYYY-mm-dd:HH:MM`, if `hour` it will be `YYYY-mm-dd:HH`, if `day` it will be `YYYY-mm-dd:00` and if `month` it will be `YYYY-mm-01:00`.| 
 | intervalTime: Time ||| TS12b (calculated client-side) | Represents the `intervalId` as a time object. |
 | unit: Stats.IntervalGranularity ||| TS12c | The length of the interval the stats span. Values will be a [`StatsIntervalGranularity`]{@link StatsIntervalGranularity}. |
 | intervalGranularity: Stats.IntervalGranularity? ||| TS12d (deprecated) | DEPRECATED: this property is deprecated and will be removed in a future version. An alias for `unit` that must be from the unit property of the JSON. |
