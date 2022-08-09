@@ -15,7 +15,7 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 | batch: BatchOperations ||| BO1 | A [`BatchOperations`]{@link BatchOperations} object. |
 | device() => LocalDevice ||  | RSH8 | Retrieves a [`LocalDevice`]{@link LocalDevice} object that represents the current state of the device as a target for push notifications. |
 ||| `LocalDevice` || A [`LocalDevice`]{@link LocalDevice} object. |
-| channels: `Channels<RestChannel>` ||| RSN1 | A [`Channels`]{@link Channels} collection object. |
+| channels: `Channels<RestChannel>` ||| RSN1 | A [`Channels`]{@link Channels} object. |
 | request(String method, String path, `Dict<String, String>` params?, JsonObject \| JsonArray body?, `Dict<String, String>` headers?) => io HttpPaginatedResponse ||  | RSC19 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || `method` ||| The request method to use, such as `GET`, `POST`. |
 || `path` ||| The request path. |
@@ -42,14 +42,14 @@ A client that extends the functionality of the [`RestClient`]{@link RestClient} 
 | constructor(keyOrTokenStr: String) ||| RSC1 | Constructs a `RealtimeClient` object using an Ably API key or token string. |
 || `keyOrTokenStr` ||| The Ably API key or token string used to validate the client. |
 | constructor(ClientOptions) ||| RSC1 | Constructs a `RealtimeClient` object using an Ably [`ClientOptions`]{@link ClientOptions} object. |
-|| `ClientOptions` ||| A [`ClientOptions`]{@link ClientOptions} object to configure the client connection to Ably. |
+|| `ClientOptions` ||| A [`ClientOptions`]{@link ClientOptions} object. |
 | auth: Auth ||| RTC4 | An [`Auth`]{@link Auth} object. |
 | push: Push ||| | A [`Push`]{@link Push} object. |
 | device() => LocalDevice ||  | RSH8 | Retrieves a [`LocalDevice`]{@link LocalDevice} object that represents the current state of the device as a target for push notifications. |
 ||| `LocalDevice` || A [`LocalDevice`]{@link LocalDevice} object. |
-| channels: `Channels<RealtimeChannel>` ||| RTC3, RTS1 | A [`Channels`]{@link Channels} collection object. |
+| channels: `Channels<RealtimeChannel>` ||| RTC3, RTS1 | A [`Channels`]{@link Channels} object. |
 | clientId: String? ||| proxy for RSA7 | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string, except it cannot contain a `*`. This option is primarily intended to be used in situations where the library is instantiated with a key. A `clientId` may also be implicit in a token used to instantiate the library; an error will be raised if a `clientId` specified here conflicts with the `clientId` implicit in the token. |
-| connection: Connection ||| RTC2 | A reference to the [`Connection`]{@link Connection} object. |
+| connection: Connection ||| RTC2 | A [`Connection`]{@link Connection} object. |
 | request(String method, String path, `Dict<String, String>` params?, JsonObject \| JsonArray body?, `Dict<String, String>` headers?) => io HttpPaginatedResponse ||| RTC9 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || `method` ||| The request method to use, such as `GET`, `POST`. |
 || `path` ||| The request path. |
@@ -208,7 +208,7 @@ Creates and destroys [`RestChannel`]{@link RestChannel} and [`RealtimeChannel`]{
 ||| `ChannelType` || A [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object. |
 | get(String, ChannelOptions) -> ChannelType ||| RSN3c, RTS3c | Creates a new [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object, with the specified [`ChannelOptions`]{@link ChannelOptions}, or returns the existing channel object. |
 || `String` ||| The channel name. |
-|| `ChannelOptions` ||| [`ChannelOptions`]{@link ChannelOptions} used to configure the channel. |
+|| `ChannelOptions` ||| A [`ChannelOptions`]{@link ChannelOptions} object. |
 ||| `ChannelType` || A [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object. |
 | iterate() -> `Iterator<ChannelType>` ||| RSN2, RTS2 | Iterates through the existing channels. |
 ||| `ChannelType` || Each iteration returns a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object. |
@@ -222,7 +222,7 @@ Enables messages to be published and historic messages to be retrieved for a cha
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | name: String? |||| The channel name. |
-| presence: RestPresence ||| RSL3 | The [`RestPresence`]{@link RestPresence} object associated with the channel. Enables the present set to be retrieved from history. |
+| presence: RestPresence ||| RSL3 | A [`RestPresence`]{@link RestPresence} object. |
 | history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`Message`]{@link Message} objects for the channel. If the channel is configured to persist messages, then messages can be retrieved from history for up to 72 hours in the past. If not, messages can only be retrieved from history for up to two minutes in the past. |
 || `start` || RSL2b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
 || `end` || RSL2b1 | The time until messages are retrieved, specified as a Unix timestamp. |
@@ -242,7 +242,7 @@ Enables messages to be published and historic messages to be retrieved for a cha
 || `data` ||| The payload of the message. |
 | setOptions(options: ChannelOptions) => io ||| RSL7 | Sets the [`ChannelOptions`]{@link ChannelOptions} for the channel. |
 || `options` ||| A [`ChannelOptions`]{@link ChannelOptions} object. |
-| push: PushChannel ||| RSH4 | The [`PushChannel`]{@link PushChannel} object associated with the channel. This enables devices to subscribe to push notifications for the channel. |
+| push: PushChannel ||| RSH4 | A [`PushChannel`]{@link PushChannel} object. |
 
 ## class RealtimeChannel
 
@@ -254,9 +254,9 @@ Enables messages to be published and subscribed to. Also enables historic messag
 | name: String? |||| The channel name. |
 | errorReason: ErrorInfo? ||| RTL4e | An [`ErrorInfo`]{@link ErrorInfo} object describing the last error which occurred on the channel, if any. |
 | state: ChannelState ||| RTL2b | The current [`ChannelState`]{@link ChannelState} of the channel. |
-| presence: RealtimePresence ||| RTL9 | The [`RealtimePresence`]{@link RealtimePresence} object associated with the channel. Enables the presence set to be entered, subscribed to and retrieved from history. |
-| properties: ChannelProperties ||| CP1, RTL15 | A [`ChannelProperties`]{@link ChannelProperties} object representing properties of the channel state. |
-| push: PushChannel |||| The [`PushChannel`]{@link PushChannel} object associated with the channel. This enables devices to subscribe to push notifications for the channel. |
+| presence: RealtimePresence ||| RTL9 | A [`RealtimePresence`]{@link RealtimePresence} object.|
+| properties: ChannelProperties ||| CP1, RTL15 | A [`ChannelProperties`]{@link ChannelProperties} object. |
+| push: PushChannel |||| A [`PushChannel`]{@link PushChannel} object. |
 | modes: readonly [ChannelMode] ||| RTL4m | An array of [`ChannelMode`]{@link ChannelMode} objects. |
 | params: readonly `Dict<String, String>` ||| RTL4k1 | Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
 | attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link RealtimeChannel#subscribe}. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, `attach()` is called implicitly if [`subscribe()`]{@link RealtimeChannel#subscribe} for the channel is called, or [`enter()`]{@link RealtimePresence#enter} or [`subscribe()`]{@link RealtimePresence#subscribe} are called on the [`RealtimePresence`]{@link RealtimePresence} object for this channel. |
@@ -917,7 +917,7 @@ Enables a device to be registered and deregistered from receiving push notificat
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| admin: PushAdmin ||| RSH1 | The [`PushAdmin`]{@link PushAdmin} object associated with the device. |
+| admin: PushAdmin ||| RSH1 | A [`PushAdmin`]{@link PushAdmin} object. |
 | activate(registerCallback: ((ErrorInfo?, DeviceDetails?) -> io String)?, updateFailedCallback: ((ErrorInfo) ->)) => io ErrorInfo? ||| RSH2a | Activates the device for push notifications with FCM or APNS, obtaining a unique identifier from them. Subsequently registers the device with Ably and stores the `deviceIdentityToken` in local storage. |
 ||| `ErrorInfo` || Describes why the activation was unsuccessful as an [`ErrorInfo`]{@link ErrorInfo} object. |
 | deactivate(deregisterCallback: ((ErrorInfo?, deviceId: String?) -> io)?) => io ErrorInfo? ||| RSH2b | Deactivates the device from receiving push notifications with Ably and FCM or APNS. |
@@ -932,8 +932,8 @@ Enables the management of device registrations and push notification subscriptio
 | publish(recipient: JsonObject, data: JsonObject) => io ||| RSH1a | Sends a push notification directly to a device, or a group of devices sharing the same `clientId`. |
 || `recipient` ||| A JSON object containing the recipient details using `clientId`, `deviceId` or the underlying notifications service. |
 || `data` ||| A JSON object containing the push notification payload. |
-| deviceRegistrations: PushDeviceRegistrations ||| RSH1b | A [`PushDeviceRegistrations`]{@link PushDeviceRegistrations} object that provides functionality for registering, updating and listing push devices. |
-| channelSubscriptions: PushChannelSubscriptions ||| RSH1c | A [`PushChannelSubscriptions`]{@link PushChannelSubscriptions} object that provides functionality for subscribing, listing and unsubscribing devices from push notifications published to channels. |
+| deviceRegistrations: PushDeviceRegistrations ||| RSH1b | A [`PushDeviceRegistrations`]{@link PushDeviceRegistrations} object. |
+| channelSubscriptions: PushChannelSubscriptions ||| RSH1c | A [`PushChannelSubscriptions`]{@link PushChannelSubscriptions} object. |
 
 ## class JsonObject
 
@@ -1131,4 +1131,4 @@ Contains fields used when referencing a previous message.
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
 | timeserial: String || | REX2a | A unique identifier indicating the message being interacted with. |
-| type: String || | REX2b | The reason for interacting with the previous message, for example, `com.ably.reaction` to indiciate a reaction. |
+| type: String || | REX2b | The reason for interacting with the previous message, for example, `com.ably.reaction` to indicate a reaction. |
