@@ -652,7 +652,7 @@ Contains an individual message that is sent to, or received from, Ably.
 | connectionId: String? ||| TM2c | The connection ID of the publisher of this message. |
 | data: Data? ||| TM2d | The message payload, if provided. |
 | encoding: String? ||| TM2e | This is typically empty, as all messages received from Ably are automatically decoded client-side using this value. However, if the message encoding cannot be processed, this attribute contains the remaining transformations not applied to the `data` payload. |
-| extras: JsonObject? ||| TM2i | A combination of metadata or ancillary payloads. The only valid payloads for `extras` are the [`Push`]{@link Push} and [`MessageFilterObject`]{@link MessageFilterObject} objects. |
+| extras: JsonObject? ||| TM2i | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. Valid payloads include [`push`]{@link Push}, [`delta`]{@link DeltaExtras}, [`ref`]{@link ReferenceExtras} and `headers`. |
 | id: String ||| TM2a | A Unique ID assigned by Ably to this message. |
 | name: String? ||| TM2g | The event name. |
 | timestamp: Time ||| TM2f | Timestamp of when the message was received by Ably, as a Unix timestamp. |
