@@ -24,14 +24,14 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 || `headers` ||| Additional HTTP headers to include in the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HttpPaginatedResponse} object returned by the HTTP request, containing an empty or JSON-encodable object. |
 | stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| RSC6a | Queries the REST `/stats` API and retrieves your application's usage statistics. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`Stats`]{@link Stats} objects. See the [Stats docs](https://ably.com/docs/general/statistics). |
-|| `start` || RSC6b1 | The time from which stats are retrieved, specified as a Unix timestamp. |
-|| `end` || RSC6b1 | The time until stats are retrieved, specified as a Unix timestamp. |
+|| `start` || RSC6b1 | The time from which stats are retrieved, specified as milliseconds since the Unix epoch. |
+|| `end` || RSC6b1 | The time until stats are retrieved, specified as milliseconds since the Unix epoch. |
 || `direction` || RSC6b2 | The order for which stats are returned in. Valid values are `backwards` which orders stats from most recent to oldest, or `forwards` which orders stats from oldest to most recent. The default is `backwards`. |
 || `limit` || RSC6b3 | An upper limit on the number of stats returned. The default is 100, and the maximum is 1000. |
 || `unit` || RSC6b4 | `minute`, `hour`, `day` or `month`. Based on the unit selected, the given `start` or `end` times are rounded down to the start of the relevant interval depending on the unit granularity of the query. |
 ||| `PaginatedResult` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Stats`]{@link Stats} objects. |
-| time() => io Time ||| RSC16 | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest} with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
-||| `Time` || The time as a Unix timestamp. |
+| time() => io Time ||| RSC16 | Retrieves the time from the Ably service as milliseconds since the Unix epoch. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest} with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
+||| `Time` || The time as milliseconds since the Unix epoch. |
 
 ## class RealtimeClient
 
@@ -58,16 +58,16 @@ A client that extends the functionality of the [`RestClient`]{@link RestClient} 
 || `headers` ||| Additional HTTP headers to include in the request. |
 ||| `HttpPaginatedResponse` || An [`HttpPaginatedResponse`]{@link HttpPaginatedResponse} response object returned by the HTTP request, containing an empty or JSON-encodable object. |
 | stats(start: Time api-default epoch(), end: Time api-default now(), direction: .Backwards \| Forwards api-default .Backwards, limit: int api-default 100, unit: .Minute \| .Hour \| .Day \| .Month api-default .Minute => io `PaginatedResult<Stats>` ||| Same as RestClient.stats, RTC5 | Queries the REST `/stats` API and retrieves your application's usage statistics. Returns a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of [`Stats`]{@link Stats} objects. See the [Stats docs](https://ably.com/docs/general/statistics). |
-|| `start` ||| The time from which stats are retrieved, specified as a Unix timestamp. |
-|| `end` ||| The time until stats are retrieved, specified as a Unix timestamp. |
+|| `start` ||| The time from which stats are retrieved, specified as milliseconds since the Unix epoch. |
+|| `end` ||| The time until stats are retrieved, specified as milliseconds since the Unix epoch. |
 || `direction` ||| The order for which stats are returned in. Valid values are `backwards` which orders stats from most recent to oldest, or `forwards` which orders stats from oldest to most recent. The default is `backwards`. |
 || `limit` ||| An upper limit on the number of stats returned. The default is 100, and the maximum is 1000. |
 || `unit` ||| `minute`, `hour`, `day` or `month`. Based on the unit selected, the given `start` or `end` times are rounded down to the start of the relevant interval depending on the unit granularity of the query. |
 ||| `PaginatedResult` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Stats`]{@link Stats} objects. |
 | close() ||| proxy for RTN12 | Calls [`connection.close()`]{@link Connection#close} and causes the connection to close, entering the closing state. Once closed, the library will not attempt to re-establish the connection without an explicit call to [`connect()`]{@link Connection#connect}. |
 | connect() ||| proxy for RTN11 | Calls [`connection.connect()`]{@link Connection#connect} and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is unnecessary unless the [`autoConnect`]{@link ClientOptions#autoConnect} property is disabled. |
-| time() => io Time ||| RTC6a | Retrieves the time from the Ably service as a Unix timestamp in milliseconds. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
-||| `Time` || The time as a Unix timestamp. |
+| time() => io Time ||| RTC6a | Retrieves the time from the Ably service as milliseconds since the Unix epoch. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
+||| `Time` || The time as milliseconds since the Unix epoch. |
 
 ## class ClientOptions
 
@@ -137,7 +137,7 @@ Defines the properties of an Ably Token.
 | capability: String api-default `'{"*":["*"]}'` ||| RSA9f, TK2b | The capabilities associated with this Ably Token. The capabilities value is a JSON-encoded representation of the resource paths and associated operations. Read more about capabilities in the [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained). |
 | clientId: String? ||| TK2c | A client ID, used for identifying this client when publishing messages or for presence purposes. The `clientId` can be any non-empty string, except it cannot contain a `*`. This option is primarily intended to be used in situations where the library is instantiated with a key. Note that a `clientId` may also be implicit in a token used to instantiate the library. An error is raised if a `clientId` specified here conflicts with the `clientId` implicit in the token. Find out more about [identified clients](https://ably.com/docs/core-features/authentication#identified-clients). |
 | nonce: String? ||| RSA9c, Tk2d | A cryptographically secure random string of at least 16 characters, used to ensure the [`TokenRequest`]{@link TokenRequest} cannot be reused. |
-| timestamp: Time? ||| RSA9d, Tk2d | The Unix timestamp of this request. Timestamps, in conjunction with the `nonce`, are used to prevent requests from being replayed. `timestamp` is a "one-time" value, and is valid in a request, but is not validly a member of any default token params such as `ClientOptions.defaultTokenParams`. |
+| timestamp: Time? ||| RSA9d, Tk2d | The timestamp of this request as milliseconds since the Unix epoch. Timestamps, in conjunction with the `nonce`, are used to prevent requests from being replayed. `timestamp` is a "one-time" value, and is valid in a request, but is not validly a member of any default token params such as `ClientOptions.defaultTokenParams`. |
 | ttl: Duration api-default 60min ||| RSA9e, TK2a | Requested time to live for the token in milliseconds. The default is 60 minutes. |
 
 ## class Auth
@@ -173,8 +173,8 @@ Contains an Ably Token and its associated metadata.
 ||| `TokenDetails` || An Ably authentication token. |
 | capability: String ||| TD5 | The capabilities associated with this Ably Token. The capabilities value is a JSON-encoded representation of the resource paths and associated operations. Read more about capabilities in the [capabilities docs](https://ably.com/docs/core-features/authentication/#capabilities-explained). |
 | clientId: String? ||| TD6 | The client ID, if any, bound to this Ably Token. If a client ID is included, then the Ably Token authenticates its bearer as that client ID, and the Ably Token may only be used to perform operations on behalf of that client ID. The client is then considered to be an [identified client](https://ably.com/docs/core-features/authentication#identified-clients). |
-| expires: Time ||| TD3 | The Unix timestamp at which this token expires. |
-| issued: Time ||| TD4 | The Unix timestamp at which this token was issued. |
+| expires: Time ||| TD3 | The timestamp at which this token expires as milliseconds since the Unix epoch. |
+| issued: Time ||| TD4 | The timestamp at which this token was issued as milliseconds since the Unix epoch. |
 | token: String ||| TD2 | The [Ably Token](https://ably.com/docs/core-features/authentication#ably-tokens) itself. A typical Ably Token string appears with the form `xVLyHw.A-pwh7wicf3afTfgiw4k2Ku33kcnSA7z6y8FjuYpe3QaNRTEo4`. |
 
 ## class TokenRequest
@@ -191,7 +191,7 @@ Contains the properties of a request for a token to Ably. Tokens are generated u
 | keyName: String ||| TE2 | The name of the key against which this request is made. The key name is public, whereas the key secret is private. |
 | mac: String ||| TE2 | The Message Authentication Code for this request. |
 | nonce: String ||| TE2 | A cryptographically secure random string of at least 16 characters, used to ensure the `TokenRequest` cannot be reused. |
-| timestamp: Time? ||| TE5 | The Unix timestamp of this request in milliseconds. |
+| timestamp: Time? ||| TE5 | The timestamp of this request as milliseconds since the Unix epoch. |
 | ttl: Duration? api-default 60min ||| TE4 | Requested time to live for the Ably Token in milliseconds. If the Ably `TokenRequest` is successful, the TTL of the returned Ably Token is less than or equal to this value, depending on application settings and the attributes of the issuing key. The default is 60 minutes. |
 
 ## class `Channels<ChannelType>`
@@ -224,8 +224,8 @@ Enables messages to be published and historic messages to be retrieved for a cha
 | name: String? |||| The channel name. |
 | presence: RestPresence ||| RSL3 | A [`RestPresence`]{@link RestPresence} object. |
 | history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`Message`]{@link Message} objects for the channel. If the channel is configured to persist messages, then messages can be retrieved from history for up to 72 hours in the past. If not, messages can only be retrieved from history for up to two minutes in the past. |
-|| `start` || RSL2b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
-|| `end` || RSL2b1 | The time until messages are retrieved, specified as a Unix timestamp. |
+|| `start` || RSL2b1 | The time from which messages are retrieved, specified as milliseconds since the Unix epoch. |
+|| `end` || RSL2b1 | The time until messages are retrieved, specified as milliseconds since the Unix epoch. |
 || `direction` || RSL2b2 | The order for which messages are returned in. Valid values are `backwards` which orders messages from most recent to oldest, or `forwards` which orders messages from oldest to most recent. The default is `backwards`. |
 || `limit` || RSL2b3 | An upper limit on the number of messages returned. The default is 100, and the maximum is 1000. |
 ||| `PaginatedResult<Message>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Message`]{@link Message} objects. |
@@ -262,8 +262,8 @@ Enables messages to be published and subscribed to. Also enables historic messag
 | attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link RealtimeChannel#subscribe}. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, `attach()` is called implicitly if [`subscribe()`]{@link RealtimeChannel#subscribe} for the channel is called, or [`enter()`]{@link RealtimePresence#enter} or [`subscribe()`]{@link RealtimePresence#subscribe} are called on the [`RealtimePresence`]{@link RealtimePresence} object for this channel. |
 | detach() => io ||| RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the [`on`]{@link EventEmitter#on} or [`once`]{@link EventEmitter#once} methods of the [`EventEmitter`]{@link EventEmitter} object. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
 | history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100, untilAttach: Bool default false) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`Message`]{@link Message} objects for the channel. If the channel is configured to persist messages, then messages can be retrieved from history for up to 72 hours in the past. If not, messages can only be retrieved from history for up to two minutes in the past. |
-|| `start` || RTL10a | The time from which messages are retrieved, specified as a Unix timestamp. |
-|| `end` || RTL10a | The time until messages are retrieved, specified as a Unix timestamp. |
+|| `start` || RTL10a | The time from which messages are retrieved, specified as milliseconds since the Unix epoch. |
+|| `end` || RTL10a | The time until messages are retrieved, specified as milliseconds since the Unix epoch. |
 || `direction` || RTL10a | The order for which messages are returned in. Valid values are `backwards` which orders messages from most recent to oldest, or `forwards` which orders messages from oldest to most recent. The default is `backwards`. |
 || `limit` || RTL10a | An upper limit on the number of messages returned. The default is 100, and the maximum is 1000. |
 || `untilAttach` || RTL10b | When `true`, ensures message history is up until the point of the channel being attached. See [continuous history](https://ably.com/docs/realtime/history#continuous-history) for more info. Requires the `direction` to be `backwards`. If the channel is not attached, or if `direction` is set to `forwards`, this option results in an error. |
@@ -545,8 +545,8 @@ Enables the retrieval of the current and historic presence set for a channel.
 || `connectionId` || RSP3a3 | Filters the list of returned presence members by a specific connection using its ID. |
 ||| `PaginatedResult<PresenceMessage>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PresenceMessage`]{@link PresenceMessage} objects. |
 | history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<PresenceMessage>` ||| RSP4a | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`PresenceMessage`]{@link PresenceMessage} objects for the channel. If the channel is configured to persist messages, then presence messages can be retrieved from history for up to 72 hours in the past. If not, presence messages can only be retrieved from history for up to two minutes in the past. |
-|| `start` || RSP4b1 | The time from which messages are retrieved, specified as a Unix timestamp. |
-|| `end` || RSP4b1 | The time until messages are retrieved, specified as a Unix timestamp. |
+|| `start` || RSP4b1 | The time from which messages are retrieved, specified as milliseconds since the Unix epoch. |
+|| `end` || RSP4b1 | The time until messages are retrieved, specified as milliseconds since the Unix epoch. |
 || `direction` || RSP4b2 | The order for which messages are returned in. Valid values are `backwards` which orders messages from most recent to oldest, or `forwards` which orders messages from oldest to most recent. The default is `backwards`. |
 || `limit` || RSP4b3 | An upper limit on the number of messages returned. The default is 100, and the maximum is 1000. |
 ||| `PaginatedResult<PresenceMessage>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PresenceMessage`]{@link PresenceMessage} objects. |
@@ -564,8 +564,8 @@ Enables the presence set to be entered and subscribed to, and the historic prese
 || `connectionId` || RTP11c3 | Filters the array of returned presence members by a specific connection using its ID. |
 ||| [`PresenceMessage`] || An array of [`PresenceMessage`]{@link PresenceMessage} objects. |
 | history(start: Time, end: Time, direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100) => io `PaginatedResult<PresenceMessage>` ||| RTP12c | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`PresenceMessage`]{@link PresenceMessage} objects for the channel. If the channel is configured to persist messages, then presence messages can be retrieved from history for up to 72 hours in the past. If not, presence messages can only be retrieved from history for up to two minutes in the past. |
-|| `start` || RTP12a | The time from which messages are retrieved, specified as a Unix timestamp. |
-|| `end` || RTP12a | The time until messages are retrieved, specified as a Unix timestamp. |
+|| `start` || RTP12a | The time from which messages are retrieved, specified as milliseconds since the Unix epoch. |
+|| `end` || RTP12a | The time until messages are retrieved, specified as milliseconds since the Unix epoch. |
 || `direction` || RTP12a | The order for which messages are returned in. Valid values are `backwards` which orders messages from most recent to oldest, or `forwards` which orders messages from oldest to most recent. The default is `backwards`. |
 || `limit` || RTP12a | An upper limit on the number of messages returned. The default is 100, and the maximum is 1000. |
 ||| `PaginatedResult<PresenceMessage>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PresenceMessage`]{@link PresenceMessage} objects. |
@@ -655,7 +655,7 @@ Contains an individual message that is sent to, or received from, Ably.
 | extras: JsonObject? ||| TM2i | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. Valid payloads include [`push`]{@link Push}, [`delta`]{@link DeltaExtras}, [`ref`]{@link ReferenceExtras} and `headers`. |
 | id: String ||| TM2a | A Unique ID assigned by Ably to this message. |
 | name: String? ||| TM2g | The event name. |
-| timestamp: Time ||| TM2f | Timestamp of when the message was received by Ably, as a Unix timestamp. |
+| timestamp: Time ||| TM2f | Timestamp of when the message was received by Ably, as milliseconds since the Unix epoch. |
 
 ## class PresenceMessage
 
@@ -676,7 +676,7 @@ Contains an individual presence update sent to, or received from, Ably.
 | encoding: String? ||| TP3f | This will typically be empty as all presence messages received from Ably are automatically decoded client-side using this value. However, if the message encoding cannot be processed, this attribute will contain the remaining transformations not applied to the data payload. |
 | extras: JsonObject? ||| TP3i | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
 | id: String ||| TP3a | A unique ID assigned to each `PresenceMessage` by Ably. |
-| timestamp: Time ||| TP3g | The time the `PresenceMessage` was received by Ably, as a Unix timestamp. |
+| timestamp: Time ||| TP3g | The time the `PresenceMessage` was received by Ably, as milliseconds since the Unix epoch. |
 | memberKey() -> String ||| TP3h | Combines `clientId` and `connectionId` to ensure that multiple connected clients with an identical `clientId` are uniquely identifiable. A string function that returns the combined `clientId` and `connectionId`. |
 ||| `String` || A combination of `clientId` and `connectionId`. |
 
