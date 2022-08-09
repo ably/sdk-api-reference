@@ -425,7 +425,7 @@ Describes the events emitted by a [`RestChannel`]{@link RestChannel} or [`Realti
 
 ## enum ChannelMode
 
-Describes the possible flags used to configure client capabilities.
+Describes the possible flags used to configure client capabilities, using [`ChannelOptions`]{@link ChannelOptions}.
 
 | Enum | Spec | Description |
 |---|---|---|
