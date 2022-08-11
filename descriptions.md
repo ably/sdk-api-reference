@@ -231,13 +231,13 @@ Enables messages to be published and historic messages to be retrieved for a cha
 ||| `PaginatedResult<Message>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Message`]{@link Message} objects. |
 | status() => ChannelDetails ||| RSL8 | Retrieves a [`ChannelDetails`]{@link ChannelDetails} object for the channel, which includes status and occupancy metrics. |
 ||| `ChannelDetails` || A [`ChannelDetails`]{@link ChannelDetails} object. |
-| publish(Message, params?: `Dict<String, Stringifiable>`) => io ||| RSL1 | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
+| publish(Message, params?: `Dict<String, Stringifiable>`) => io ||| RSL1 | Publishes a message to the channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
 || `Message` ||| A [`Message`]{@link Message} object. |
 || `params` ||| Optional parameters, such as [`quickAck`](https://faqs.ably.com/why-are-some-rest-publishes-on-a-channel-slow-and-then-typically-faster-on-subsequent-publishes) sent as part of the query string. |
-| publish([Message], params?: `Dict<String, Stringifiable>` ||| RSL1 | Sends an array of messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
+| publish([Message], params?: `Dict<String, Stringifiable>` ||| RSL1 | Publishes an array of messages to the channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
 || [`Message`] ||| An array of [`Message`]{@link Message} objects. |
 || `params` ||| Optional parameters, such as [`quickAck`](https://faqs.ably.com/why-are-some-rest-publishes-on-a-channel-slow-and-then-typically-faster-on-subsequent-publishes) sent as part of the query string. |
-| publish(name: String?, data: Data?) => io ||| RSL1 | Sends a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
+| publish(name: String?, data: Data?) => io ||| RSL1 | Publishes a single message to the channel with the given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. |
 || `name` ||| The name of the message. |
 || `data` ||| The payload of the message. |
 | setOptions(options: ChannelOptions) => io ||| RSL7 | Sets the [`ChannelOptions`]{@link ChannelOptions} for the channel. |
@@ -268,11 +268,11 @@ Enables messages to be published and subscribed to. Also enables historic messag
 || `limit` || RTL10a | An upper limit on the number of messages returned. The default is 100, and the maximum is 1000. |
 || `untilAttach` || RTL10b | When `true`, ensures message history is up until the point of the channel being attached. See [continuous history](https://ably.com/docs/realtime/history#continuous-history) for more info. Requires the `direction` to be `backwards`. If the channel is not attached, or if `direction` is set to `forwards`, this option results in an error. |
 ||| `PaginatedResult<Message>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Message`]{@link Message} objects. |
-| publish(Message) => io ||| RTL6i | Sends a message on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+| publish(Message) => io ||| RTL6i | Publish a message to the channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
 || `Message` ||| A [`Message`]{@link Message} object. |
-| publish([Message]) => io ||| RTL6i | Sends an array of messages on this channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
+| publish([Message]) => io ||| RTL6i | Publishes an array of messages to the channel. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel. |
 || [`Message`] ||| An array of [`Message`]{@link Message} objects. |
-| publish(name: String?, data: Data?) => io ||| RTL6i | Sends a single message on this channel based on a given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel, so long as [transient publishing](https://ably.com/docs/realtime/channels#transient-publish) is available in the library. Otherwise, the client will implicitly attach. |
+| publish(name: String?, data: Data?) => io ||| RTL6i | Publishes a single message to the channel with the given event name and payload. A callback may optionally be passed in to this call to be notified of success or failure of the operation. When publish is called with this client library, it won't attempt to implicitly attach to the channel, so long as [transient publishing](https://ably.com/docs/realtime/channels#transient-publish) is available in the library. Otherwise, the client will implicitly attach. |
 || `name` ||| The event name. |
 || `data` ||| The message payload. |
 | subscribe((Message) ->) => io ||| RTL7a | Registers a listener for messages on this channel. The caller supplies a listener function, which is called each time one or more messages arrives on the channel. A callback may optionally be passed in to this call to be notified of success or failure of the channel [`attach()`]{@link RealtimeChannel#attach} operation. |
@@ -331,10 +331,10 @@ Enables messages to be published to multiple channels, or retrieves the presence
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| publish([BatchSpec]) => `BatchResult<BatchPublishResponse>` ||| BO2a | Sends an array of [`BatchSpec`]{@link BatchSpec} objects to one or more channels, up to a maximum of 100 channels. Each [`BatchSpec`]{@link BatchSpec} object can contain a single message or an array of messages. Returns a [`BatchResult`]{@link BatchResult} object. |
+| publish([BatchSpec]) => `BatchResult<BatchPublishResponse>` ||| BO2a | Publish an array of [`BatchSpec`]{@link BatchSpec} objects to one or more channels, up to a maximum of 100 channels. Each [`BatchSpec`]{@link BatchSpec} object can contain a single message or an array of messages. Returns a [`BatchResult`]{@link BatchResult} object. |
 || [`BatchSpec`] ||| An array of [`BatchSpec`]{@link BatchSpec} objects. |
 ||| `BatchResult<BatchPublishResponse>` || A [`BatchResult`]{@link BatchResult} object. |
-| publish(BatchSpec) => `BatchResult<BatchPublishResponse>` ||| BO2a | Sends a [`BatchSpec`]{@link BatchSpec} object to one or more channels, up to a maximum of 100 channels. A [`BatchSpec`]{@link BatchSpec} object can contain a single message or an array of messages. Returns a [`BatchResult`]{@link BatchSpec} object. |
+| publish(BatchSpec) => `BatchResult<BatchPublishResponse>` ||| BO2a | Publish a [`BatchSpec`]{@link BatchSpec} object to one or more channels, up to a maximum of 100 channels. A [`BatchSpec`]{@link BatchSpec} object can contain a single message or an array of messages. Returns a [`BatchResult`]{@link BatchSpec} object. |
 || `BatchSpec` ||| A [`BatchSpec`]{@link BatchSpec} object. |
 | getPresence([String]) => `BatchResult<BatchPresenceResponse>` ||| BO2b | Retrieves the presence state for one or more channels, up to a maximum of 100 channels. Presence state includes the `clientId` of members and their current [`PresenceAction`]{@link PresenceAction}. Returns a [`BatchResult`]{@link BatchResult} object. |
 || [`String`] ||| An array of one or more channel names, up to a maximum of 100. |
