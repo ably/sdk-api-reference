@@ -109,7 +109,7 @@ Passes additional client-specific properties to the REST [`constructor()`]{@link
 | fallbackRetryTimeout: Duration default 600s ||| TO3l10 | The maximum time before HTTP requests are retried against the default endpoint. The default is 600 seconds. |
 | plugins: `Dict<PluginType, Plugin>` ||| TO3o | A map between a [`PluginType`]{@link PluginType} and a `Plugin` object. |
 | idempotentRestPublishing: bool default true ||| RSL1k1, RTL6a1, TO3n | When `true`, enables idempotent publishing by assigning a unique message ID client-side, allowing the Ably servers to discard automatic publish retries following a failure such as a network fault. The default is `true`. |
-| agents: [String: String?]? ||| RSC7d6 - interface only offered by some libraries | For use only by other Ably-authored SDKs, on a need-to-have basis. |
+| agents: [String: String?]? ||| RSC7d6 - interface only offered by some libraries | A set of additional entries for the Ably agent header. Each entry can be a key string or set of key-value pairs. |
 
 ## class AuthOptions
 
