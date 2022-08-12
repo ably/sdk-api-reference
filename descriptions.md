@@ -259,8 +259,8 @@ Enables messages to be published and subscribed to. Also enables historic messag
 | push: PushChannel |||| A [`PushChannel`]{@link PushChannel} object. |
 | modes: readonly [ChannelMode] ||| RTL4m | An array of [`ChannelMode`]{@link ChannelMode} objects. |
 | params: readonly `Dict<String, String>` ||| RTL4k1 | Optional [channel parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
-| attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link RealtimeChannel#subscribe}. Any resulting channel state change will be emitted to any listeners registered using the on or once methods. As a convenience, `attach()` is called implicitly if [`subscribe()`]{@link RealtimeChannel#subscribe} for the channel is called, or [`enter()`]{@link RealtimePresence#enter} or [`subscribe()`]{@link RealtimePresence#subscribe} are called on the [`RealtimePresence`]{@link RealtimePresence} object for this channel. |
-| detach() => io ||| RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the [`on`]{@link EventEmitter#on} or [`once`]{@link EventEmitter#once} methods of the [`EventEmitter`]{@link EventEmitter} object. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
+| attach() => io ||| RTL4d | Attach to this channel ensuring the channel is created in the Ably system and all messages published on the channel are received by any channel listeners registered using [`subscribe()`]{@link RealtimeChannel#subscribe}. Any resulting channel state change will be emitted to any listeners registered using the [`on()`]{@link EventEmitter#on} or [`once()`]{@link EventEmitter#once} methods. A callback may optionally be passed in to this call to be notified of success or failure of the operation. As a convenience, `attach()` is called implicitly if [`subscribe()`]{@link RealtimeChannel#subscribe} for the channel is called, or [`enter()`]{@link RealtimePresence#enter} or [`subscribe()`]{@link RealtimePresence#subscribe} are called on the [`RealtimePresence`]{@link RealtimePresence} object for this channel. |
+| detach() => io ||| RTL5e | Detach from this channel. Any resulting channel state change is emitted to any listeners registered using the [`on()`]{@link EventEmitter#on} or [`once()`]{@link EventEmitter#once} methods. A callback may optionally be passed in to this call to be notified of success or failure of the operation. Once all clients globally have detached from the channel, the channel will be released in the Ably service within two minutes. |
 | history(start: Time, end: Time api-default now(), direction: .Backwards \| .Forwards api-default .Backwards, limit: int api-default 100, untilAttach: Bool default false) => io `PaginatedResult<Message>` ||| RSL2a | Retrieves a [`PaginatedResult`]{@link PaginatedResult} object, containing an array of historical [`Message`]{@link Message} objects for the channel. If the channel is configured to persist messages, then messages can be retrieved from history for up to 72 hours in the past. If not, messages can only be retrieved from history for up to two minutes in the past. |
 || `start` || RTL10a | The time from which messages are retrieved, specified as milliseconds since the Unix epoch. |
 || `end` || RTL10a | The time until messages are retrieved, specified as milliseconds since the Unix epoch. |
@@ -302,7 +302,7 @@ Enables messages to be published and subscribed to. Also enables historic messag
 | unsubscribe(MessageFilterObject, (Message) ->) ||| RTL22 | Deregisters all listeners to messages on this channel that match the supplied filter. |
 || `MessageFilterObject` ||| A [`MessageFilterObject`]{@link MessageFilterObject}. |
 || `(Message)` ||| An event listener function. |
-| setOptions(options: ChannelOptions) => io ||| RTL16 | Sets the [`ChannelOptions`]{@link ChannelOptions} for the channel. |
+| setOptions(options: ChannelOptions) => io ||| RTL16 | Sets the [`ChannelOptions`]{@link ChannelOptions} for the channel. An optional callback may be provided to notify of the success or failure of the operation. |
 || `options` ||| A [`ChannelOptions`]{@link ChannelOptions} object. |
 
 ## class MessageFilterObject
@@ -529,9 +529,9 @@ Contains the properties required to configure the encryption of [`Message`]{@lin
 | +getDefaultParams(CipherParamOptions) -> CipherParams ||| RSE1 | Returns a [`CipherParams`]{@link CipherParams} object, using the default values for any fields not supplied by the [`CipherParamOptions`]{@link CipherParamOptions} object. |
 || `CipherParamOptions` || RSE1b | A [`CipherParamOptions`]{@link CipherParamOptions} object. |
 ||| `CipherParams` | RSE1a | A [`CipherParams`]{@link CipherParams} object, using the default values for any fields not supplied. |
-| +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key to be used in the encryption of the channel. |
+| +generateRandomKey(keyLength: Int?) => io Binary ||| RSE2 | Generates a random key to be used in the encryption of the channel. If the language cryptographic randomness primitives are blocking or async, a callback is used. The callback returns a generated binary key. |
 || `keyLength` || RSE2a  | The length of the key, in bits, to be generated. If not specified, this is equal to the default `keyLength` of the default algorithm: for AES this is 256 bits. |
-||| `Binary` | RSE2b | The key as a binary, for example, a byte array. If the language cryptographic randomness primitives are blocking or async, a callback is used. The callback returns the generated binary key. |
+||| `Binary` | RSE2b | The key as a binary, for example, a byte array. |
 
 ## class RestPresence
 
