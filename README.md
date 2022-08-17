@@ -68,7 +68,7 @@ The following conventions should be followed when adding a new method or propert
 
 ## Static site introduction
 
-The following text is an introduction that can be added to each static site generated from an SDK after docstring comments have been added. It can be amended as necessary, for example where an SDK implements the REST and realtime interfaces as two separate libraries.
+The following text is an introduction that can be added to each static site generated from an SDK after docstring comments have been added:
 
 ```
 # Ably `<Language>` Client Library SDK API Reference
@@ -81,3 +81,5 @@ The realtime interface enables a client to maintain a persistent connection to A
 
 The `<Language>` API references are generated from the [Ably `<Language>` Client Library SDK source code](link-to-Ably-repo) using [`<Tool>`](link-to-tool). View the [Ably docs](http://ably.com/docs/) for conceptual information on using Ably and for client library API references split between the [realtime](http://ably.com/docs/api/realtime-sdk) and [REST](http://ably.com/docs/api/rest-sdk) interfaces.
 ```
+
+It can be amended as necessary, for example where an SDK implements the REST and realtime interfaces as two separate libraries.
