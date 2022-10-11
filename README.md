@@ -1,8 +1,14 @@
-# Canonical table
+# Ably's Canonical SDK API Reference Commentaries
 
-This repository is intended to be a language-agnostic reference for SDK developers to use when adding docstring comments to Ably SDKs.
+_[Ably](https://ably.com) is the platform that powers synchronized digital experiences in realtime. Whether attending an event in a virtual venue, receiving realtime financial information, or monitoring live car performance data – consumers simply expect realtime digital experiences as standard. Ably provides a suite of APIs to build, extend, and deliver powerful digital experiences in realtime for more than 250 million devices across 80 countries each month. Organizations like Bloomberg, HubSpot, Verizon, and Hopin depend on Ably’s platform to offload the growing complexity of business-critical realtime data synchronization at global scale. For more information, see the [Ably documentation](https://ably.com/documentation)._
 
-The repository contains a set of tables in [descriptions.md](/descriptions.md) that complements the [Ably features spec](https://docs.ably.io/client-lib-development-guide/features). Each class and enum has its own table with an associated description for the class or enum. Every method and property is documented within the appropriate table.
+## Overview
+
+Language-agnostic reference API (Application Programming Interface) commentaries for SDK (Software Developent Kit) developers to use when adding docstring comments to Ably SDKs.
+
+The repository contains a set of tables in [descriptions.md](/descriptions.md) that complements our [features spec](https://sdk.ably.com/builds/ably/specification/main/features/). Each class and enum has its own table with an associated description for the class or enum. Every method and property is documented within the appropriate table.
+
+This repository is owned by our DevEd (Developer Education) Team, with contrbutions and review input from our SDK Team.
 
 ## Table format
 
@@ -24,7 +30,7 @@ The table for each class contains the following columns:
 
 The table for each enum contains the following columns:
 
-```
+```markdown
 | Enum | Spec | Description |
 ```
 
@@ -70,7 +76,7 @@ The following conventions should be followed when adding a new method or propert
 
 The following text is an introduction that can be added to each static site generated from an SDK after docstring comments have been added:
 
-```
+```markdown
 # Ably `<Language>` Client Library SDK API Reference
 
 The `<Language>` Client Library SDK supports a realtime and a REST interface. The `<Language>` API references are generated from the [Ably `<Language>` Client Library SDK source code](link-to-Ably-repo) using [`<Tool>`](link-to-tool) and structured by classes.
