@@ -1056,6 +1056,8 @@ A generic interface for event registration and delivery used in a number of the 
 || `Event` ||| The named event to listen for. |
 || `Data` ||| The event listener. |
 | off() ||| RTE5 | Deregisters all registrations, for all events and listeners. |
+| off(Event) ||| RTE5 | Removes all registrations that match the specified event. |
+|| `Event` ||| The named event. |
 | off((Data...) ->) ||| RTE5 | Deregisters the specified listener. Removes all registrations matching the given listener, regardless of whether they are associated with an event or not. |
 || `Data` ||| The event listener. |
 | off(Event, (Data...) ->) ||| RTE5 | Removes all registrations that match both the specified listener and the specified event. |
