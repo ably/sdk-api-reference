@@ -1056,11 +1056,11 @@ A generic interface for event registration and delivery used in a number of the 
 || `Event` ||| The named event to listen for. |
 || `Data` ||| The event listener. |
 | off() ||| RTE5 | Deregisters all registrations, for all events and listeners. |
-| off(Event) ||| RTE5 | Removes all registrations that match the specified event. |
+| off(Event) ||| RTE5 | Deregisters all registrations that match the specified event. |
 || `Event` ||| The named event. |
 | off((Data...) ->) ||| RTE5 | Deregisters the specified listener. Removes all registrations matching the given listener, regardless of whether they are associated with an event or not. |
 || `Data` ||| The event listener. |
-| off(Event, (Data...) ->) ||| RTE5 | Removes all registrations that match both the specified listener and the specified event. |
+| off(Event, (Data...) ->) ||| RTE5 | Deregisters all registrations that match both the specified listener and the specified event. |
 || `Event` ||| The named event. |
 || `Data` ||| The event listener. |
 | emit(Event, Data...) ||| internal, RTE6 | Emits an event, calling registered listeners with the given event name and any other given arguments. If an exception is raised in any of the listeners, the exception is caught by the `EventEmitter` and the exception is logged to the Ably logger. |
