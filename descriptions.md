@@ -452,7 +452,7 @@ Passes additional properties to a [`RestChannel`]{@link RestChannel} or [`Realti
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|----|
-| +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Constructor `withCipherKey`, that takes a key only. |
+| +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Constructor `withCipherKey` takes a key as a argument. |
 || `key` ||| A private key used to encrypt and decrypt payloads. |
 ||| `ChannelOptions` || A `ChannelOptions` object. |
 | cipher?: (CipherParams \| CipherParamOptions) ||| RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
