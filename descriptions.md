@@ -200,7 +200,7 @@ Creates and destroys [`RestChannel`]{@link RestChannel} and [`RealtimeChannel`]{
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| exists(String) -> Bool || | RSN2, RTS2 | Checks if a channel has been previously retrieved using the `get()` method. |
+| exists(String) -> Bool || | RSN2, RTS2 | Checks if the channel by the given name exists locally. |
 || `String` ||| The channel name. |
 ||| `Bool` || `true` if the channel exists, otherwise `false`. |
 | get(String) -> ChannelType ||| RSN3a, RTS3a | Creates a new [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object, or returns the existing channel object. |
