@@ -474,7 +474,7 @@ Contains the status of a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| isActive: Boolean ||| CHS2a | If `true`, the channel is active, otherwise `false`. |
+| isActive: Boolean ||| CHS2a | If `true`, the channel is active, otherwise inactive. |
 | occupancy: ChannelOccupancy ||| CHS2b | A [`ChannelOccupancy`]{@link ChannelOccupancy} object. |
 
 ## class ChannelOccupancy
