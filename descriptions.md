@@ -65,7 +65,7 @@ A client that extends the functionality of the [`RestClient`]{@link RestClient} 
 || `unit` ||| `minute`, `hour`, `day` or `month`. Based on the unit selected, the given `start` or `end` times are rounded down to the start of the relevant interval depending on the unit granularity of the query. |
 ||| `PaginatedResult` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Stats`]{@link Stats} objects. |
 | close() ||| proxy for RTN12 | Calls [`connection.close()`]{@link Connection#close} and causes the connection to close, entering the closing state. Once closed, the library will not attempt to re-establish the connection without an explicit call to [`connect()`]{@link Connection#connect}. |
-| connect() ||| proxy for RTN11 | Calls [`connection.connect()`]{@link Connection#connect} and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is unnecessary unless the [`autoConnect`]{@link ClientOptions#autoConnect} property is disabled. |
+| connect() ||| proxy for RTN11 | Calls [`connection.connect()`]{@link Connection#connect} and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is needed if the [`autoConnect`]{@link ClientOptions#autoConnect} property is disabled. |
 | time() => io Time ||| RTC6a | Retrieves the time from the Ably service as milliseconds since the Unix epoch. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
 ||| `Time` || The time as milliseconds since the Unix epoch. |
 
@@ -702,7 +702,7 @@ Enables the management of a connection to Ably.
 | serial: Int? ||| RTN10 | The serial number of the last message to be received on this connection, used automatically by the library when recovering or resuming a connection. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. |
 | state: ConnectionState ||| RTN4d | The current [`ConnectionState`]{@link ConnectionState} of the connection. |
 | close() ||| RTN12 | Causes the connection to close, entering the [`CLOSING`]{@link ConnectionState#CLOSING} state. Once closed, the library does not attempt to re-establish the connection without an explicit call to [`connect()`]{@link Connection#connect}. |
-| connect() ||| RTC1b, RTN3, RTN11 | Explicitly calling `connect()` is unnecessary unless the `autoConnect` attribute of the [`ClientOptions`]{@link ClientOptions} object is `false`. Unless already connected or connecting, this method causes the connection to open, entering the [`CONNECTING`]{@link ConnectionState#CONNECTING} state. |
+| connect() ||| RTC1b, RTN3, RTN11 | Explicitly calling `connect()` is needed if the `autoConnect` attribute of the [`ClientOptions`]{@link ClientOptions} object is `false`. If not already connected or connecting, this method causes the connection to open, entering the [`CONNECTING`]{@link ConnectionState#CONNECTING} state. |
 | ping() => io Duration ||| RTN13 | When connected, sends a heartbeat ping to the Ably server and executes the callback with any error and the response time in milliseconds when a heartbeat ping request is echoed from the server. This can be useful for measuring true round-trip latency to the connected Ably server. |
 ||| `Duration` || The response time in milliseconds. |
 
