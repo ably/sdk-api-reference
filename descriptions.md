@@ -65,7 +65,7 @@ A client that extends the functionality of the [`RestClient`]{@link RestClient} 
 || `unit` ||| `minute`, `hour`, `day` or `month`. Based on the unit selected, the given `start` or `end` times are rounded down to the start of the relevant interval depending on the unit granularity of the query. |
 ||| `PaginatedResult` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Stats`]{@link Stats} objects. |
 | close() ||| proxy for RTN12 | Calls [`connection.close()`]{@link Connection#close} and causes the connection to close, entering the closing state. Once closed, the library will not attempt to re-establish the connection without an explicit call to [`connect()`]{@link Connection#connect}. |
-| connect() ||| proxy for RTN11 | Calls [`connection.connect()`]{@link Connection#connect} and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is unnecessary unless the [`autoConnect`]{@link ClientOptions#autoConnect} property is disabled. |
+| connect() ||| proxy for RTN11 | Calls [`connection.connect()`]{@link Connection#connect} and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is needed if the [`autoConnect`]{@link ClientOptions#autoConnect} property is disabled. |
 | time() => io Time ||| RTC6a | Retrieves the time from the Ably service as milliseconds since the Unix epoch. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
 ||| `Time` || The time as milliseconds since the Unix epoch. |
 
@@ -96,9 +96,9 @@ Passes additional client-specific properties to the REST [`constructor()`]{@link
 | useBinaryProtocol: Bool default true ||| TO3f | When `true`, the more efficient MsgPack binary encoding is used. When `false`, JSON text encoding is used. The default is `true`. |
 | transportParams: [String: Stringifiable]? ||| RTC1f | A set of key-value pairs that can be used to pass in arbitrary connection parameters, such as [`heartbeatInterval`](https://ably.com/docs/realtime/connection#heartbeats) or [`remainPresentFor`](https://ably.com/docs/realtime/presence#unstable-connections). |
 | addRequestIds: Bool default false ||| TO3p | When `true`, every REST request to Ably should include a random string in the `request_id` query string parameter. The random string should be a url-safe base64-encoding sequence of at least 9 bytes, obtained from a source of randomness. This request ID must remain the same if a request is retried to a fallback host. Any log messages associated with the request should include the request ID. If the request fails, the request ID must be included in the [`ErrorInfo`]{@link ErrorInfo} returned to the user. The default is `false`. |
-| disconnectedRetryTimeout: Duration default 15s ||| TO3l1 | If the connection is still in the [`DISCONNECTED`]{@link ConnectionState#disconnected} state after this delay, the client library will attempt to reconnect automatically. The default is 15 seconds. |
+| disconnectedRetryTimeout: Duration default 15s ||| TO3l1 | When the connection enters the [`DISCONNECTED`]{@link ConnectionState#disconnected} state, after this delay, if the state is still [`DISCONNECTED`]{@link ConnectionState#disconnected}, the client library will attempt to reconnect automatically. The default is 15 seconds. |
 | suspendedRetryTimeout: Duration default 30s ||| RTN14d, TO3l2 | When the connection enters the [`SUSPENDED`]{@link ConnectionState#suspended} state, after this delay, if the state is still [`SUSPENDED`]{@link ConnectionState#suspended}, the client library attempts to reconnect automatically. The default is 30 seconds. |
-| channelRetryTimeout: Duration default 15s ||| RTL13b, TO3l7 | When a channel becomes [`SUSPENDED`]{@link ConnectionState#suspended} following a server initiated [`DETACHED`]{@link ConnectionState#detached}, after this delay, if the channel is still [`SUSPENDED`]{@link ConnectionState#suspended} and the connection is [`CONNECTED`]{@link ConnectionState#connected}, the client library will attempt to re-attach the channel automatically. The default is 15 seconds. |
+| channelRetryTimeout: Duration default 15s ||| RTL13b, TO3l7 | When a channel becomes [`SUSPENDED`]{@link ChannelState#suspended} following a server initiated [`DETACHED`]{@link ChannelState#detached}, after this delay, if the channel is still [`SUSPENDED`]{@link ChannelState#suspended} and the connection is in [`CONNECTED`]{@link ConnectionState#connected}, the client library will attempt to re-attach the channel automatically. The default is 15 seconds. |
 | httpOpenTimeout: Duration default 4s ||| TO3l3 | Timeout for opening a connection to Ably to initiate an HTTP request. The default is 4 seconds. |
 | httpRequestTimeout: Duration default 10s ||| TO3l4 | Timeout for a client performing a complete HTTP request to Ably, including the connection phase. The default is 10 seconds. |
 | realtimeRequestTimeout: Duration default 10s ||| TO3l11 | Timeout for the wait of acknowledgement for operations performed via a realtime connection, before the client library considers a request failed and triggers a failure condition. Operations include establishing a connection with Ably, or sending a `HEARTBEAT`, `CONNECT`, `ATTACH`, `DETACH` or `CLOSE` request. It is the equivalent of `httpRequestTimeout` but for realtime operations, rather than REST. The default is 10 seconds. |
@@ -200,7 +200,7 @@ Creates and destroys [`RestChannel`]{@link RestChannel} and [`RealtimeChannel`]{
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| exists(String) -> Bool || | RSN2, RTS2 | Checks if a channel has been previously retrieved using the `get()` method. |
+| exists(String) -> Bool || | RSN2, RTS2 | Checks if the channel by the given name exists locally. |
 || `String` ||| The channel name. |
 ||| `Bool` || `true` if the channel exists, otherwise `false`. |
 | get(String) -> ChannelType ||| RSN3a, RTS3a | Creates a new [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object, or returns the existing channel object. |
@@ -452,7 +452,7 @@ Passes additional properties to a [`RestChannel`]{@link RestChannel} or [`Realti
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|----|
-| +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Constructor `withCipherKey`, that takes a key only. |
+| +withCipherKey(key: Binary \| String)? -> ChannelOptions ||| TB3 | Constructor `withCipherKey` takes a key as a argument. |
 || `key` ||| A private key used to encrypt and decrypt payloads. |
 ||| `ChannelOptions` || A `ChannelOptions` object. |
 | cipher?: (CipherParams \| CipherParamOptions) ||| RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
@@ -474,7 +474,7 @@ Contains the status of a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| isActive: Boolean ||| CHS2a | If `true`, the channel is active, otherwise `false`. |
+| isActive: Boolean ||| CHS2a | If `true`, the channel is active, otherwise inactive. |
 | occupancy: ChannelOccupancy ||| CHS2b | A [`ChannelOccupancy`]{@link ChannelOccupancy} object. |
 
 ## class ChannelOccupancy
@@ -578,24 +578,24 @@ Enables the presence set to be entered and subscribed to, and the historic prese
 | unsubscribe((PresenceMessage) ->) ||| RTP7a | Deregisters a specific listener that is registered to receive [`PresenceMessage`]{@link PresenceMessage} on the channel. |
 | unsubscribe(PresenceAction, (PresenceMessage) ->) ||| RTP7b | Deregisters a specific listener that is registered to receive [`PresenceMessage`]{@link PresenceMessage} on the channel for a given [`PresenceAction`]{@link PresenceAction}. |
 || `PresenceAction` || | A specific [`PresenceAction`]{@link PresenceAction} to deregister the listener for. |
-| enter(Data?, extras?: JsonObject) => io ||| RTP8 | Enters the presence set for the channel, optionally passing a `data` payload. A `clientId` is required to be present on a channel. An optional callback may be provided to notify of the success or failure of the operation. |
+| enter(Data?, extras?: JsonObject) => io ||| RTP8 | Announces the presence of the current client with optional `data` payload (enter message) on the channel. Enters client presence into the channel presence set. A valid `clientId` is required to be present on the connection. An optional callback may be provided to notify of the success or failure of the operation. |
 || `Data` || | The payload associated with the presence member. |
 || `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
-| update(Data?, extras?: JsonObject) => io ||| RTP9 | Updates the `data` payload for a presence member. If called before entering the presence set, this is treated as an [`ENTER`]{@link PresenceAction#ENTER} event. An optional callback may be provided to notify of the success or failure of the operation. |
+| update(Data?, extras?: JsonObject) => io ||| RTP9 | Announces an updated presence message for the current client.Updates the `data` payload for a presence member. If the current client is not present on the channel, update will behave as `Enter` method, i.e. if called before entering the presence set, this is treated as an [`ENTER`]{@link PresenceAction#ENTER} event. An optional callback may be provided to notify of the success or failure of the operation. |
 || `Data` || | The payload to update for the presence member. |
 || `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
-| leave(Data?, extras?: JsonObject) => io ||| RTP10 | Leaves the presence set for the channel. A client must have previously entered the presence set before they can leave it. An optional callback may be provided to notify of the success or failure of the operation. |
+| leave(Data?, extras?: JsonObject) => io ||| RTP10 | Announces current client leave on the channel altogether with a optional data payload (leave message). It is removed from the channel presence members set. A client must have previously entered the presence set before they can leave it. An optional callback may be provided to notify of the success or failure of the operation. |
 || `Data` || | The payload associated with the presence member. |
 || `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
-| enterClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP4, RTP14, RTP15 | Enters the presence set of the channel for a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
+| enterClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP4, RTP14, RTP15 | Announces presence of the given `clientID` altogether with a enter message for the associated channel. Enters the given clientId in the channel presence set. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard (*) `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
 || `clientId` || | The ID of the client to enter into the presence set. |
 || `Data` || | The payload associated with the presence member. |
 || `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
-| updateClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP15 | Updates the `data` payload for a presence member using a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
+| updateClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP15 | Announces an updated presence message for the given `clientID`. Updates the `data` payload for a presence member using a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard (*) `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
 || `clientId` || | The ID of the client to update in the presence set. |
 || `Data` || | The payload to update for the presence member. |
 || `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
-| leaveClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP15 | Leaves the presence set of the channel for a given `clientId`. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
+| leaveClient(clientId: String, Data?, extras?: JsonObject) => io ||| RTP15 | Announces the given clientID leave from associated channel altogether with a optional leave message. Leaves the given `clientId` from channel presence set. Enables a single client to update presence on behalf of any number of clients using a single connection. The library must have been instantiated with an API key or a token bound to a wildcard (*) `clientId`. An optional callback may be provided to notify of the success or failure of the operation. |
 || `clientId` || | The ID of the client to leave the presence set for. |
 || `Data` || | The payload associated with the presence member. |
 || `extras` || | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. |
@@ -702,7 +702,7 @@ Enables the management of a connection to Ably.
 | serial: Int? ||| RTN10 | The serial number of the last message to be received on this connection, used automatically by the library when recovering or resuming a connection. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. |
 | state: ConnectionState ||| RTN4d | The current [`ConnectionState`]{@link ConnectionState} of the connection. |
 | close() ||| RTN12 | Causes the connection to close, entering the [`CLOSING`]{@link ConnectionState#CLOSING} state. Once closed, the library does not attempt to re-establish the connection without an explicit call to [`connect()`]{@link Connection#connect}. |
-| connect() ||| RTC1b, RTN3, RTN11 | Explicitly calling `connect()` is unnecessary unless the `autoConnect` attribute of the [`ClientOptions`]{@link ClientOptions} object is `false`. Unless already connected or connecting, this method causes the connection to open, entering the [`CONNECTING`]{@link ConnectionState#CONNECTING} state. |
+| connect() ||| RTC1b, RTN3, RTN11 | Explicitly calling `connect()` is needed if the `autoConnect` attribute of the [`ClientOptions`]{@link ClientOptions} object is `false`. If not already connected or connecting, this method causes the connection to open, entering the [`CONNECTING`]{@link ConnectionState#CONNECTING} state. |
 | ping() => io Duration ||| RTN13 | When connected, sends a heartbeat ping to the Ably server and executes the callback with any error and the response time in milliseconds when a heartbeat ping request is echoed from the server. This can be useful for measuring true round-trip latency to the connected Ably server. |
 ||| `Duration` || The response time in milliseconds. |
 
@@ -1056,9 +1056,11 @@ A generic interface for event registration and delivery used in a number of the 
 || `Event` ||| The named event to listen for. |
 || `Data` ||| The event listener. |
 | off() ||| RTE5 | Deregisters all registrations, for all events and listeners. |
+| off(Event) ||| RTE5 | Deregisters all registrations that match the specified event. |
+|| `Event` ||| The named event. |
 | off((Data...) ->) ||| RTE5 | Deregisters the specified listener. Removes all registrations matching the given listener, regardless of whether they are associated with an event or not. |
 || `Data` ||| The event listener. |
-| off(Event, (Data...) ->) ||| RTE5 | Removes all registrations that match both the specified listener and the specified event. |
+| off(Event, (Data...) ->) ||| RTE5 | Deregisters all registrations that match both the specified listener and the specified event. |
 || `Event` ||| The named event. |
 || `Data` ||| The event listener. |
 | emit(Event, Data...) ||| internal, RTE6 | Emits an event, calling registered listeners with the given event name and any other given arguments. If an exception is raised in any of the listeners, the exception is caught by the `EventEmitter` and the exception is logged to the Ably logger. |
