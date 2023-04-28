@@ -210,6 +210,15 @@ Creates and destroys [`RestChannel`]{@link RestChannel} and [`RealtimeChannel`]{
 || `String` ||| The channel name. |
 || `ChannelOptions` ||| A [`ChannelOptions`]{@link ChannelOptions} object. |
 ||| `ChannelType` || A [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object. |
+| getDerived(String, DeriveOptions) -> ChannelType ||| RTS5, RTS5a, RTS5a1 | Creates a new derived [`RealtimeChannel`]{@link RealtimeChannel} object, with the provided [`DeriveOptions`]{@link DeriveOptions}, or returns the existing derived channel object. |
+|| `String` ||| The channel name. |
+|| `DeriveOptions` ||| A [`DeriveOptions`]{@link DeriveOptions} object. |
+||| `ChannelType` || A [`RealtimeChannel`]{@link RealtimeChannel} object. |
+| getDerived(String, DeriveOptions, ChannelOptions) -> ChannelType ||| RTS5, RTS5a, RTS5a2 | Creates a new derived [`RealtimeChannel`]{@link RealtimeChannel} object, with the provided [`DeriveOptions`]{@link DeriveOptions} and [`ChannelOptions`]{@link ChannelOptions}, or returns the existing derived channel object. |
+|| `String` ||| The channel name. |
+|| `DeriveOptions` ||| A [`DeriveOptions`]{@link DeriveOptions} object. |
+|| `ChannelOptions` ||| A [`ChannelOptions`]{@link ChannelOptions} object. |
+||| `ChannelType` || A [`RealtimeChannel`]{@link RealtimeChannel} object. |
 | iterate() -> `Iterator<ChannelType>` ||| RSN2, RTS2 | Iterates through the existing channels. |
 ||| `ChannelType` || Each iteration returns a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object. |
 | release(String) ||| RSN4, RTS4 | Releases a [`RestChannel`]{@link RestChannel} or [`RealtimeChannel`]{@link RealtimeChannel} object, deleting it, and enabling it to be garbage collected. It also removes any listeners associated with the channel. To release a channel, the [`ChannelState`]{@link ChannelState} must be `INITIALIZED`, `DETACHED`, or `FAILED`. |
@@ -458,6 +467,15 @@ Passes additional properties to a [`RestChannel`]{@link RestChannel} or [`Realti
 | cipher?: (CipherParams \| CipherParamOptions) ||| RSL5a, TB2b | Requests encryption for this channel when not null, and specifies encryption-related parameters (such as algorithm, chaining mode, key length and key). See [an example](https://ably.com/docs/realtime/encryption#getting-started). |
 | params?: `Dict<String, String>` ||| TB2c | [Channel Parameters](https://ably.com/docs/realtime/channels/channel-parameters/overview) that configure the behavior of the channel. |
 | modes?: [ChannelMode] ||| TB2d | An array of [`ChannelMode`]{@link ChannelMode} objects. |
+
+
+## class DeriveOptions
+
+Passes additional properties to a [`RealtimeChannel`]{@link RealtimeChannel} object, such as filter, to create a new derived/synthetic channel.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|----|
+| filter: `String` ||| RTS5a | JMESPath string expression of filter property to be used to create a Subscription filter derived channel |
 
 ## class ChannelDetails
 
