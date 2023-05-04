@@ -178,7 +178,11 @@ Creates Ably [`TokenRequest`]{@link TokenRequest} objects and obtains Ably Token
 || `AuthOptions` ||| An [`AuthOptions`]{@link AuthOptions} object. |
 ||| `TokenDetails` || A [`TokenDetails`]{@link TokenDetails} object. |
 |`TokenDetails`: TokenDetails?||| RSA16 | A [`TokenDetails`]{@link TokenDetails} object. |
-
+| revokeTokens([TokenRevocationTargetSpecifier], issuedBefore number?, allowReauthMargin boolean?) => io `BatchResult<TokenRevocationSuccessResult \| TokenRevocationFailureResult>`  ||| RSA17 | Revokes the tokens specified by the provided array of [`TokenRevocationTargetSpecifier`]{@link TokenRevocationTargetSpecifier}s. Only tokens issued by an API key that had revocable tokens enabled before the token was issued can be revoked. See the [token revocation docs](https://ably.com/docs/core-features/authentication#token-revocation) for more information. |
+|| [`TokenRevocationTargetSpecifier`] ||| An array of [`TokenRevocationTargetSpecifier`]{@link TokenRevocationTargetSpecifier} objects. |
+|| `issuedBefore` ||| A Unix timestamp in milliseconds where only tokens issued before this time are revoked. The default is the current time. Requests with an `issuedBefore` in the future, or more than an hour in the past, will be rejected. |
+|| `allowReauthMargin` ||| If true, permits a token renewal cycle to take place without needing established connections to be dropped, by postponing enforcement to 30 seconds in the future, and sending any existing connections a hint to obtain (and upgrade the connection to use) a new token. The default is `false`, meaning that the effect is near-immediate. |
+||| `BatchResult<TokenRevocationSuccessResult \| TokenRevocationFailureResult>` || A [`BatchResult`]{@link BatchResult} containing information about the result of the token revocation request for each provided [`TokenRevocationTargetSpecifier`]{@link TokenRevocationTargetSpecifier}. |
 
 ## class TokenDetails
 
@@ -1174,3 +1178,31 @@ Contains information about the result of an unsuccessful batch presence request 
 |---|---|---|---|---|
 | channel: String ||| BGF2a | The channel name the presence state failed to be retrieved for. |
 | error: ErrorInfo ||| BGF2b | Describes the reason for which presence state could not be retrieved for the channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
+
+## class `TokenRevocationTargetSpecifier`
+
+Describes which tokens should be affected by a token revocation request.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| type: String ||| TRT2a | The type of token revocation target specifier. Valid values include `clientId`, `revocationKey` and `channel`. |
+| value: String ||| TRT2b | The value of the token revocation target specifier. |
+
+## class `TokenRevocationSuccessResult`
+
+Contains information about the result of a successful token revocation request for a single target specifier.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| target: String ||| TRS2a | The target specifier. |
+| appliesAt: Int ||| TRS2b | The time at which the token revocation will take effect, as a Unix timestamp in milliseconds. |
+| issuedBefore: Int ||| TRS2c | A Unix timestamp in milliseconds. Only tokens issued earlier than this time will be revoked. |
+
+## class `TokenRevocationFailureResult`
+
+Contains information about the result of an unsuccessful token revocation request for a single target specifier.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| target: String ||| TRF2a | The target specifier. |
+| error: ErrorInfo ||| TRF2b | Describes the reason for which token revocation failed for the given `target` as an [`ErrorInfo`]{@link ErrorInfo} object. |
