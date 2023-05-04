@@ -32,6 +32,12 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 ||| `PaginatedResult` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Stats`]{@link Stats} objects. |
 | time() => io Time ||| RSC16 | Retrieves the time from the Ably service as milliseconds since the Unix epoch. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest} with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
 ||| `Time` || The time as milliseconds since the Unix epoch. |
+| batchPublish(BatchPublishSpec) => io `BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>` ||| RSC22 | Publishes a [`BatchPublishSpec`]{@link BatchPublishSpec} object to one or more channels, up to a maximum of 100 channels. |
+|| `BatchPublishSpec` ||| A [`BatchPublishSpec`]{@link BatchPublishSpec} object. |
+||| `BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>` || A [`BatchResult`]{@link BatchResult} object containing information about the result of the batch publish for each requested channel. |
+| batchPublish([BatchPublishSpec]) => io `[BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>]` ||| RSC22 | Publishes one or more [`BatchPublishSpec`]{@link BatchPublishSpec} objects to one or more channels, up to a maximum of 100 channels. |
+|| [`BatchPublishSpec`] ||| An array of [`BatchPublishSpec`]{@link BatchPublishSpec} objects. |
+||| [`BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>`] || An array of [`BatchResult`]{@link BatchResult} objects containing information about the result of the batch publish for each requested channel for each provided [`BatchPublishSpec`]{@link BatchPublishSpec}. The array returned is in the same order as the provided [`BatchPublishSpec`]{@link BatchPublishSpec} array. |
 
 ## class RealtimeClient
 
@@ -68,6 +74,12 @@ A client that extends the functionality of the [`RestClient`]{@link RestClient} 
 | connect() ||| proxy for RTN11 | Calls [`connection.connect()`]{@link Connection#connect} and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is needed if the [`autoConnect`]{@link ClientOptions#autoConnect} property is disabled. |
 | time() => io Time ||| RTC6a | Retrieves the time from the Ably service as milliseconds since the Unix epoch. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
 ||| `Time` || The time as milliseconds since the Unix epoch. |
+| batchPublish(BatchPublishSpec) => io `BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>` ||| RSC22 | Publishes a [`BatchPublishSpec`]{@link BatchPublishSpec} object to one or more channels, up to a maximum of 100 channels. |
+|| `BatchPublishSpec` ||| A [`BatchPublishSpec`]{@link BatchPublishSpec} object. |
+||| `BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>` || A [`BatchResult`]{@link BatchResult} object containing information about the result of the batch publish for each requested channel. |
+| batchPublish([BatchPublishSpec]) => io `[BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>]` ||| RSC22 | Publishes one or more [`BatchPublishSpec`]{@link BatchPublishSpec} object to one or more channels, up to a maximum of 100 channels. |
+|| [`BatchPublishSpec`] ||| An array of [`BatchPublishSpec`]{@link BatchPublishSpec} objects. |
+||| [`BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>`] || An array of [`BatchResult`]{@link BatchResult} objects containing information about the result of the batch publish for each requested channel for each provided [`BatchPublishSpec`]{@link BatchPublishSpec}. The array returned is in the same order as the provided [`BatchPublishSpec`]{@link BatchPublishSpec} array. |
 
 ## class ClientOptions
 
@@ -1101,3 +1113,40 @@ Provides information about the Ably client library and the environment in which 
 | +agentIdentifier(additionalAgents: Dict<String, String?>?) => String || | CR3 | Returns the `Agent` library identifier. This method should only be used by Ably-authored SDKs. |
 || `additionalAgents` || CR3c | A set of additional entries for the `Agent` library identifier. Its keys are the names of the agents, and its values are their optional versions. |
 ||| `String` | CR3b | The `Agent` library identifier. |
+
+## class `BatchResult<T>`
+
+Contains information about the results of a batch operation.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| successCount: Int ||| BAR2a | The number of successful operations in the request. |
+| failureCount: Int ||| BAR2b | The number of unsuccessful operations in the request. |
+| results: [T] ||| BAR2c | An array of results for the batch operation. |
+
+## class `BatchPublishSpec`
+
+Describes the messages that should be published by a batch publish operation, and the channels to which they should be published.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channels: [String] ||| BSP2a | The names of the channels to publish the `messages` to. |
+| messages: [Message] ||| BSP2b | An array of [`Message`]{@link Message} objects. |
+
+## class `BatchPublishSuccessResult`
+
+Contains information about the result of successful publishes to a channel requested by a single [`BatchPublishSpec`]{@link BatchPublishSpec}.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BPR2a | The name of the channel the message(s) was published to. |
+| messageId: String ||| BPR2b | A unique ID prefixed to the [`id`]{@link Message#id} of each published message. |
+
+## class `BatchPublishFailureResult`
+
+Contains information about the result of unsuccessful publishes to a channel requested by a single [`BatchPublishSpec`]{@link BatchPublishSpec}.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BPF2a | The name of the channel the message(s) failed to be published to.  |
+| error: ErrorInfo ||| BPF2b | Describes the reason for which the message(s) failed to publish to the channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
