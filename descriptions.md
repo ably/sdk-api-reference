@@ -12,7 +12,6 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 || `ClientOptions` ||| A [`ClientOptions`]{@link ClientOptions} object to configure the client connection to Ably. |
 | auth: Auth ||| RSC5 | An [`Auth`]{@link Auth} object. |
 | push: Push ||| RSH7 | A [`Push`]{@link Push} object. |
-| batch: BatchOperations ||| BO1 | A [`BatchOperations`]{@link BatchOperations} object. |
 | device() => LocalDevice ||  | RSH8 | Retrieves a [`LocalDevice`]{@link LocalDevice} object that represents the current state of the device as a target for push notifications. |
 ||| `LocalDevice` || A [`LocalDevice`]{@link LocalDevice} object. |
 | channels: `Channels<RestChannel>` ||| RSN1 | A [`Channels`]{@link Channels} object. |
@@ -335,58 +334,6 @@ Describes the properties of the channel state.
 |---|---|---|---|---|
 | attachSerial: String ||| CP2a | Starts unset when a channel is instantiated, then updated with the `channelSerial` from each [`ATTACHED`]{@link ChannelState#ATTACHED} event that matches the channel. Used as the value for [`untilAttach`]{@link RealtimeChannel#history}. |
 
-## class BatchOperations
-
-Enables messages to be published to multiple channels, or retrieves the presence state from multiple channels, as batch operations.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| publish([BatchSpec]) => `BatchResult<BatchPublishResponse>` ||| BO2a | Publish an array of [`BatchSpec`]{@link BatchSpec} objects to one or more channels, up to a maximum of 100 channels. Each [`BatchSpec`]{@link BatchSpec} object can contain a single message or an array of messages. Returns a [`BatchResult`]{@link BatchResult} object. |
-|| [`BatchSpec`] ||| An array of [`BatchSpec`]{@link BatchSpec} objects. |
-||| `BatchResult<BatchPublishResponse>` || A [`BatchResult`]{@link BatchResult} object. |
-| publish(BatchSpec) => `BatchResult<BatchPublishResponse>` ||| BO2a | Publish a [`BatchSpec`]{@link BatchSpec} object to one or more channels, up to a maximum of 100 channels. A [`BatchSpec`]{@link BatchSpec} object can contain a single message or an array of messages. Returns a [`BatchResult`]{@link BatchSpec} object. |
-|| `BatchSpec` ||| A [`BatchSpec`]{@link BatchSpec} object. |
-| getPresence([String]) => `BatchResult<BatchPresenceResponse>` ||| BO2b | Retrieves the presence state for one or more channels, up to a maximum of 100 channels. Presence state includes the `clientId` of members and their current [`PresenceAction`]{@link PresenceAction}. Returns a [`BatchResult`]{@link BatchResult} object. |
-|| [`String`] ||| An array of one or more channel names, up to a maximum of 100. |
-
-## class `BatchResult<T>`
-
-Contains the results of a [`BatchOperations`]{@link BatchOperations} request.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| error: ErrorInfo? ||| BPA2b | Describes the reason for which a batch operation failed, or states that the batch operation was only partially successful as an [`ErrorInfo`]{@link ErrorInfo} object. Will be `null` if the operation was successful. |
-| responses: []T? ||| BPA2a | An array of [`BatchPublishResponse`]{@link BatchPublishResponse} or [`BatchPresenceResponse`]{@link BatchPresenceResponse} objects that contain details of successful and partially successful batch operations. |
-
-## class BatchPublishResponse
-
-Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`publish()`]{@link BatchOperations#publish} request. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| channel: String ||| BPB2a | The channel name a message was successfully published to, or the channel name for which an `error` was returned. |
-| messageId: String? ||| BPB2b | The unique ID for a successfully published message. |
-| error: ErrorInfo? ||| BPB2c | Describes the reason for which a message, or messages failed to publish to a channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
-
-## class BatchPresenceResponse
-
-Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`getPresence()`]{@link BatchOperations#getPresence} request. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| channel: String ||| BPD2a | The channel name the presence state was retrieved for. |
-| presence: []BatchPresence ||| PBD2b | An array of [`BatchPresence`]{@link BatchPresence} objects that contains details of the presence state for a channel, such as the `clientId` of members and their current [`PresenceAction`]{@link PresenceAction}. |
-
-## class BatchPresence
-
-Contains the presence state of each [`BatchPresenceResponse`]{@link BatchPresenceResponse}.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| clientId: string |||| The ID of each client entered into the presence set for the channel. |
-| action: string? |||| The [`PresenceAction`]{@link PresenceAction} associated with each client. |
-| error: ErrorInfo? |||| Describes the reason for which the presence details could not be retrieved for a channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
-
 ## class PushChannel
 
 Enables devices to subscribe to push notifications for a channel.
@@ -400,15 +347,6 @@ Enables devices to subscribe to push notifications for a channel.
 | listSubscriptions(params?: `Dict<String, String>`) => io `PaginatedResult<PushChannelSubscription>` ||| RSH7e | Retrieves all push subscriptions for the channel. Subscriptions can be filtered using a `params` object. Returns a [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects. |
 || `params` ||| An object containing key-value pairs to filter subscriptions by. Can contain `clientId`, `deviceId` or a combination of both if `concatFilters` is set to `true`, and a `limit` on the number of subscriptions returned, up to 1,000. |
 ||| `PaginatedResult<PushChannelSubscription>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects.|
-
-## class BatchSpec
-
-Sets the channel names and message contents to [`publish()`]{@link BatchOperations#publish} to in [`BatchOperations`]{@link BatchOperations}. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| channels: [String] |||| An array of channel names to publish messages to. |
-| messages: [Message] |||| An array of [`Message`]{@link Message} objects to publish. |
 
 ## enum ChannelState
 
