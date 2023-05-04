@@ -38,6 +38,9 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 | batchPublish([BatchPublishSpec]) => io `[BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>]` ||| RSC22 | Publishes one or more [`BatchPublishSpec`]{@link BatchPublishSpec} objects to one or more channels, up to a maximum of 100 channels. |
 || [`BatchPublishSpec`] ||| An array of [`BatchPublishSpec`]{@link BatchPublishSpec} objects. |
 ||| [`BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>`] || An array of [`BatchResult`]{@link BatchResult} objects containing information about the result of the batch publish for each requested channel for each provided [`BatchPublishSpec`]{@link BatchPublishSpec}. The array returned is in the same order as the provided [`BatchPublishSpec`]{@link BatchPublishSpec} array. |
+| batchPresence([String]) => io `BatchResult<BatchPresenceSuccessResult \| BatchPresenceFailureResult>` ||| RSC23 | Retrieves the presence state for one or more channels, up to a maximum of 100 channels. Presence state includes the `clientId` of members and their current [`PresenceAction`]{@link PresenceAction}. |
+|| [String] ||| An array of one or more channel names, up to a maximum of 100 channels. |
+||| `BatchResult<BatchPresenceSuccessResult \| BatchPresenceFailureResult>` || A [`BatchResult`]{@link BatchResult} object containing information about the result of the batch presence request for each requested channel. |
 
 ## class RealtimeClient
 
@@ -80,6 +83,9 @@ A client that extends the functionality of the [`RestClient`]{@link RestClient} 
 | batchPublish([BatchPublishSpec]) => io `[BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>]` ||| RSC22 | Publishes one or more [`BatchPublishSpec`]{@link BatchPublishSpec} object to one or more channels, up to a maximum of 100 channels. |
 || [`BatchPublishSpec`] ||| An array of [`BatchPublishSpec`]{@link BatchPublishSpec} objects. |
 ||| [`BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>`] || An array of [`BatchResult`]{@link BatchResult} objects containing information about the result of the batch publish for each requested channel for each provided [`BatchPublishSpec`]{@link BatchPublishSpec}. The array returned is in the same order as the provided [`BatchPublishSpec`]{@link BatchPublishSpec} array. |
+| batchPresence([String]) => io `BatchResult<BatchPresenceSuccessResult \| BatchPresenceFailureResult>` ||| RSC23 | Retrieves the presence state for one or more channels, up to a maximum of 100 channels. Presence state includes the `clientId` of members and their current [`PresenceAction`]{@link PresenceAction}. |
+|| [String] ||| An array of one or more channel names, up to a maximum of 100 channels. |
+||| `BatchResult<BatchPresenceSuccessResult \| BatchPresenceFailureResult>` || A [`BatchResult`]{@link BatchResult} object containing information about the result of the batch presence request for each requested channel. |
 
 ## class ClientOptions
 
@@ -1148,5 +1154,23 @@ Contains information about the result of unsuccessful publishes to a channel req
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| channel: String ||| BPF2a | The name of the channel the message(s) failed to be published to.  |
-| error: ErrorInfo ||| BPF2b | Describes the reason for which the message(s) failed to publish to the channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
+| channel: String ||| BPF2a | The name of the channel the message(s) failed to be published to. |
+| error: ErrorInfo ||| BPF2b | Describes the reason for which the message(s) failed to be published to the channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
+
+## class `BatchPresenceSuccessResult`
+
+Contains information about the result of a successful batch presence request for a single channel.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BGR2a | The channel name the presence state was retrieved for. |
+| presence: [PresenceMessage] ||| BGR2b | An array of [`PresenceMessage`]{@link PresenceMessage}s describing members present on the channel. |
+
+## class `BatchPresenceFailureResult`
+
+Contains information about the result of an unsuccessful batch presence request for a single channel.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BGF2a | The channel name the presence state failed to be retrieved for. |
+| error: ErrorInfo ||| BGF2b | Describes the reason for which presence state could not be retrieved for the channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
