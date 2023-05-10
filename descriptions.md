@@ -471,11 +471,11 @@ Passes additional properties to a [`RestChannel`]{@link RestChannel} or [`Realti
 
 ## class DeriveOptions
 
-Passes additional properties to a [`RealtimeChannel`]{@link RealtimeChannel} object, such as filter, to create a new derived/synthetic channel.
+Passes properties to a [`RealtimeChannel`]{@link RealtimeChannel} object, such as a filter, to create a derived channel.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|----|
-| filter: `String` ||| RTS5a | JMESPath string expression of filter property to be used to create a Subscription filter derived channel |
+| filter: `String` ||| RTS5a | A filter expression written in JMESPath, used to filter messages received by the derived channel. |
 
 ## class ChannelDetails
 
