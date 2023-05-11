@@ -22,6 +22,7 @@
 | class BatchSpec |||
 | class ChannelStateChange |||
 | class ChannelOptions |||
+| class DeriveOptions |||
 | class ChannelDetails |||
 | class ChannelStatus |||
 | class ChannelOccupancy |||
