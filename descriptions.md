@@ -730,6 +730,10 @@ Contains application statistics for a specified time interval and time period.
 | intervalId: String ||| TS15a | The UTC time at which the time period covered begins. If `unit` is set to `minute` this will be in the format `YYYY-mm-dd:HH:MM`, if `hour` it will be `YYYY-mm-dd:HH`, if `day` it will be `YYYY-mm-dd:00` and if `month` it will be `YYYY-mm-01:00`.|
 | intervalTime: Time ||| TS15g (calculated client-side) | Represents the `intervalId` as a time object. |
 | unit: Stats.IntervalGranularity ||| TS15b | The length of the interval the stats span. Values will be a [`StatsIntervalGranularity`]{@link StatsIntervalGranularity}. |
+| inProgress: String? ||| TS15c | For entries that are still in progress, such as the current month: the last sub-interval included in this entry (in format yyyy-mm-dd:hh:mm:ss), else undefined. |
+| entries: Dict<String, Int> ||| TS15d | The statistics for this time interval and time period. See the JSON schema which the [`schema`]{@link Stats#schema} property points to for more information. |
+| schema: String ||| TS15e | The URL of a [JSON Schema](https://json-schema.org/) which describes the structure of this `Stats` object. |
+| appId: String ||| TS15f | The ID of the Ably application the statistics are for. |
 
 ## enum StatsIntervalGranularity
 
