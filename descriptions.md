@@ -12,7 +12,6 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 || `ClientOptions` ||| A [`ClientOptions`]{@link ClientOptions} object to configure the client connection to Ably. |
 | auth: Auth ||| RSC5 | An [`Auth`]{@link Auth} object. |
 | push: Push ||| RSH7 | A [`Push`]{@link Push} object. |
-| batch: BatchOperations ||| BO1 | A [`BatchOperations`]{@link BatchOperations} object. |
 | device() => LocalDevice ||  | RSH8 | Retrieves a [`LocalDevice`]{@link LocalDevice} object that represents the current state of the device as a target for push notifications. |
 ||| `LocalDevice` || A [`LocalDevice`]{@link LocalDevice} object. |
 | channels: `Channels<RestChannel>` ||| RSN1 | A [`Channels`]{@link Channels} object. |
@@ -33,6 +32,15 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 ||| `PaginatedResult` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`Stats`]{@link Stats} objects. |
 | time() => io Time ||| RSC16 | Retrieves the time from the Ably service as milliseconds since the Unix epoch. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest} with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
 ||| `Time` || The time as milliseconds since the Unix epoch. |
+| batchPublish(BatchPublishSpec) => io `BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>` ||| RSC22 | Publishes a [`BatchPublishSpec`]{@link BatchPublishSpec} object to one or more channels, up to a maximum of 100 channels. |
+|| `BatchPublishSpec` ||| A [`BatchPublishSpec`]{@link BatchPublishSpec} object. |
+||| `BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>` || A [`BatchResult`]{@link BatchResult} object containing information about the result of the batch publish for each requested channel. |
+| batchPublish([BatchPublishSpec]) => io `[BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>]` ||| RSC22 | Publishes one or more [`BatchPublishSpec`]{@link BatchPublishSpec} objects to one or more channels, up to a maximum of 100 channels. |
+|| [`BatchPublishSpec`] ||| An array of [`BatchPublishSpec`]{@link BatchPublishSpec} objects. |
+||| [`BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>`] || An array of [`BatchResult`]{@link BatchResult} objects containing information about the result of the batch publish for each requested channel for each provided [`BatchPublishSpec`]{@link BatchPublishSpec}. The array returned is in the same order as the provided [`BatchPublishSpec`]{@link BatchPublishSpec} array. |
+| batchPresence([String]) => io `BatchResult<BatchPresenceSuccessResult \| BatchPresenceFailureResult>` ||| RSC23 | Retrieves the presence state for one or more channels, up to a maximum of 100 channels. Presence state includes the `clientId` of members and their current [`PresenceAction`]{@link PresenceAction}. |
+|| [String] ||| An array of one or more channel names, up to a maximum of 100 channels. |
+||| `BatchResult<BatchPresenceSuccessResult \| BatchPresenceFailureResult>` || A [`BatchResult`]{@link BatchResult} object containing information about the result of the batch presence request for each requested channel. |
 
 ## class RealtimeClient
 
@@ -69,6 +77,15 @@ A client that extends the functionality of the [`RestClient`]{@link RestClient} 
 | connect() ||| proxy for RTN11 | Calls [`connection.connect()`]{@link Connection#connect} and causes the connection to open, entering the connecting state. Explicitly calling `connect()` is needed if the [`autoConnect`]{@link ClientOptions#autoConnect} property is disabled. |
 | time() => io Time ||| RTC6a | Retrieves the time from the Ably service as milliseconds since the Unix epoch. Clients that do not have access to a sufficiently well maintained time source and wish to issue Ably [`TokenRequest`s]{@link TokenRequest with a more accurate timestamp should use the [`queryTime`]{@link ClientOptions#queryTime} property instead of this method. |
 ||| `Time` || The time as milliseconds since the Unix epoch. |
+| batchPublish(BatchPublishSpec) => io `BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>` ||| RSC22 | Publishes a [`BatchPublishSpec`]{@link BatchPublishSpec} object to one or more channels, up to a maximum of 100 channels. |
+|| `BatchPublishSpec` ||| A [`BatchPublishSpec`]{@link BatchPublishSpec} object. |
+||| `BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>` || A [`BatchResult`]{@link BatchResult} object containing information about the result of the batch publish for each requested channel. |
+| batchPublish([BatchPublishSpec]) => io `[BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>]` ||| RSC22 | Publishes one or more [`BatchPublishSpec`]{@link BatchPublishSpec} object to one or more channels, up to a maximum of 100 channels. |
+|| [`BatchPublishSpec`] ||| An array of [`BatchPublishSpec`]{@link BatchPublishSpec} objects. |
+||| [`BatchResult<BatchPublishSuccessResult \| BatchPublishFailureResult>`] || An array of [`BatchResult`]{@link BatchResult} objects containing information about the result of the batch publish for each requested channel for each provided [`BatchPublishSpec`]{@link BatchPublishSpec}. The array returned is in the same order as the provided [`BatchPublishSpec`]{@link BatchPublishSpec} array. |
+| batchPresence([String]) => io `BatchResult<BatchPresenceSuccessResult \| BatchPresenceFailureResult>` ||| RSC23 | Retrieves the presence state for one or more channels, up to a maximum of 100 channels. Presence state includes the `clientId` of members and their current [`PresenceAction`]{@link PresenceAction}. |
+|| [String] ||| An array of one or more channel names, up to a maximum of 100 channels. |
+||| `BatchResult<BatchPresenceSuccessResult \| BatchPresenceFailureResult>` || A [`BatchResult`]{@link BatchResult} object containing information about the result of the batch presence request for each requested channel. |
 
 ## class ClientOptions
 
@@ -161,7 +178,11 @@ Creates Ably [`TokenRequest`]{@link TokenRequest} objects and obtains Ably Token
 || `AuthOptions` ||| An [`AuthOptions`]{@link AuthOptions} object. |
 ||| `TokenDetails` || A [`TokenDetails`]{@link TokenDetails} object. |
 |`TokenDetails`: TokenDetails?||| RSA16 | A [`TokenDetails`]{@link TokenDetails} object. |
-
+| revokeTokens([TokenRevocationTargetSpecifier], issuedBefore number?, allowReauthMargin boolean?) => io `BatchResult<TokenRevocationSuccessResult \| TokenRevocationFailureResult>`  ||| RSA17 | Revokes the tokens specified by the provided array of [`TokenRevocationTargetSpecifier`]{@link TokenRevocationTargetSpecifier}s. Only tokens issued by an API key that had revocable tokens enabled before the token was issued can be revoked. See the [token revocation docs](https://ably.com/docs/core-features/authentication#token-revocation) for more information. |
+|| [`TokenRevocationTargetSpecifier`] ||| An array of [`TokenRevocationTargetSpecifier`]{@link TokenRevocationTargetSpecifier} objects. |
+|| `issuedBefore` ||| A Unix timestamp in milliseconds where only tokens issued before this time are revoked. The default is the current time. Requests with an `issuedBefore` in the future, or more than an hour in the past, will be rejected. |
+|| `allowReauthMargin` ||| If true, permits a token renewal cycle to take place without needing established connections to be dropped, by postponing enforcement to 30 seconds in the future, and sending any existing connections a hint to obtain (and upgrade the connection to use) a new token. The default is `false`, meaning that the effect is near-immediate. |
+||| `BatchResult<TokenRevocationSuccessResult \| TokenRevocationFailureResult>` || A [`BatchResult`]{@link BatchResult} containing information about the result of the token revocation request for each provided [`TokenRevocationTargetSpecifier`]{@link TokenRevocationTargetSpecifier}. |
 
 ## class TokenDetails
 
@@ -335,58 +356,6 @@ Describes the properties of the channel state.
 |---|---|---|---|---|
 | attachSerial: String ||| CP2a | Starts unset when a channel is instantiated, then updated with the `channelSerial` from each [`ATTACHED`]{@link ChannelState#ATTACHED} event that matches the channel. Used as the value for [`untilAttach`]{@link RealtimeChannel#history}. |
 
-## class BatchOperations
-
-Enables messages to be published to multiple channels, or retrieves the presence state from multiple channels, as batch operations.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| publish([BatchSpec]) => `BatchResult<BatchPublishResponse>` ||| BO2a | Publish an array of [`BatchSpec`]{@link BatchSpec} objects to one or more channels, up to a maximum of 100 channels. Each [`BatchSpec`]{@link BatchSpec} object can contain a single message or an array of messages. Returns a [`BatchResult`]{@link BatchResult} object. |
-|| [`BatchSpec`] ||| An array of [`BatchSpec`]{@link BatchSpec} objects. |
-||| `BatchResult<BatchPublishResponse>` || A [`BatchResult`]{@link BatchResult} object. |
-| publish(BatchSpec) => `BatchResult<BatchPublishResponse>` ||| BO2a | Publish a [`BatchSpec`]{@link BatchSpec} object to one or more channels, up to a maximum of 100 channels. A [`BatchSpec`]{@link BatchSpec} object can contain a single message or an array of messages. Returns a [`BatchResult`]{@link BatchSpec} object. |
-|| `BatchSpec` ||| A [`BatchSpec`]{@link BatchSpec} object. |
-| getPresence([String]) => `BatchResult<BatchPresenceResponse>` ||| BO2b | Retrieves the presence state for one or more channels, up to a maximum of 100 channels. Presence state includes the `clientId` of members and their current [`PresenceAction`]{@link PresenceAction}. Returns a [`BatchResult`]{@link BatchResult} object. |
-|| [`String`] ||| An array of one or more channel names, up to a maximum of 100. |
-
-## class `BatchResult<T>`
-
-Contains the results of a [`BatchOperations`]{@link BatchOperations} request.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| error: ErrorInfo? ||| BPA2b | Describes the reason for which a batch operation failed, or states that the batch operation was only partially successful as an [`ErrorInfo`]{@link ErrorInfo} object. Will be `null` if the operation was successful. |
-| responses: []T? ||| BPA2a | An array of [`BatchPublishResponse`]{@link BatchPublishResponse} or [`BatchPresenceResponse`]{@link BatchPresenceResponse} objects that contain details of successful and partially successful batch operations. |
-
-## class BatchPublishResponse
-
-Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`publish()`]{@link BatchOperations#publish} request. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| channel: String ||| BPB2a | The channel name a message was successfully published to, or the channel name for which an `error` was returned. |
-| messageId: String? ||| BPB2b | The unique ID for a successfully published message. |
-| error: ErrorInfo? ||| BPB2c | Describes the reason for which a message, or messages failed to publish to a channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
-
-## class BatchPresenceResponse
-
-Contains the responses from a [`BatchOperations`]{@link BatchOperations} [`getPresence()`]{@link BatchOperations#getPresence} request. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| channel: String ||| BPD2a | The channel name the presence state was retrieved for. |
-| presence: []BatchPresence ||| PBD2b | An array of [`BatchPresence`]{@link BatchPresence} objects that contains details of the presence state for a channel, such as the `clientId` of members and their current [`PresenceAction`]{@link PresenceAction}. |
-
-## class BatchPresence
-
-Contains the presence state of each [`BatchPresenceResponse`]{@link BatchPresenceResponse}.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| clientId: string |||| The ID of each client entered into the presence set for the channel. |
-| action: string? |||| The [`PresenceAction`]{@link PresenceAction} associated with each client. |
-| error: ErrorInfo? |||| Describes the reason for which the presence details could not be retrieved for a channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
-
 ## class PushChannel
 
 Enables devices to subscribe to push notifications for a channel.
@@ -400,15 +369,6 @@ Enables devices to subscribe to push notifications for a channel.
 | listSubscriptions(params?: `Dict<String, String>`) => io `PaginatedResult<PushChannelSubscription>` ||| RSH7e | Retrieves all push subscriptions for the channel. Subscriptions can be filtered using a `params` object. Returns a [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects. |
 || `params` ||| An object containing key-value pairs to filter subscriptions by. Can contain `clientId`, `deviceId` or a combination of both if `concatFilters` is set to `true`, and a `limit` on the number of subscriptions returned, up to 1,000. |
 ||| `PaginatedResult<PushChannelSubscription>` || A [`PaginatedResult`]{@link PaginatedResult} object containing an array of [`PushChannelSubscription`]{@link PushChannelSubscription} objects.|
-
-## class BatchSpec
-
-Sets the channel names and message contents to [`publish()`]{@link BatchOperations#publish} to in [`BatchOperations`]{@link BatchOperations}. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| channels: [String] |||| An array of channel names to publish messages to. |
-| messages: [Message] |||| An array of [`Message`]{@link Message} objects to publish. |
 
 ## enum ChannelState
 
@@ -1163,3 +1123,86 @@ Provides information about the Ably client library and the environment in which 
 | +agentIdentifier(additionalAgents: Dict<String, String?>?) => String || | CR3 | Returns the `Agent` library identifier. This method should only be used by Ably-authored SDKs. |
 || `additionalAgents` || CR3c | A set of additional entries for the `Agent` library identifier. Its keys are the names of the agents, and its values are their optional versions. |
 ||| `String` | CR3b | The `Agent` library identifier. |
+
+## class `BatchResult<T>`
+
+Contains information about the results of a batch operation.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| successCount: Int ||| BAR2a | The number of successful operations in the request. |
+| failureCount: Int ||| BAR2b | The number of unsuccessful operations in the request. |
+| results: [T] ||| BAR2c | An array of results for the batch operation. |
+
+## class `BatchPublishSpec`
+
+Describes the messages that should be published by a batch publish operation, and the channels to which they should be published.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channels: [String] ||| BSP2a | The names of the channels to publish the `messages` to. |
+| messages: [Message] ||| BSP2b | An array of [`Message`]{@link Message} objects. |
+
+## class `BatchPublishSuccessResult`
+
+Contains information about the result of successful publishes to a channel requested by a single [`BatchPublishSpec`]{@link BatchPublishSpec}.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BPR2a | The name of the channel the message(s) was published to. |
+| messageId: String ||| BPR2b | A unique ID prefixed to the [`id`]{@link Message#id} of each published message. |
+
+## class `BatchPublishFailureResult`
+
+Contains information about the result of unsuccessful publishes to a channel requested by a single [`BatchPublishSpec`]{@link BatchPublishSpec}.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BPF2a | The name of the channel the message(s) failed to be published to. |
+| error: ErrorInfo ||| BPF2b | Describes the reason for which the message(s) failed to be published to the channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
+
+## class `BatchPresenceSuccessResult`
+
+Contains information about the result of a successful batch presence request for a single channel.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BGR2a | The channel name the presence state was retrieved for. |
+| presence: [PresenceMessage] ||| BGR2b | An array of [`PresenceMessage`]{@link PresenceMessage}s describing members present on the channel. |
+
+## class `BatchPresenceFailureResult`
+
+Contains information about the result of an unsuccessful batch presence request for a single channel.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| channel: String ||| BGF2a | The channel name the presence state failed to be retrieved for. |
+| error: ErrorInfo ||| BGF2b | Describes the reason for which presence state could not be retrieved for the channel as an [`ErrorInfo`]{@link ErrorInfo} object. |
+
+## class `TokenRevocationTargetSpecifier`
+
+Describes which tokens should be affected by a token revocation request.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| type: String ||| TRT2a | The type of token revocation target specifier. Valid values include `clientId`, `revocationKey` and `channel`. |
+| value: String ||| TRT2b | The value of the token revocation target specifier. |
+
+## class `TokenRevocationSuccessResult`
+
+Contains information about the result of a successful token revocation request for a single target specifier.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| target: String ||| TRS2a | The target specifier. |
+| appliesAt: Int ||| TRS2b | The time at which the token revocation will take effect, as a Unix timestamp in milliseconds. |
+| issuedBefore: Int ||| TRS2c | A Unix timestamp in milliseconds. Only tokens issued earlier than this time will be revoked. |
+
+## class `TokenRevocationFailureResult`
+
+Contains information about the result of an unsuccessful token revocation request for a single target specifier.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| target: String ||| TRF2a | The target specifier. |
+| error: ErrorInfo ||| TRF2b | Describes the reason for which token revocation failed for the given `target` as an [`ErrorInfo`]{@link ErrorInfo} object. |
