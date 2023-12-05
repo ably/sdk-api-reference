@@ -728,20 +728,13 @@ Contains application statistics for a specified time interval and time period.
 
 | Method / Property | Parameter | Returns | Spec | Description |
 |---|---|---|---|---|
-| intervalId: String ||| TS12a | The UTC time at which the time period covered begins. If `unit` is set to `minute` this will be in the format `YYYY-mm-dd:HH:MM`, if `hour` it will be `YYYY-mm-dd:HH`, if `day` it will be `YYYY-mm-dd:00` and if `month` it will be `YYYY-mm-01:00`.| 
-| intervalTime: Time ||| TS12b (calculated client-side) | Represents the `intervalId` as a time object. |
-| unit: Stats.IntervalGranularity ||| TS12c | The length of the interval the stats span. Values will be a [`StatsIntervalGranularity`]{@link StatsIntervalGranularity}. |
-| all: Stats.MessageTypes ||| TS12e | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing the aggregate count of all message stats.|
-| inbound: Stats.MessageTraffic ||| TS12f | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing the aggregate count of inbound message stats. |
-| outbound: Stats.MessageTraffic ||| TS12g | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing the aggregate count of outbound message stats. |
-| persisted: Stats.MessageTypes ||| TS12h | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing the aggregate count of persisted message stats. |
-| connections: Stats.ConnectionTypes ||| TS12i | A [`Stats.ConnectionTypes`]{@link Stats.ConnectionTypes} object containing a breakdown of connection related stats, such as min, mean and peak connections. |
-| channels: Stats.ResourceCount ||| TS12j |  A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of channels. |
-| apiRequests: Stats.RequestCount ||| TS12k |  A [`Stats.RequestCount`]{@link Stats.RequestCount} object containing a breakdown of API Requests. |
-| tokenRequests: Stats.RequestCount ||| TS12l | A [`Stats.RequestCount`]{@link Stats.RequestCount} object containing a breakdown of Ably Token requests. |
-| push: Stats.PushStats ||| TS12m | A [`Stats.PushStats`]{@link Stats.PushStats} object containing a breakdown of stats on push notifications. |
-| xchgProducer: Stats.XchgMessages ||| TS12n | A [`Stats.XchgMessages`]{@link Stats.XchgMessages} object containing data about usage of Ably API Streamer as a producer. |
-| xchgConsumer: Stats.XchgMessages ||| TS12o | A [`Stats.XchgMessages`]{@link Stats.XchgMessages} object containing data about usage of Ably API Streamer as a consumer. |
+| intervalId: String ||| TS15a | The UTC time at which the time period covered begins. If `unit` is set to `minute` this will be in the format `YYYY-mm-dd:HH:MM`, if `hour` it will be `YYYY-mm-dd:HH`, if `day` it will be `YYYY-mm-dd:00` and if `month` it will be `YYYY-mm-01:00`.|
+| intervalTime: Time ||| TS15g (calculated client-side) | Represents the `intervalId` as a time object. |
+| unit: Stats.IntervalGranularity ||| TS15b | The length of the interval the stats span. Values will be a [`StatsIntervalGranularity`]{@link StatsIntervalGranularity}. |
+| inProgress: String? ||| TS15c | For entries that are still in progress, such as the current month: the last sub-interval included in this entry (in format yyyy-mm-dd:hh:mm:ss), else undefined. |
+| entries: Dict<String, Int> ||| TS15d | The statistics for this time interval and time period. See the JSON schema which the [`schema`]{@link Stats#schema} property points to for more information. |
+| schema: String ||| TS15e | The URL of a [JSON Schema](https://json-schema.org/) which describes the structure of this `Stats` object. |
+| appId: String ||| TS15f | The ID of the Ably application the statistics are for. |
 
 ## enum StatsIntervalGranularity
 
@@ -753,110 +746,6 @@ Describes the interval unit over which statistics are gathered.
 | HOUR || Interval unit over which statistics are gathered as hours. |
 | DAY || Interval unit over which statistics are gathered as days. |
 | MONTH || Interval unit over which statistics are gathered as months. |
-
-
-## class Stats.ConnectionTypes
-
-Contains a breakdown of summary stats data for different (TLS vs non-TLS) connection types.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| tls: Stats.ResourceCount ||| TS4a | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over TLS connections. |
-| plain: Stats.ResourceCount ||| TS4b | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over non-TLS connections. |
-| all: Stats.ResourceCount ||| TS4c | A [`Stats.ResourceCount`]{@link Stats.ResourceCount} object containing a breakdown of usage by scope over TLS connections (both TLS and non-TLS). |
-
-## class Stats.MessageCount
-
-Contains the aggregate counts for messages and data transferred.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| count: Int ||| TS5a | The count of all messages.|
-| data: Int ||| TS5b | The total number of bytes transferred for all messages.|
-
-## class Stats.MessageTypes
-
-Contains a breakdown of summary stats data for different (channel vs presence) message types.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| messages: Stats.MessageCount ||| TS6a | A [`Stats.MessageCount`]{@link Stats.MessageCount} object containing the count and byte value of messages. |
-| presence: Stats.MessageCount ||| TS6b | A [`Stats.MessageCount`]{@link Stats.MessageCount} object containing the count and byte value of presence messages. |
-| all: Stats.MessageCount ||| TS6c | A [`Stats.MessageCount`]{@link Stats.MessageCount} object containing the count and byte value of messages and presence messages. |
-
-## class Stats.MessageTraffic
-
-Contains a breakdown of summary stats data for traffic over various transport types.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| realtime: Stats.MessageTypes ||| TS7a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for messages transferred over a realtime transport such as WebSocket. |
-| rest: Stats.MessageTypes ||| TS7b | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for messages transferred over a rest transport such as WebSocket. |
-| webhook: Stats.MessageTypes ||| TS7c | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for messages delivered using webhooks.|
-| all: Stats.MessageTypes ||| TS7d | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for all messages (includes `realtime`, `rest` and `webhook` messages). |
-
-## class Stats.RequestCount
-
-Contains the aggregate counts for requests made. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| succeeded: Int||| TS8a | The number of requests that succeeded. |
-| failed: Int ||| TS8b | The number of requests that failed. |
-| refused: Int ||| TS8c | The number of requests that were refused, typically as a result of permissions or a limit being exceeded. |
-
-## class Stats.ResourceCount
-
-Contains the aggregate data for usage of a resource in a specific scope. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| opened: Int ||| TS9a | The total number of resources opened of this type. |
-| peak: Int ||| TS9b | The peak number of resources of this type used for this period. |
-| mean: Float ||| TS9c | The average number of resources of this type used for this period. |
-| min: Int ||| TS9d | The minimum total resources of this type used for this period. |
-| refused: Int ||| TS9e | The number of resource requests refused within this period. |
-
-## class Stats.PushStats
-
-Details the stats on push notifications. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| messages: Int||| TS10a | Total number of push messages. |
-| directPublishes: Int ||| TS10b | Total number of direct publishes. |
-| notifications: Stats.PushNotificationCount ||| TS10c | The count of push notifications. |
-
-## class Stats.PushNotificationCount
-
-Contains a count of push notifications published broken down by outcome. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| invalid: Int ||| TS13a | Total number of attempted push notifications which were rejected due to invalid request data. |
-| attempted: Int ||| TS13b | Total number of attempted push notifications including notifications which were rejected as invalid or failed to publish. |
-| successful: Int ||| TS13c | Total number of delivered push notifications. |
-| failed: Int ||| TS13d | Total number of refused push notifications. |
-
-## class Stats.XchgMessages
-
-Contains data about usage of Ably API Streamer as a producer or consumer. 
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| all: Stats.MessageTypes ||| TS11a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for the Ably API Streamer.|
-| producerPaid: Stats.MessageDirections ||| TS11b | A [`Stats.MessageDirections`]{@link Stats.MessageDirections} object containing a breakdown of usage, by messages published and received, for the API Streamer charged to the producer.|
-| consumerPaid: Stats.MessageDirections ||| TS11c | A [`Stats.MessageDirections`]{@link Stats.MessageDirections} object containing a breakdown of usage, by messages published and received, for the API Streamer charged to the consumer.|
-
-## class Stats.MessageDirections
-
-Contains data about published and received messages.
-
-| Method / Property | Parameter | Returns | Spec | Description |
-|---|---|---|---|---|
-| all: MessageTypes ||| TS14a | A [`Stats.MessageTypes`]{@link Stats.MessageTypes} object containing a breakdown of usage by message type for messages published and received. |
-| inbound: MessageTraffic ||| TS14b | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing a breakdown of usage by transport type for received messages. |
-| outbound: MessageTraffic ||| TS14c | A [`Stats.MessageTraffic`]{@link Stats.MessageTraffic} object containing a breakdown of usage by transport type for published messages. |
 
 ## class DeviceDetails
 
