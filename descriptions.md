@@ -18,7 +18,7 @@ A client that offers a simple stateless API to interact directly with Ably's RES
 | request(String method, String path, Int version, `Dict<String, String>` params?, JsonObject \| JsonArray body?, `Dict<String, String>` headers?) => io HttpPaginatedResponse ||  | RSC19 | Makes a REST request to a provided path. This is provided as a convenience for developers who wish to use REST API functionality that is either not documented or is not yet included in the public API, without having to directly handle features such as authentication, paging, fallback hosts, MsgPack and JSON support. |
 || `method` ||| The request method to use, such as `GET`, `POST`. |
 || `path` ||| The request path. |
-|| `version` || RSC19f1 | The major version of the Ably REST API to use. See the [REST API reference](https://ably.com/docs/api/rest-api#versioning) for information on versioning. |
+|| `version` || RSC19f1 | The version of the Ably REST API to use. See the [REST API reference](https://ably.com/docs/api/rest-api#versioning) for information on versioning. |
 || `params` ||| The parameters to include in the URL query of the request. The parameters depend on the endpoint being queried. See the [REST API reference](https://ably.com/docs/api/rest-api) for the available parameters of each endpoint. |
 || `body` ||| The JSON body of the request. |
 || `headers` ||| Additional HTTP headers to include in the request. |
