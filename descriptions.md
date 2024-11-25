@@ -592,6 +592,21 @@ Describes the possible actions members in the presence set can emit.
 | LEAVE | TP2 | A member who was present has now left the channel. This may be a result of an explicit request to leave or implicitly when detaching from the channel. Alternatively, if a member's connection is abruptly disconnected and they do not resume their connection within a minute, Ably treats this as a leave event as the client is no longer present. |
 | UPDATE | TP2 | An already present member has updated their member data. Being notified of member data updates can be very useful, for example, it can be used to update the status of a user when they are typing a message. |
 
+
+## enum MessageAction
+
+Describes the possible actions message can represent (in order from zero).
+
+| Enum | Spec | Description |
+|---|---|---|
+| MESSAGE_UNSET | TM5 | Message was unset. |
+| MESSAGE_CREATE | TM5 | Message was created. |
+| MESSAGE_UPDATE | TM5 | Message was updated. |
+| MESSAGE_DELETE | TM5 | Message was deleted. |
+| ANNOTATION_CREATE | TM5 | An annotation to the message was created. |
+| ANNOTATION_DELETE | TM5 | An annotation to the message was deleted. |
+| META_OCCUPANCY | TM5 | An occupancy data. |
+
 ## class ConnectionDetails
 
 Contains any constraints a client should adhere to and provides additional metadata about a [`Connection`]{@link Connection}, such as if a request to [`publish()`]{@link RealtimeClient#publish} a message that exceeds the maximum message size should be rejected immediately without communicating with Ably.
@@ -636,6 +651,8 @@ Contains an individual message that is sent to, or received from, Ably.
 | id: String ||| TM2a | A Unique ID assigned by Ably to this message. |
 | name: String? ||| TM2g | The event name. |
 | timestamp: Time ||| TM2f | Timestamp of when the message was received by Ably, as milliseconds since the Unix epoch. |
+| action: MessageAction ||| TM2j | The [`MessageAction`]{@link MessageAction} this message represents. |
+| serial: String? ||| TM2k | An opaque string that uniquely identifies the message. |
 
 ## class PresenceMessage
 
