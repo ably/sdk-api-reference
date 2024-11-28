@@ -582,15 +582,15 @@ Enables the presence set to be entered and subscribed to, and the historic prese
 
 ## enum PresenceAction
 
-Describes the possible actions members in the presence set can emit.
+Enumerates the possible types of `PresenceMessage` (and corresponding presence event emitted by a `RealtimePresence` object) there can be
 
 | Enum | Spec | Description |
 |---|---|---|
-| ABSENT | TP2 | A member is not present in the channel. |
-| PRESENT | TP2 | When subscribing to presence events on a channel that already has members present, this event is emitted for every member already present on the channel before the subscribe listener was registered. |
-| ENTER | TP2 | A new member has entered the channel. |
-| LEAVE | TP2 | A member who was present has now left the channel. This may be a result of an explicit request to leave or implicitly when detaching from the channel. Alternatively, if a member's connection is abruptly disconnected and they do not resume their connection within a minute, Ably treats this as a leave event as the client is no longer present. |
-| UPDATE | TP2 | An already present member has updated their member data. Being notified of member data updates can be very useful, for example, it can be used to update the status of a user when they are typing a message. |
+| ABSENT | TP2 | A tombstone for a member no longer present (used internally; as a user you should not ever see this). |
+| PRESENT | TP2 | A member already present in the channel's presence set. (So the `PresenceMessage.action` for members retrieved using `Presence.get()` will generally be `PRESENT`; and when attaching to a channel that already has members, a `PRESENT` event will be emitted to presence subscribers for every such member). |
+| ENTER | TP2 | A new member has entered the channel's presence set. |
+| LEAVE | TP2 | A member who was present has now left the channel's presence set. This may be a result of an explicit request to leave, or implicit from the member detaching from the channel or disconnecting from Ably and not reconnecting within a grace period. |
+| UPDATE | TP2 | An already present member has updated their member data. |
 
 ## class ConnectionDetails
 
