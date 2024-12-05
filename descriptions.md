@@ -285,6 +285,9 @@ Enables messages to be published and subscribed to. Also enables historic messag
 | name: String? |||| The channel name. |
 | errorReason: ErrorInfo? ||| RTL4e | An [`ErrorInfo`]{@link ErrorInfo} object describing the last error which occurred on the channel, if any. |
 | state: ChannelState ||| RTL2b | The current [`ChannelState`]{@link ChannelState} of the channel. |
+| whenState(ChannelState, (ChannelStateChange?) ->) ||| RTL25 | If the channel is already in the given state, calls the listener immediately with a `null` argument. Else, calls [`once()`]{@link EventEmitter#once} to register the listener to be called the next time the channel transitions to the given state. |
+|| `ChannelState` ||| The channel state to wait for. |
+|| `(ChannelStateChange?) ->` ||| The event listener. |
 | presence: RealtimePresence ||| RTL9 | A [`RealtimePresence`]{@link RealtimePresence} object.|
 | properties: ChannelProperties ||| CP1, RTL15 | A [`ChannelProperties`]{@link ChannelProperties} object. |
 | push: PushChannel |||| A [`PushChannel`]{@link PushChannel} object. |
@@ -682,6 +685,9 @@ Enables the management of a connection to Ably.
 | createRecoveryKey: String? ||| RTN16b, RTN16c | The recovery key string can be used by another client to recover this connection's state using the [`ClientOptions.recover`]{@ link ClientOptions#recover} property. It will return `nil` if connection is in the [`CLOSED`]{@link ConnectionState#CLOSED}, [`CLOSING`]{@link ConnectionState#CLOSING}, [`FAILED`]{@link ConnectionState#FAILED}, or [`SUSPENDED`]{@link ConnectionState#SUSPENDED} states, or when it does not have a connection [`key`]{@link Connection#key} (for example, if it has not yet become connected). See [connection state recovery options](ably.com/docs/connect/states) for more information. |
 | serial: Int? ||| RTN10 | The serial number of the last message to be received on this connection, used automatically by the library when recovering or resuming a connection. When recovering a connection explicitly, the `recoveryKey` is used in the recover client options as it contains both the key and the last message serial. |
 | state: ConnectionState ||| RTN4d | The current [`ConnectionState`]{@link ConnectionState} of the connection. |
+| whenState(ConnectionState, (ConnectionStateChange?) ->) ||| RTN26 | If the connection is already in the given state, calls the listener immediately with a `null` argument. Else, calls [`once()`]{@link EventEmitter#once} to register the listener to be called the next time the connection transitions to the given state. |
+|| `ConnectionState` ||| The connection state to wait for. |
+|| `(ConnectionStateChange?) ->` ||| The event listener. |
 | close() ||| RTN12 | Causes the connection to close, entering the [`CLOSING`]{@link ConnectionState#CLOSING} state. Once closed, the library does not attempt to re-establish the connection without an explicit call to [`connect()`]{@link Connection#connect}. |
 | connect() ||| RTC1b, RTN3, RTN11 | Explicitly calling `connect()` is needed if the `autoConnect` attribute of the [`ClientOptions`]{@link ClientOptions} object is `false`. If not already connected or connecting, this method causes the connection to open, entering the [`CONNECTING`]{@link ConnectionState#CONNECTING} state. |
 | ping() => io Duration ||| RTN13 | When connected, sends a heartbeat ping to the Ably server and executes the callback with any error and the response time in milliseconds when a heartbeat ping request is echoed from the server. This can be useful for measuring true round-trip latency to the connected Ably server. |
