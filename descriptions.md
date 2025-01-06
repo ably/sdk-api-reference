@@ -585,15 +585,27 @@ Enables the presence set to be entered and subscribed to, and the historic prese
 
 ## enum PresenceAction
 
-Describes the possible actions members in the presence set can emit.
+Enumerates the possible types of `PresenceMessage` (and corresponding presence event emitted by a `RealtimePresence` object) there can be
 
 | Enum | Spec | Description |
 |---|---|---|
-| ABSENT | TP2 | A member is not present in the channel. |
-| PRESENT | TP2 | When subscribing to presence events on a channel that already has members present, this event is emitted for every member already present on the channel before the subscribe listener was registered. |
-| ENTER | TP2 | A new member has entered the channel. |
-| LEAVE | TP2 | A member who was present has now left the channel. This may be a result of an explicit request to leave or implicitly when detaching from the channel. Alternatively, if a member's connection is abruptly disconnected and they do not resume their connection within a minute, Ably treats this as a leave event as the client is no longer present. |
-| UPDATE | TP2 | An already present member has updated their member data. Being notified of member data updates can be very useful, for example, it can be used to update the status of a user when they are typing a message. |
+| ABSENT | TP2 | A tombstone for a member no longer present (used internally; as a user you should not ever see this). |
+| PRESENT | TP2 | A member already present in the channel's presence set. (So the `PresenceMessage.action` for members retrieved using `Presence.get()` will generally be `PRESENT`; and when attaching to a channel that already has members, a `PRESENT` event will be emitted to presence subscribers for every such member). |
+| ENTER | TP2 | A new member has entered the channel's presence set. |
+| LEAVE | TP2 | A member who was present has now left the channel's presence set. This may be a result of an explicit request to leave, or implicit from the member detaching from the channel or disconnecting from Ably and not reconnecting within a grace period. |
+| UPDATE | TP2 | An already present member has updated their member data. |
+
+## enum MessageAction
+
+Enumerates the possible types of `Message` there can be.
+
+| Enum | Spec | Description |
+|---|---|---|
+| MESSAGE_CREATE | TM5 | A normal message that has been published by a user. |
+| MESSAGE_UPDATE | TM5 | An update that modifies a previously-published message (referenced by `serial`). |
+| MESSAGE_DELETE | TM5 | A deletion of a previously-published message (referenced by `serial`). |
+| META_OCCUPANCY | TM5 | Channel metadata containing information on what the current occupancy of the channel is. |
+| MESSAGE_SUMMARY | TM5 | A message containing the latest rolled-up summary of annotations that have been made to this message. |
 
 ## class ConnectionDetails
 
@@ -638,7 +650,24 @@ Contains an individual message that is sent to, or received from, Ably.
 | extras: JsonObject? ||| TM2i | A JSON object of arbitrary key-value pairs that may contain metadata, and/or ancillary payloads. Valid payloads include [`push`]{@link Push}, [`delta`]{@link DeltaExtras}, [`ref`]{@link ReferenceExtras} and `headers`. |
 | id: String ||| TM2a | A Unique ID assigned by Ably to this message. |
 | name: String? ||| TM2g | The event name. |
-| timestamp: Time ||| TM2f | Timestamp of when the message was received by Ably, as milliseconds since the Unix epoch. |
+| action: MessageAction ||| TM2j | Which one of the [`MessageAction`]{@link MessageAction} types this message represents. |
+| timestamp: Time ||| TM2f | Timestamp of when the message was received by Ably, as milliseconds since the Unix epoch. (This is the timestamp of the current version of the message) |
+| serial: String? ||| TM2k | This message's unique serial (an identifier that — unlike the id — will remain the same in all future updates of this message, and can be used to update or delete that message). Lexicographically-comparable with other serials and with the `version` field. |
+| version: String? ||| TM2p | The version of the message, lexicographically-comparable with other versions (that share the same serial) Will differ from the serial only if the message has been updated or deleted. |
+| refSerial: String? ||| TM2l | If this message references another, the serial of that referenced message. |
+| refType: String? ||| TM2m | If this message references another, the type of reference that is. |
+| createdAt: Time? ||| TM2o | The timestamp of the very first version of a given message (will differ from `timestamp` only if the message has been updated or deleted). |
+| operation: Operation? ||| TM2n | In the case of an updated or deleted message, this will contain metadata about the update or delete operation. |
+
+## class Operation
+
+In the case of an updated or deleted message, this will contain metadata about the update or delete operation.
+
+| Method / Property | Parameter | Returns | Spec | Description |
+|---|---|---|---|---|
+| clientId: String? ||| TM2n1 | ClientId of the user who triggered the update or delete. |
+| description: String? ||| TM2n2 | Reason for the update or delete provided by of the user who triggered it. |
+| metadata: Dict<string, string>? ||| TM2n3 | Arbitrary metadata contributed by the user who triggered the update or delete. |
 
 ## class PresenceMessage
 
